@@ -10,6 +10,7 @@
   "dependencies": {
     "@react-native-community/masked-view": "0.1.10",
     "@react-navigation/native": "^5.7.1",
+    "@react-navigation/stack": "^5.7.1",
     "babel-plugin-dotenv-import": "^2.1.0",
     "babel-plugin-inline-dotenv": "^1.6.0",
     "babel-plugin-transform-inline-environment-variables": "^0.4.3",
@@ -18,6 +19,7 @@
     "expo-constants": "~9.1.1",
     "expo-status-bar": "^1.0.2",
     "firebase": "^7.17.1",
+    "lottie-react-native": "^3.5.0",
     "native-base": "^2.13.13",
     "react": "~16.11.0",
     "react-dom": "~16.11.0",
@@ -25,7 +27,10 @@
     "react-native-gesture-handler": "~1.6.0",
     "react-native-reanimated": "~1.9.0",
     "react-native-safe-area-context": "~3.0.7",
+    "react-native-safe-module": "^1.2.0",
+    "react-native-safe-modules": "^1.0.0",
     "react-native-screens": "~2.9.0",
+    "react-native-svg": "12.1.0",
     "react-native-web": "~0.11.7",
     "rn-nodeify": "^10.2.0"
   },
