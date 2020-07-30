@@ -13,7 +13,7 @@ const TermsScreen = () => {
             height: 400,
             backgroundColor: "#eee",
           }}
-          source={require("../../assets/28141-sate-traveling.json")}
+          source={require("../../../assets/28141-sate-traveling.json")}
           autoPlay
           loop
         />

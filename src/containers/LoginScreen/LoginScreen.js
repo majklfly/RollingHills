@@ -1,40 +1,16 @@
-import React, { useState } from "react";
-import {
-  Container,
-  Content,
-  Header,
-  Form,
-  Input,
-  Item,
-  Button,
-  Label,
-} from "native-base";
+import React, { useState, useContext } from "react";
+import { Container, Form, Input, Item, Button, Label } from "native-base";
 import { StyleSheet, Text, View } from "react-native";
-import Firebase from "../../firebase";
+
+import constants from "../../constants";
 
 import { Background } from "../../components/Background/Background";
+import { AuthContext } from "../../store/AuthProvider";
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
-
-  const handleSignup = (email, password) => {
-    try {
-      password.length < 6 && alert("Please enter at least 6 characters");
-      Firebase.auth().createUserWithEmailAndPassword(email, password);
-    } catch (error) {
-      console.log(error.toString());
-    }
-  };
-  const handleLogin = (email, password) => {
-    try {
-      Firebase.auth()
-        .signInWithEmailAndPassword(email, password)
-        .then((user) => console.log(user));
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const { login, signup } = useContext(AuthContext);
 
   return (
     <View style={styles.mainContainer}>
@@ -44,6 +20,7 @@ const LoginScreen = ({ navigation }) => {
           <Item floatingLabel>
             <Label style={styles.label}>Email</Label>
             <Input
+              style={styles.input}
               autoCorrent={false}
               autoCapitalize="none"
               onChangeText={(value) => setEmail(value)}
@@ -52,6 +29,7 @@ const LoginScreen = ({ navigation }) => {
           <Item floatingLabel>
             <Label style={styles.label}>Password</Label>
             <Input
+              style={styles.input}
               autoCorrent={false}
               autoCapitalize="none"
               secureTextEntry
@@ -65,18 +43,18 @@ const LoginScreen = ({ navigation }) => {
             rounded
             success
             style={{ marginTop: 40 }}
-            onPress={() => handleLogin(email, password)}
+            onPress={() => login(email, password)}
           >
-            <Text>Login</Text>
+            <Text style={styles.terms}>Login</Text>
           </Button>
           <Button
             full
             rounded
             primary
             style={{ marginTop: 40 }}
-            onPress={() => handleSignup(email, password)}
+            onPress={() => signup(email, password)}
           >
-            <Text>Sign in</Text>
+            <Text style={styles.buttonText}>Sign in</Text>
           </Button>
         </Form>
         <Text style={styles.terms} onPress={() => navigation.navigate("Terms")}>
@@ -100,13 +78,23 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   label: {
-    color: "white",
+    color: constants.primary.textColor,
+    fontFamily: constants.primary.fontFamily,
     padding: 5,
   },
+  input: {
+    color: constants.primary.textColor,
+    fontFamily: constants.primary.fontFamily,
+  },
   terms: {
-    color: "white",
+    color: constants.primary.textColor,
     alignSelf: "center",
     paddingTop: 20,
+    fontFamily: constants.primary.fontFamily,
+  },
+  buttonText: {
+    color: constants.primary.textColor,
+    fontFamily: constants.primary.fontFamily,
   },
 });
 

@@ -1,27 +1,28 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import "react-native-gesture-handler";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import React, { useState, useEffect } from "react";
+import { Providers } from "./src/store/Providers";
+import * as Font from "expo-font";
+import { ActivityIndicator } from "react-native";
 
-import LoginScreen from "./containers/LoginScreen/LoginScreen";
-import TermsScreen from "./containers/TermsScreen/TermsScreen";
+const App = () => {
+  const [fontsLoaded, setFontsLoaded] = useState(false);
 
-const Stack = createStackNavigator();
+  const getFonts = async () => {
+    await Font.loadAsync({
+      MontSerrat: require("./assets/fonts/Montserrat/Montserrat-Medium.ttf"),
+      Source: require("./assets/fonts/Source_Sans_Pro/SourceSansPro-Regular.ttf"),
+      Harmattan: require("./assets/fonts/Harmattan/Harmattan-Regular.ttf"),
+    });
+    setFontsLoaded(true);
+  };
 
-export default function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen name="Terms" component={TermsScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-}
+  useEffect(() => {
+    getFonts();
+  }, []);
+
+  if (fontsLoaded) {
+    return <Providers />;
+  }
+  return <ActivityIndicator size="large" />;
+};
+
+export default App;
