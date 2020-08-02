@@ -22,7 +22,7 @@ const App = () => {
   if (fontsLoaded) {
     return <Providers />;
   }
-  return <ActivityIndicator size="large" />;
+  return <ActivityIndicator size="small" />;
 };
 
 export default App;

@@ -19,6 +19,10 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "android": {
+      "package": "com.majklfly.RollingHills",
+      "googleServicesFile": "./google-services.json"
     }
   }
 }

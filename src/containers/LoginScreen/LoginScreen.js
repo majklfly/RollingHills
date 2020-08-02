@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Form, Item, Button, Label, CheckBox } from "native-base";
+import { Form, Item, Button, Label, CheckBox, Input } from "native-base";
 import {
   StyleSheet,
   Text,
@@ -22,7 +22,9 @@ import { GithubLogin } from "../../components/GithubLogin/GithubLogin";
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
-  const { login, signup } = useContext(AuthContext);
+  const { login, errorMessage, signInGoogle } = useContext(AuthContext);
+
+  console.log(email);
 
   return (
     <View style={styles.mainContainer}>
@@ -42,31 +44,35 @@ const LoginScreen = ({ navigation }) => {
               stroke={constants.primary.containerColor}
             />
           </Svg>
-          <View style={styles.errorMessage}>
-            <Text style={styles.buttonText}>Here is the error message</Text>
-          </View>
+          {errorMessage && (
+            <View style={styles.errorMessage}>
+              <Text style={styles.buttonText}>{errorMessage}</Text>
+            </View>
+          )}
         </View>
         <Form style={styles.form}>
           <Item floatingLabel>
             <Label style={styles.label}>Email</Label>
-            <TextInput
+            <Input
               style={{ color: "red" }}
+              value={email}
               autoCorrent={false}
               autoCapitalize="none"
               onChangeText={(value) => setEmail(value)}
-            ></TextInput>
+            ></Input>
           </Item>
           <Item floatingLabel>
             <Label style={styles.label}>Password</Label>
-            <TextInput
+            <Input
               style={styles.input}
               autoCorrent={false}
+              value={password}
               autoCapitalize="none"
               secureTextEntry
               onChangeText={(value) => {
                 setPassword(value);
               }}
-            ></TextInput>
+            ></Input>
           </Item>
           <View style={styles.checkbox}>
             <CheckBox />
@@ -84,7 +90,9 @@ const LoginScreen = ({ navigation }) => {
             <Text style={styles.buttonText}>Login</Text>
           </Button>
           <View style={styles.footer}>
-            <GoogleLogin />
+            <TouchableOpacity onPress={() => signInGoogle()}>
+              <GoogleLogin />
+            </TouchableOpacity>
             <FacebookLogin />
             <GithubLogin />
           </View>

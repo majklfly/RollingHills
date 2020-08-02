@@ -18,6 +18,7 @@
     "dotenv": "^8.2.0",
     "expo": "~38.0.8",
     "expo-constants": "~9.1.1",
+    "expo-google-app-auth": "^8.1.2",
     "expo-status-bar": "^1.0.2",
     "firebase": "^7.17.1",
     "lottie-react-native": "^3.5.0",
@@ -33,7 +34,8 @@
     "react-native-screens": "~2.9.0",
     "react-native-svg": "12.1.0",
     "react-native-web": "~0.11.7",
-    "rn-nodeify": "^10.2.0"
+    "rn-nodeify": "^10.2.0",
+    "expo-google-sign-in": "~8.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",
