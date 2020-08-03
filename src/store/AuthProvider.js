@@ -1,7 +1,9 @@
 import React, { createContext, useState } from "react";
 import { AsyncStorage } from "react-native";
 import Firebase from "../../firebase";
-import * as GoogleSignIn from "expo-google-sign-in";
+import * as Google from "expo-google-app-auth";
+import * as Facebook from "expo-facebook";
+const firebase = require("firebase");
 
 const ANDROID_CLIENT_ID =
   "336140000042-nr0ujm74ie18vtdjop0btpglgcttnfub.apps.googleusercontent.com";
@@ -13,6 +15,7 @@ export const AuthContext = createContext({
   logout: () => {},
   signup: () => {},
   signInGoogle: () => {},
+  singInFacebook: () => {},
 });
 
 export const AuthProvider = ({ children }) => {
@@ -76,13 +79,33 @@ export const AuthProvider = ({ children }) => {
 
   const signInGoogle = async () => {
     try {
-      await GoogleSignIn.initAsync({
-        clientId: ANDROID_CLIENT_ID,
+      const result = await Google.logInAsync({
+        androidClientId: ANDROID_CLIENT_ID,
+        scopes: ["profile", "email"],
       });
-      const user = await GoogleSignIn.signInWithGoogle();
-      console.log(user);
+      if (result.type === "success") {
+        const credential = firebase.auth.GoogleAuthProvider.credential(
+          result.idToken,
+          result.accessToken
+        );
+        Firebase.auth()
+          .signInWithCredential(credential)
+          .then((data) => console.log(data));
+      }
     } catch (e) {
       console.log(e);
+    }
+  };
+
+  const signInFacebook = async () => {
+    await Facebook.initializeAsync("213144473364363");
+    try {
+      const { type, token } = await Facebook.logInWithReadPermissionsAsync({
+        permissions: ["public_profile"],
+      });
+      console.log(type);
+    } catch (e) {
+      console.log(e.message);
     }
   };
 
@@ -96,6 +119,7 @@ export const AuthProvider = ({ children }) => {
         logout,
         signup,
         signInGoogle,
+        signInFacebook,
       }}
     >
       {children}

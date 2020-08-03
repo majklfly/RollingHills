@@ -22,7 +22,9 @@ import { GithubLogin } from "../../components/GithubLogin/GithubLogin";
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
-  const { login, errorMessage, signInGoogle } = useContext(AuthContext);
+  const { login, errorMessage, signInGoogle, signInFacebook } = useContext(
+    AuthContext
+  );
 
   console.log(email);
 
@@ -93,7 +95,9 @@ const LoginScreen = ({ navigation }) => {
             <TouchableOpacity onPress={() => signInGoogle()}>
               <GoogleLogin />
             </TouchableOpacity>
-            <FacebookLogin />
+            <TouchableOpacity onPress={() => signInFacebook()}>
+              <FacebookLogin />
+            </TouchableOpacity>
             <GithubLogin />
           </View>
           <View style={{ flexDirection: "row", justifyContent: "center" }}>
