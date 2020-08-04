@@ -103,9 +103,9 @@ export const AuthProvider = ({ children }) => {
       const { type, token } = await Facebook.logInWithReadPermissionsAsync({
         permissions: ["public_profile"],
       });
-      console.log(type);
+      setErrorMessage(type);
     } catch (e) {
-      console.log(e.message);
+      setErrorMessage(e.message);
     }
   };
 
