@@ -1,12 +1,12 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
 import { AsyncStorage } from "react-native";
 import Firebase from "../../firebase";
 import * as Google from "expo-google-app-auth";
 import * as Facebook from "expo-facebook";
+import { AuthSession } from "expo";
 const firebase = require("firebase");
 
-const ANDROID_CLIENT_ID =
-  "336140000042-nr0ujm74ie18vtdjop0btpglgcttnfub.apps.googleusercontent.com";
+import { ANDROID_CLIENT_ID, GITHUB_ID, GITHUB_SECRET } from "@env";
 
 export const AuthContext = createContext({
   user: null,
@@ -30,6 +30,12 @@ export const AuthProvider = ({ children }) => {
     AsyncStorage.setItem("user", JSON.stringify(user));
     setUser(user);
   };
+
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged((user) => {
+      user && console.log(user);
+    });
+  }, []);
 
   const handleError = (error) => {
     if (
@@ -98,15 +104,27 @@ export const AuthProvider = ({ children }) => {
   };
 
   const signInFacebook = async () => {
-    await Facebook.initializeAsync("213144473364363");
     try {
+      await Facebook.initializeAsync("213144473364363");
       const { type, token } = await Facebook.logInWithReadPermissionsAsync({
         permissions: ["public_profile"],
       });
-      setErrorMessage(type);
-    } catch (e) {
-      setErrorMessage(e.message);
+      if (type === "success") {
+        const credential = firebase.auth.FacebookAuthProvider.credential(token);
+        firebase
+          .auth()
+          .signInWithCredential(credential)
+          .catch((error) => console.log(error));
+      } else {
+        // type === 'cancel'
+      }
+    } catch ({ message }) {
+      alert(`Facebook Login Error: ${message}`);
     }
+  };
+
+  const forgotPassword = (email) => {
+    return firebase.auth().sendPasswordResetEmail(email);
   };
 
   return (
@@ -120,6 +138,7 @@ export const AuthProvider = ({ children }) => {
         signup,
         signInGoogle,
         signInFacebook,
+        forgotPassword,
       }}
     >
       {children}
