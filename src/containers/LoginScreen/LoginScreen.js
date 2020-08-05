@@ -4,9 +4,9 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity,
   Modal,
   Alert,
+  TouchableOpacity,
 } from "react-native";
 
 import constants from "../../constants";
@@ -18,18 +18,108 @@ import { AuthContext } from "../../store/AuthProvider";
 
 import { GoogleLogin } from "../../components/GoogleLogin/GoogleLogin";
 import { FacebookLogin } from "../../components/FacebookLogin/FacebookLogin";
-import { GithubLogin } from "../../components/GithubLogin/GithubLogin";
 import { ForgotPasswordForm } from "../../components/ForgotPasswordForm/ForgotPasswordForm";
+import { SignupForm } from "../../components/SignupForm/SignupForm";
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [signupModalVisible, setSignupModalVisible] = useState(false);
   const { login, errorMessage, signInGoogle, signInFacebook } = useContext(
     AuthContext
   );
 
-  console.log(email);
+  const renderLoginForm = () => {
+    if (modalVisible === true || signupModalVisible === true) {
+      return null;
+    } else {
+      return (
+        <>
+          <Form style={styles.form}>
+            <Item floatingLabel>
+              <Label style={styles.label}>Email</Label>
+              <Input
+                style={{ color: "white" }}
+                value={email}
+                autoCorrent={false}
+                autoCapitalize="none"
+                onChangeText={(value) => setEmail(value)}
+              ></Input>
+            </Item>
+            <Item floatingLabel>
+              <Label style={styles.label}>Password</Label>
+              <Input
+                style={styles.input}
+                autoCorrent={false}
+                value={password}
+                autoCapitalize="none"
+                secureTextEntry
+                onChangeText={(value) => {
+                  setPassword(value);
+                }}
+              ></Input>
+            </Item>
+            <View style={styles.checkbox}>
+              <CheckBox />
+              <Text style={styles.checkboxText}>Remember me</Text>
+            </View>
+            <Button
+              full
+              rounded
+              style={{
+                marginTop: 20,
+                backgroundColor: constants.primary.buttonColor,
+              }}
+              onPress={() => login(email, password)}
+            >
+              <Text style={styles.buttonText}>Login</Text>
+            </Button>
+            <View style={styles.footer}>
+              <TouchableOpacity onPress={() => signInGoogle()}>
+                <GoogleLogin />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => signInFacebook()}>
+                <FacebookLogin />
+              </TouchableOpacity>
+            </View>
+            <View style={{ flexDirection: "row", justifyContent: "center" }}>
+              <Text
+                style={styles.terms}
+                onPress={() => navigation.navigate("Terms")}
+              >
+                Terms
+              </Text>
+              <Text style={styles.terms} onPress={() => setModalVisible(true)}>
+                Forgot Password
+              </Text>
+              <Text
+                style={styles.terms}
+                onPress={() => setSignupModalVisible(true)}
+              >
+                Signup
+              </Text>
+            </View>
+          </Form>
+
+          <View style={{ flexDirection: "row" }}>
+            <Svg
+              height={200}
+              width={200}
+              viewBox="0 0 100 100"
+              style={{ position: "relative", bottom: 74.5 }}
+            >
+              <Path
+                d="M0 0 L0 60 Q0 15 40 0 L0 0"
+                fill={constants.primary.containerColor}
+                stroke={constants.primary.containerColor}
+              />
+            </Svg>
+          </View>
+        </>
+      );
+    }
+  };
 
   return (
     <View style={styles.mainContainer}>
@@ -55,92 +145,7 @@ const LoginScreen = ({ navigation }) => {
             </View>
           )}
         </View>
-        {!modalVisible && (
-          <>
-            <Form style={styles.form}>
-              <Item floatingLabel>
-                <Label style={styles.label}>Email</Label>
-                <Input
-                  style={{ color: "white" }}
-                  value={email}
-                  autoCorrent={false}
-                  autoCapitalize="none"
-                  onChangeText={(value) => setEmail(value)}
-                ></Input>
-              </Item>
-              <Item floatingLabel>
-                <Label style={styles.label}>Password</Label>
-                <Input
-                  style={styles.input}
-                  autoCorrent={false}
-                  value={password}
-                  autoCapitalize="none"
-                  secureTextEntry
-                  onChangeText={(value) => {
-                    setPassword(value);
-                  }}
-                ></Input>
-              </Item>
-              <View style={styles.checkbox}>
-                <CheckBox />
-                <Text style={styles.checkboxText}>Remember me</Text>
-              </View>
-              <Button
-                full
-                rounded
-                style={{
-                  marginTop: 20,
-                  backgroundColor: constants.primary.buttonColor,
-                }}
-                onPress={() => login(email, password)}
-              >
-                <Text style={styles.buttonText}>Login</Text>
-              </Button>
-              <View style={styles.footer}>
-                <TouchableOpacity onPress={() => signInGoogle()}>
-                  <GoogleLogin />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => signInFacebook()}>
-                  <FacebookLogin />
-                </TouchableOpacity>
-              </View>
-              <View style={{ flexDirection: "row", justifyContent: "center" }}>
-                <Text
-                  style={styles.terms}
-                  onPress={() => navigation.navigate("Terms")}
-                >
-                  Terms
-                </Text>
-                <Text
-                  style={styles.terms}
-                  onPress={() => setModalVisible(true)}
-                >
-                  Forgot Password?
-                </Text>
-              </View>
-            </Form>
-
-            <View style={{ flexDirection: "row" }}>
-              <Svg
-                height={200}
-                width={200}
-                viewBox="0 0 100 100"
-                style={{ position: "relative", bottom: 74.5 }}
-              >
-                <Path
-                  d="M0 0 L0 60 Q0 15 40 0 L0 0"
-                  fill={constants.primary.containerColor}
-                  stroke={constants.primary.containerColor}
-                />
-              </Svg>
-              <TouchableOpacity style={styles.signupButton}>
-                <Text style={styles.buttonText}>
-                  Don't have an account? Sing Up here
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </>
-        )}
+        {renderLoginForm()}
       </View>
       <Modal
         animationType="fade"
@@ -150,6 +155,15 @@ const LoginScreen = ({ navigation }) => {
         style={styles.modal}
       >
         <ForgotPasswordForm setModalVisible={setModalVisible} />
+      </Modal>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={signupModalVisible}
+        onRequestClose={() => Alert.alert("Email has been sent")}
+        style={styles.modal}
+      >
+        <SignupForm setSignupModalVisible={setSignupModalVisible} />
       </Modal>
     </View>
   );
@@ -215,11 +229,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   signupButton: {
-    width: "80%",
+    width: "100%",
     height: 50,
     backgroundColor: constants.primary.containerColor,
-    position: "relative",
-    left: "-75%",
+    marginTop: "50%",
+    marginBottom: "-68%",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 40,

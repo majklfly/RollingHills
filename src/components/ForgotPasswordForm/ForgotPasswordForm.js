@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { Form, Item, Button, Label, Input } from "native-base";
 
@@ -6,8 +6,11 @@ import { FontAwesome } from "@expo/vector-icons";
 
 import constants from "../../constants";
 
+import { AuthContext } from "../../store/AuthProvider";
+
 export const ForgotPasswordForm = (props) => {
   const [email, setEmail] = useState(null);
+  const { forgotPassword } = useContext(AuthContext);
   return (
     <View>
       <Form style={styles.form}>
@@ -32,7 +35,7 @@ export const ForgotPasswordForm = (props) => {
             backgroundColor: constants.primary.buttonColor,
             marginTop: 50,
           }}
-          onPress={() => console.log(email)}
+          onPress={() => forgotPassword(email)}
         >
           <Text style={styles.buttonText}>Reset my password</Text>
         </Button>

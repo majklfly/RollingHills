@@ -6,7 +6,7 @@ import * as Facebook from "expo-facebook";
 import { AuthSession } from "expo";
 const firebase = require("firebase");
 
-import { ANDROID_CLIENT_ID, GITHUB_ID, GITHUB_SECRET } from "@env";
+import { ANDROID_CLIENT_ID } from "@env";
 
 export const AuthContext = createContext({
   user: null,
@@ -124,7 +124,11 @@ export const AuthProvider = ({ children }) => {
   };
 
   const forgotPassword = (email) => {
-    return firebase.auth().sendPasswordResetEmail(email);
+    try {
+      return firebase.auth().sendPasswordResetEmail(email);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
