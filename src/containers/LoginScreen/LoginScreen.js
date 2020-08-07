@@ -26,9 +26,7 @@ const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [signupModalVisible, setSignupModalVisible] = useState(false);
-  const { login, errorMessage, signInGoogle, signInFacebook } = useContext(
-    AuthContext
-  );
+  const { state, dispatch } = useContext(AuthContext);
 
   const renderLoginForm = () => {
     if (modalVisible === true || signupModalVisible === true) {

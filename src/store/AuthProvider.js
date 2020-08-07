@@ -1,11 +1,9 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useReducer } from "react";
 import { AsyncStorage } from "react-native";
 import Firebase from "../../firebase";
 import * as Google from "expo-google-app-auth";
 import * as Facebook from "expo-facebook";
-import { AuthSession } from "expo";
 const firebase = require("firebase");
-
 import { ANDROID_CLIENT_ID } from "@env";
 
 export const AuthContext = createContext({
@@ -18,52 +16,83 @@ export const AuthContext = createContext({
   singInFacebook: () => {},
 });
 
+const initialState = {
+  user: {},
+  errorMessage: "",
+  isLoading: false,
+};
+
+const authReducer = (state, action) => {
+  switch (action.type) {
+    case "login": {
+      return {
+        ...state,
+        isLoading: true,
+      };
+    }
+    case "success": {
+      return {
+        ...state,
+        isLoading: false,
+        user: action.payload,
+      };
+    }
+    case "error": {
+      return {
+        ...state,
+        error: action.payload,
+      };
+    }
+    case "cleanError": {
+      return {
+        ...state,
+        error: "",
+      };
+    }
+  }
+};
+
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(undefined);
+  const [state, dispatch] = useReducer(authReducer, initialState);
+
   const logout = () => {
     setUser(null);
     AsyncStorage.removeItem("user");
   };
-
-  const handleLogin = (user) => {
-    AsyncStorage.setItem("user", JSON.stringify(user));
-    setUser(user);
-  };
-
-  useEffect(() => {
-    firebase.auth().onAuthStateChanged((user) => {
-      user && console.log(user);
-    });
-  }, []);
 
   const handleError = (error) => {
     if (
       error.message ===
       'signInWithEmailAndPassword failed: First argument "email" must be a valid string.'
     ) {
-      setErrorMessage("Please enter valid email");
+      dispatch({ type: "error", payload: "Please enter valid email" });
     } else if (
       error.message ===
       'signInWithEmailAndPassword failed: Second argument "password" must be a valid string.'
     ) {
-      setErrorMessage("Please enter your password");
+      dispatch({ type: "error", payload: "Please enter your password" });
     } else if (error.message === "The email address is badly formatted.") {
-      setErrorMessage("Please enter valid email");
+      dispatch({ type: "error", payload: "Please enter valid email" });
     } else if (
       error.message ===
       "There is no user record corresponding to this identifier. The user may have been deleted."
     ) {
-      setErrorMessage("Provided credentials don't match.");
+      dispatch({ type: "error", payload: "Provided credentials don't match." });
     } else {
       console.log(error);
     }
     setTimeout(function () {
-      setErrorMessage(null);
+      dispatch({ type: "cleanError" });
     }, 2000);
   };
 
+  const handleLogin = (user) => {
+    AsyncStorage.setItem("user", JSON.stringify(user));
+    dispatch({ type: "success", payload: user });
+  };
+
   const login = (email, password) => {
+    dispatch({ type: "login" });
     try {
       Firebase.auth()
         .signInWithEmailAndPassword(email, password)
@@ -84,6 +113,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const signInGoogle = async () => {
+    dispatch({ type: "login" });
     try {
       const result = await Google.logInAsync({
         androidClientId: ANDROID_CLIENT_ID,
@@ -96,10 +126,10 @@ export const AuthProvider = ({ children }) => {
         );
         Firebase.auth()
           .signInWithCredential(credential)
-          .then((data) => console.log(data));
+          .then((data) => dispatch({ type: "success", payload: data }));
       }
     } catch (e) {
-      console.log(e);
+      console.log(error);
     }
   };
 
@@ -114,7 +144,8 @@ export const AuthProvider = ({ children }) => {
         firebase
           .auth()
           .signInWithCredential(credential)
-          .catch((error) => console.log(error));
+          .then((data) => console.log("data", data))
+          .catch((error) => console.log("here", error));
       } else {
         // type === 'cancel'
       }
@@ -132,19 +163,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider
-      value={{
-        setUser,
-        errorMessage,
-        user,
-        login,
-        logout,
-        signup,
-        signInGoogle,
-        signInFacebook,
-        forgotPassword,
-      }}
-    >
+    <AuthContext.Provider value={{ state, dispatch }}>
       {children}
     </AuthContext.Provider>
   );
