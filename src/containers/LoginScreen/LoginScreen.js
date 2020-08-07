@@ -14,7 +14,7 @@ import constants from "../../constants";
 import Svg, { Path } from "react-native-svg";
 
 import { Background } from "../../components/Background/Background";
-import { AuthContext } from "../../store/AuthProvider";
+import { AuthContext, GlobalContext } from "../../store/AuthProvider";
 
 import { GoogleLogin } from "../../components/GoogleLogin/GoogleLogin";
 import { FacebookLogin } from "../../components/FacebookLogin/FacebookLogin";
@@ -26,7 +26,10 @@ const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [signupModalVisible, setSignupModalVisible] = useState(false);
-  const { state, dispatch } = useContext(AuthContext);
+  const { login, logout, signup, signInGoogle, signInFacebook } = useContext(
+    AuthContext
+  );
+  const { errorMessage, user } = useContext(GlobalContext);
 
   const renderLoginForm = () => {
     if (modalVisible === true || signupModalVisible === true) {

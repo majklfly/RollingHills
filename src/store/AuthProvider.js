@@ -7,13 +7,16 @@ const firebase = require("firebase");
 import { ANDROID_CLIENT_ID } from "@env";
 
 export const AuthContext = createContext({
-  user: null,
-  errorMessage: null,
   login: () => {},
   logout: () => {},
   signup: () => {},
   signInGoogle: () => {},
-  singInFacebook: () => {},
+  signInFacebook: () => {},
+});
+
+export const GlobalContext = createContext({
+  user: null,
+  errorMessage: null,
 });
 
 const initialState = {
@@ -163,8 +166,12 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ state, dispatch }}>
-      {children}
-    </AuthContext.Provider>
+    <GlobalContext.Provider value={{ state }}>
+      <AuthContext.Provider
+        value={{ login, logout, signup, signInGoogle, signInFacebook }}
+      >
+        {children}
+      </AuthContext.Provider>
+    </GlobalContext.Provider>
   );
 };
