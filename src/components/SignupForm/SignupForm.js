@@ -20,44 +20,42 @@ export const SignupForm = (props) => {
       >
         <FontAwesome name="close" style={styles.icon} />
       </TouchableOpacity>
-      <View style={styles.container}>
-        <Form style={styles.form}>
-          <Item floatingLabel>
-            <Label style={styles.label}>Email</Label>
-            <Input
-              style={{ color: "white" }}
-              value={email}
-              autoCorrent={false}
-              autoCapitalize="none"
-              onChangeText={(value) => setEmail(value)}
-            ></Input>
-          </Item>
-          <Item floatingLabel>
-            <Label style={styles.label}>Password</Label>
-            <Input
-              style={styles.input}
-              autoCorrent={false}
-              value={password}
-              autoCapitalize="none"
-              secureTextEntry
-              onChangeText={(value) => {
-                setPassword(value);
-              }}
-            ></Input>
-          </Item>
-          <Button
-            full
-            rounded
-            style={{
-              marginTop: 20,
-              backgroundColor: constants.primary.buttonColor,
+      <Form style={styles.form}>
+        <Item floatingLabel>
+          <Label style={styles.label}>Email</Label>
+          <Input
+            style={{ color: "white" }}
+            value={email}
+            autoCorrent={false}
+            autoCapitalize="none"
+            onChangeText={(value) => setEmail(value)}
+          ></Input>
+        </Item>
+        <Item floatingLabel>
+          <Label style={styles.label}>Password</Label>
+          <Input
+            style={styles.input}
+            autoCorrent={false}
+            value={password}
+            autoCapitalize="none"
+            secureTextEntry
+            onChangeText={(value) => {
+              setPassword(value);
             }}
-            onPress={() => signup(email, password)}
-          >
-            <Text style={styles.buttonText}>Sign Up</Text>
-          </Button>
-        </Form>
-      </View>
+          ></Input>
+        </Item>
+        <Button
+          full
+          rounded
+          style={{
+            marginTop: 20,
+            backgroundColor: constants.primary.buttonColor,
+          }}
+          onPress={() => signup(email, password)}
+        >
+          <Text style={styles.buttonText}>Sign Up</Text>
+        </Button>
+      </Form>
     </>
   );
 };
@@ -67,7 +65,7 @@ const styles = StyleSheet.create({
     width: "70%",
     alignSelf: "center",
     position: "relative",
-    top: -150,
+    top: "30%",
   },
   label: {
     color: constants.primary.textColor,

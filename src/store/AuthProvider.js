@@ -43,13 +43,22 @@ const authReducer = (state, action) => {
     case "error": {
       return {
         ...state,
-        error: action.payload,
+        errorMessage: action.payload,
+        isLoading: false,
       };
     }
     case "cleanError": {
       return {
         ...state,
+        errorMessage: null,
+      };
+    }
+    case "logout": {
+      return {
+        ...state,
         error: "",
+        user: null,
+        loading: false,
       };
     }
   }
@@ -58,12 +67,7 @@ const authReducer = (state, action) => {
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
-  const logout = () => {
-    setUser(null);
-    AsyncStorage.removeItem("user");
-  };
-
-  const handleError = (error) => {
+  const handleLoginErrors = (error) => {
     if (
       error.message ===
       'signInWithEmailAndPassword failed: First argument "email" must be a valid string.'
@@ -80,13 +84,39 @@ export const AuthProvider = ({ children }) => {
       error.message ===
       "There is no user record corresponding to this identifier. The user may have been deleted."
     ) {
-      dispatch({ type: "error", payload: "Provided credentials don't match." });
+      dispatch({ type: "error", payload: "Email address is not recognized." });
+    } else if (
+      error.message ===
+      "The password is invalid or the user does not have a password."
+    ) {
+      dispatch({ type: "error", payload: "Please enter correct password." });
     } else {
       console.log(error);
     }
     setTimeout(function () {
       dispatch({ type: "cleanError" });
     }, 2000);
+  };
+
+  const handleSignupErrors = (error) => {
+    error.message ===
+      'createUserWithEmailAndPassword failed: First argument "email" must be a valid string.' &&
+      dispatch({ type: "error", payload: "Please enter your email" });
+    error.message ===
+      'createUserWithEmailAndPassword failed: Second argument "password" must be a valid string.' &&
+      dispatch({ type: "error", payload: "Please enter your password" });
+    error.message === "The email address is badly formatted." &&
+      dispatch({ type: "error", payload: "Your email is incorrect." });
+    error.message === "Password should be at least 6 characters" &&
+      dispatch({ type: "error", payload: "Please provide longer password" });
+    setTimeout(function () {
+      dispatch({ type: "cleanError" });
+    }, 2000);
+  };
+
+  const logout = () => {
+    dispatch({ type: "logout" });
+    AsyncStorage.removeItem("user");
   };
 
   const handleLogin = (user) => {
@@ -100,18 +130,22 @@ export const AuthProvider = ({ children }) => {
       Firebase.auth()
         .signInWithEmailAndPassword(email, password)
         .then((user) => handleLogin(user))
-        .catch((e) => handleError(e));
+        .catch((e) => handleLoginErrors(e));
     } catch (error) {
-      handleError(error);
+      handleLoginErrors(error);
     }
   };
 
   const signup = (email, password) => {
     try {
-      password.length < 6 && alert("Please enter at least 6 characters");
-      Firebase.auth().createUserWithEmailAndPassword(email, password);
+      Firebase.auth()
+        .createUserWithEmailAndPassword(email, password)
+        .then((user) => handleLogin(user))
+        .catch((e) => {
+          handleSignupErrors(e);
+        });
     } catch (error) {
-      console.log(error.toString());
+      handleSignupErrors(error);
     }
   };
 
@@ -137,6 +171,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const signInFacebook = async () => {
+    dispatch({ type: "login" });
     try {
       await Facebook.initializeAsync("213144473364363");
       const { type, token } = await Facebook.logInWithReadPermissionsAsync({
@@ -147,7 +182,7 @@ export const AuthProvider = ({ children }) => {
         firebase
           .auth()
           .signInWithCredential(credential)
-          .then((data) => console.log("data", data))
+          .then((data) => dispatch({ type: "success", payload: data.user }))
           .catch((error) => console.log("here", error));
       } else {
         // type === 'cancel'
@@ -166,7 +201,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <GlobalContext.Provider value={{ state }}>
+    <GlobalContext.Provider value={{ state, dispatch }}>
       <AuthContext.Provider
         value={{ login, logout, signup, signInGoogle, signInFacebook }}
       >

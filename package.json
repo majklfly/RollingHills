@@ -41,7 +41,10 @@
     "react-native-screens": "~2.9.0",
     "react-native-svg": "12.1.0",
     "react-native-web": "~0.11.7",
-    "rn-nodeify": "^10.2.0"
+    "rn-nodeify": "^10.2.0",
+    "react-native-maps": "0.27.1",
+    "expo-task-manager": "~8.3.0",
+    "expo-location": "~8.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",

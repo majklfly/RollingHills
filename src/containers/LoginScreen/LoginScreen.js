@@ -7,6 +7,7 @@ import {
   Modal,
   Alert,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 
 import constants from "../../constants";
@@ -26,10 +27,9 @@ const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [signupModalVisible, setSignupModalVisible] = useState(false);
-  const { login, logout, signup, signInGoogle, signInFacebook } = useContext(
-    AuthContext
-  );
-  const { errorMessage, user } = useContext(GlobalContext);
+  const { login, signInGoogle, signInFacebook } = useContext(AuthContext);
+  const { state } = useContext(GlobalContext);
+  const { isLoading, errorMessage } = state;
 
   const renderLoginForm = () => {
     if (modalVisible === true || signupModalVisible === true) {
@@ -61,15 +61,11 @@ const LoginScreen = ({ navigation }) => {
                 }}
               ></Input>
             </Item>
-            <View style={styles.checkbox}>
-              <CheckBox />
-              <Text style={styles.checkboxText}>Remember me</Text>
-            </View>
             <Button
               full
               rounded
               style={{
-                marginTop: 20,
+                marginTop: 40,
                 backgroundColor: constants.primary.buttonColor,
               }}
               onPress={() => login(email, password)}
@@ -108,7 +104,7 @@ const LoginScreen = ({ navigation }) => {
               height={200}
               width={200}
               viewBox="0 0 100 100"
-              style={{ position: "relative", bottom: 74.5 }}
+              style={{ position: "relative", top: "-13.8%" }}
             >
               <Path
                 d="M0 0 L0 60 Q0 15 40 0 L0 0"
@@ -125,7 +121,6 @@ const LoginScreen = ({ navigation }) => {
   return (
     <View style={styles.mainContainer}>
       <Background />
-
       <View style={styles.container}>
         <View style={{ flexDirection: "row" }}>
           <Svg
@@ -140,13 +135,13 @@ const LoginScreen = ({ navigation }) => {
               stroke={constants.primary.containerColor}
             />
           </Svg>
-          {errorMessage && (
+          {errorMessage ? (
             <View style={styles.errorMessage}>
               <Text style={styles.buttonText}>{errorMessage}</Text>
             </View>
-          )}
+          ) : null}
         </View>
-        {renderLoginForm()}
+        {isLoading ? <ActivityIndicator size="large" /> : renderLoginForm()}
       </View>
       <Modal
         animationType="fade"
@@ -201,16 +196,6 @@ const styles = StyleSheet.create({
     fontFamily: constants.primary.fontFamily,
     width: 70,
   },
-  checkbox: {
-    flexDirection: "row",
-    paddingLeft: 10,
-    paddingTop: 20,
-  },
-  checkboxText: {
-    color: constants.primary.textColor,
-    fontFamily: constants.primary.fontFamily,
-    marginLeft: 20,
-  },
   terms: {
     color: constants.primary.textColor,
     alignSelf: "center",
@@ -243,7 +228,7 @@ const styles = StyleSheet.create({
     width: "80%",
     height: 50,
     backgroundColor: constants.primary.errorMessageColor,
-    top: "-25%",
+    top: "-20%",
     left: "-75%",
     justifyContent: "center",
     alignItems: "center",
