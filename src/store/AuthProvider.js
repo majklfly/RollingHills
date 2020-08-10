@@ -61,6 +61,8 @@ const authReducer = (state, action) => {
         loading: false,
       };
     }
+    default:
+      return state;
   }
 };
 

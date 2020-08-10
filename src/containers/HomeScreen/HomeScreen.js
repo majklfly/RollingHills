@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { AuthContext, GlobalContext } from "../../store/AuthProvider";
+import { LocationContext } from "../../store/LocationProvider";
 import { Background } from "../../components/Background/Background";
 import constants from "../../constants";
 import { Map } from "../../components/Map/Map";
@@ -9,6 +10,7 @@ import { Map } from "../../components/Map/Map";
 const HomeScreen = () => {
   const { logout } = useContext(AuthContext);
   const { state } = useContext(GlobalContext);
+  const { startRecording } = useContext(LocationContext);
   const { user } = state;
 
   return (
@@ -23,6 +25,13 @@ const HomeScreen = () => {
         <View style={styles.mapContainer}>
           <Map />
         </View>
+        <Text>00.00.00.00</Text>
+        <TouchableOpacity
+          onPress={() => startRecording()}
+          style={styles.recordButton}
+        >
+          <Text>Start recording</Text>
+        </TouchableOpacity>
       </View>
     </>
   );
@@ -62,6 +71,11 @@ const styles = StyleSheet.create({
     marginTop: "5%",
     alignItems: "center",
     justifyContent: "center",
+  },
+  recordButton: {
+    width: 200,
+    height: 100,
+    backgroundColor: "red",
   },
 });
 
