@@ -1,13 +1,13 @@
+// import "../../_mockLocation";
 import React, { useState, useEffect } from "react";
-
 import { StyleSheet } from "react-native";
 import MapView, { Polyline } from "react-native-maps";
 import * as TaskManager from "expo-task-manager";
 import * as Location from "expo-location";
+import { watchPositionAsync, Accuracy } from "expo-location";
 
 export const Map = () => {
   const [location, setLocation] = useState(null);
-  const [errMessage, setErrMessage] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -17,22 +17,29 @@ export const Map = () => {
       }
 
       let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
+      await watchPositionAsync(
+        {
+          accuracy: Accuracy.BestForNavigation,
+          timeInterval: 1000,
+          distanceInterval: 10,
+        },
+        (location) => {
+          console.log(location);
+        }
+      );
     })();
-  });
+  }, []);
 
   return (
     <MapView
       style={styles.map}
       initialRegion={{
-        latitude: 37.33233,
-        longitude: -122.03121,
-        latitudeDelta: 0.01,
-        longitudeDelta: 0.01,
+        latitude: 51.473506,
+        longitude: -0.205746,
+        latitudeDelta: 0.001,
+        longitudeDelta: 0.001,
       }}
-    >
-      <Polyline />
-    </MapView>
+    ></MapView>
   );
 };
 

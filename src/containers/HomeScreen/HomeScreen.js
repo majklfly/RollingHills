@@ -15,8 +15,10 @@ const HomeScreen = () => {
     <>
       <Background />
       <View style={styles.container}>
-        {user.displayName && (
+        {user.displayName ? (
           <Text style={styles.greeting}>Hello, {user.displayName}</Text>
+        ) : (
+          <Text style={styles.greeting}>Please login</Text>
         )}
         <View style={styles.mapContainer}>
           <Map />
