@@ -1,45 +1,38 @@
-// import "../../_mockLocation";
-import React, { useState, useEffect } from "react";
-import { StyleSheet } from "react-native";
-import MapView, { Polyline } from "react-native-maps";
+import "../../_mockLocation";
+import React, { useState, useContext } from "react";
+import { StyleSheet, ActivityIndicator } from "react-native";
+import MapView, { Polyline, Circle } from "react-native-maps";
+import { LocationStateContext } from "../../store/LocationProvider";
+
 import * as TaskManager from "expo-task-manager";
-import * as Location from "expo-location";
-import { watchPositionAsync, Accuracy } from "expo-location";
 
 export const Map = () => {
   const [location, setLocation] = useState(null);
+  const {
+    state: { currentLocation },
+  } = useContext(LocationStateContext);
 
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestPermissionsAsync();
-      if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
-      }
-
-      let location = await Location.getCurrentPositionAsync({});
-      await watchPositionAsync(
-        {
-          accuracy: Accuracy.BestForNavigation,
-          timeInterval: 1000,
-          distanceInterval: 10,
-        },
-        (location) => {
-          console.log(location);
-        }
-      );
-    })();
-  }, []);
+  if (!currentLocation) {
+    return <ActivityIndicator size="large" style={{ marginTop: 150 }} />;
+  }
 
   return (
     <MapView
       style={styles.map}
       initialRegion={{
-        latitude: 51.473506,
-        longitude: -0.205746,
-        latitudeDelta: 0.001,
-        longitudeDelta: 0.001,
+        longitude: currentLocation.coords.longitude,
+        latitude: currentLocation.coords.latitude,
+        latitudeDelta: 0.004,
+        longitudeDelta: 0.004,
       }}
-    ></MapView>
+    >
+      <Circle
+        center={currentLocation.coords}
+        radius={10}
+        strokeColor="rgba(158,158,255,1)"
+        fillColor="rgba(158,158,255,0.3)"
+      />
+    </MapView>
   );
 };
 

@@ -6,6 +6,12 @@ export const LocationContext = createContext({
   addLocation: () => {},
 });
 
+export const LocationStateContext = createContext({
+  currentLocation: null,
+  locations: [],
+  recording: false,
+});
+
 const initialState = {
   recording: false,
   locations: [],
@@ -14,6 +20,8 @@ const initialState = {
 
 const locationReducer = (state, action) => {
   switch (action.type) {
+    case "add_current_location":
+      return { ...state, currentLocation: action.payload };
     default:
       return state;
   }
@@ -26,13 +34,17 @@ export const LocationProvider = ({ children }) => {
     console.log("startRecording triggered");
   };
   const stopRecording = () => {};
-  const addLocation = () => {};
+  const addLocation = (location) => {
+    dispatch({ type: "add_current_location", payload: location });
+  };
 
   return (
-    <LocationContext.Provider
-      value={{ startRecording, stopRecording, addLocation }}
-    >
-      {children}
-    </LocationContext.Provider>
+    <LocationStateContext.Provider value={{ state }}>
+      <LocationContext.Provider
+        value={{ startRecording, stopRecording, addLocation }}
+      >
+        {children}
+      </LocationContext.Provider>
+    </LocationStateContext.Provider>
   );
 };

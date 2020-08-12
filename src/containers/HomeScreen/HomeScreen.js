@@ -1,17 +1,23 @@
 import React, { useContext } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+
 import { AuthContext, GlobalContext } from "../../store/AuthProvider";
 import { LocationContext } from "../../store/LocationProvider";
+import useLocation from "../../hooks/useLocation";
+
 import { Background } from "../../components/Background/Background";
-import constants from "../../constants";
 import { Map } from "../../components/Map/Map";
+import constants from "../../constants";
 
 const HomeScreen = () => {
   const { logout } = useContext(AuthContext);
-  const { state } = useContext(GlobalContext);
-  const { startRecording } = useContext(LocationContext);
-  const { user } = state;
+  const {
+    state: { user },
+  } = useContext(GlobalContext);
+  const { addLocation, startRecording } = useContext(LocationContext);
+
+  const [err] = useLocation((location) => addLocation(location));
 
   return (
     <>
@@ -20,7 +26,7 @@ const HomeScreen = () => {
         {user.displayName ? (
           <Text style={styles.greeting}>Hello, {user.displayName}</Text>
         ) : (
-          <Text style={styles.greeting}>Please login</Text>
+          <>{logout()}</>
         )}
         <View style={styles.mapContainer}>
           <Map />

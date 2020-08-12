@@ -203,7 +203,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <GlobalContext.Provider value={{ state, dispatch }}>
+    <GlobalContext.Provider value={{ state }}>
       <AuthContext.Provider
         value={{ login, logout, signup, signInGoogle, signInFacebook }}
       >
