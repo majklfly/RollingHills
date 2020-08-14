@@ -3,10 +3,11 @@ import * as Location from "expo-location";
 
 import { Accuracy, watchPositionAsync } from "expo-location";
 
-export default (callback) => {
+export default (shouldTrack, callback) => {
   const [err, setErr] = useState(null);
+  const [subscriber, setSubscriber] = useState(false);
 
-  useEffect(() => {
+  const startWatching = () => {
     try {
       (async () => {
         let { status } = await Location.requestPermissionsAsync();
@@ -15,7 +16,7 @@ export default (callback) => {
         }
 
         let location = await Location.getCurrentPositionAsync({});
-        await watchPositionAsync(
+        const sub = await watchPositionAsync(
           {
             accuracy: Accuracy.BestForNavigation,
             timeInterval: 1000,
@@ -23,11 +24,26 @@ export default (callback) => {
           },
           callback
         );
+        setSubscriber(sub);
       })();
     } catch (e) {
       setErr(e);
     }
-  }, []);
+  };
+
+  useEffect(() => {
+    if (shouldTrack) {
+      startWatching();
+    } else {
+      subscriber.remove();
+      setSubscriber(null);
+    }
+    return () => {
+      if (subscriber) {
+        subscriber.remove();
+      }
+    };
+  }, [shouldTrack, callback]);
 
   return [err];
 };

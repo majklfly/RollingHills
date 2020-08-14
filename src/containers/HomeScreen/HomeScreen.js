@@ -1,13 +1,17 @@
-import React, { useContext } from "react";
+import React, { useContext, useCallback } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 import { AuthContext, GlobalContext } from "../../store/AuthProvider";
-import { LocationContext } from "../../store/LocationProvider";
+import {
+  LocationContext,
+  LocationStateContext,
+} from "../../store/LocationProvider";
 import useLocation from "../../hooks/useLocation";
 
 import { Background } from "../../components/Background/Background";
 import { Map } from "../../components/Map/Map";
+import { Timer } from "../../components/Timer/Timer";
 import constants from "../../constants";
 
 const HomeScreen = () => {
@@ -15,9 +19,23 @@ const HomeScreen = () => {
   const {
     state: { user },
   } = useContext(GlobalContext);
-  const { addLocation, startRecording } = useContext(LocationContext);
+  const {
+    addLocation,
+    startRecording,
+    stopRecording,
+    runFinished,
+  } = useContext(LocationContext);
+  const {
+    state: { recording },
+  } = useContext(LocationStateContext);
+  const callback = useCallback(
+    (location) => {
+      addLocation(location, recording);
+    },
+    [recording]
+  );
 
-  const [err] = useLocation((location) => addLocation(location));
+  const [err] = useLocation(true, callback);
 
   return (
     <>
@@ -31,13 +49,30 @@ const HomeScreen = () => {
         <View style={styles.mapContainer}>
           <Map />
         </View>
-        <Text>00.00.00.00</Text>
-        <TouchableOpacity
-          onPress={() => startRecording()}
-          style={styles.recordButton}
-        >
-          <Text>Start recording</Text>
-        </TouchableOpacity>
+        <Timer />
+        {recording ? (
+          <View style={styles.pauseContainer}>
+            <TouchableOpacity
+              onPress={() => runFinished()}
+              style={styles.pauseButton}
+            >
+              <Text style={styles.buttonText}>Finish</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => stopRecording()}
+              style={styles.pauseButton}
+            >
+              <Text style={styles.buttonText}>Pause</Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <TouchableOpacity
+            onPress={() => startRecording()}
+            style={styles.recordButton}
+          >
+            <Text style={styles.buttonText}>Run</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </>
   );
@@ -79,9 +114,34 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   recordButton: {
-    width: 200,
-    height: 100,
-    backgroundColor: "red",
+    marginTop: "10%",
+    width: 300,
+    height: 50,
+    backgroundColor: constants.primary.buttonColor,
+    borderRadius: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 10,
+  },
+  buttonText: {
+    color: constants.primary.textColor,
+    fontFamily: constants.primary.fontFamily,
+    fontSize: 17,
+  },
+  pauseContainer: {
+    flexDirection: "row",
+    width: "80%",
+    justifyContent: "space-between",
+    marginTop: "10%",
+  },
+  pauseButton: {
+    width: 150,
+    height: 50,
+    backgroundColor: constants.primary.buttonColor,
+    borderRadius: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 10,
   },
 });
 
