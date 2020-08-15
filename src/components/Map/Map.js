@@ -1,4 +1,4 @@
-import "../../_mockLocation";
+// import "../../_mockLocation";
 import React, { useState, useContext } from "react";
 import { StyleSheet, ActivityIndicator } from "react-native";
 import MapView, { Polyline, Circle } from "react-native-maps";

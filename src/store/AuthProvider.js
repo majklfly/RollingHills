@@ -131,7 +131,7 @@ export const AuthProvider = ({ children }) => {
     try {
       Firebase.auth()
         .signInWithEmailAndPassword(email, password)
-        .then((user) => handleLogin(user))
+        .then((data) => handleLogin(data.user))
         .catch((e) => handleLoginErrors(e));
     } catch (error) {
       handleLoginErrors(error);
@@ -142,7 +142,7 @@ export const AuthProvider = ({ children }) => {
     try {
       Firebase.auth()
         .createUserWithEmailAndPassword(email, password)
-        .then((user) => handleLogin(user))
+        .then((data) => handleLogin(data.user))
         .catch((e) => {
           handleSignupErrors(e);
         });
@@ -165,7 +165,7 @@ export const AuthProvider = ({ children }) => {
         );
         Firebase.auth()
           .signInWithCredential(credential)
-          .then((data) => dispatch({ type: "success", payload: data }));
+          .then((data) => dispatch({ type: "success", payload: data.user }));
       }
     } catch (e) {
       console.log(error);

@@ -51,7 +51,7 @@ const HomeScreen = () => {
         {user ? (
           <Text style={styles.greeting}>Hello, {user.displayName}</Text>
         ) : (
-          <Text style={styles.greeting}>Hello</Text>
+          <Text style={styles.greeting}>{logout()}</Text>
         )}
         <View style={styles.mapContainer}>
           <Map />

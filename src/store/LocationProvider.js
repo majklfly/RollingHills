@@ -11,6 +11,8 @@ export const LocationContext = createContext({
   addLocation: () => {},
   runFinished: () => {},
   calculateDistance: () => {},
+  submitResults: () => {},
+  fetchData: () => {},
 });
 
 export const LocationStateContext = createContext({
@@ -19,6 +21,7 @@ export const LocationStateContext = createContext({
   distance: null,
   recording: false,
   finished: false,
+  tracks: [],
 });
 
 const initialState = {
@@ -27,6 +30,7 @@ const initialState = {
   distance: null,
   currentLocation: null,
   finished: false,
+  tracks: [],
 };
 
 const locationReducer = (state, action) => {
@@ -48,7 +52,8 @@ const locationReducer = (state, action) => {
       };
     case "add_location":
       return { ...state, locations: [...state.locations, action.payload] };
-
+    case "update_trackslist":
+      return { ...state, tracks: action.payload };
     case "add_distance":
       return { ...state, distance: action.payload };
     default:
@@ -74,14 +79,36 @@ export const LocationProvider = ({ children }) => {
     dispatch({ type: "run_finished" });
     const distance = calculateDistance(locations);
     dispatch({ type: "add_distance", payload: distance });
-    // console.log(user.uid);
-    // db.collection("userdata")
-    //   .doc(user.uid)
-    //   .collection("performaces")
-    //   .doc("run1")
-    //   .set({
-    //     time: 201525,
-    //   });
+  };
+
+  const submitResults = (distance, date, time, name) => {
+    try {
+      db.collection("userdata")
+        .doc(user.uid)
+        .collection("performaces")
+        .doc(date)
+        .set({
+          distance: distance,
+          date: date,
+          time: time,
+          name: name,
+        });
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+  const fetchData = async () => {
+    try {
+      const data = await db
+        .collection("userdata")
+        .doc(user.uid)
+        .collection("performaces")
+        .get();
+      dispatch({ type: "update_trackslist", payload: data.Dd.docChanges });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const cleanup = () => {
@@ -128,6 +155,8 @@ export const LocationProvider = ({ children }) => {
           addLocation,
           runFinished,
           calculateDistance,
+          submitResults,
+          fetchData,
           cleanup,
         }}
       >

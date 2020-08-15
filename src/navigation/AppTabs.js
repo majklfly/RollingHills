@@ -2,7 +2,9 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import ProfileScreen from "../containers/ProfileScreen/ProfileScreen";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
+
 import { HomeStack } from "./HomeStack";
+import TracksScreen from "../containers/TracksScreen/TracksScreen";
 
 import constants from "../constants";
 
@@ -45,7 +47,7 @@ export const AppTabs = () => {
       }}
     >
       <Tabs.Screen name="homeScreen" component={HomeStack} />
-      <Tabs.Screen name="Tracks" component={ProfileScreen} />
+      <Tabs.Screen name="Tracks" component={TracksScreen} />
       <Tabs.Screen name="Statistics" component={ProfileScreen} />
       <Tabs.Screen name="profileScreen" component={ProfileScreen} />
     </Tabs.Navigator>

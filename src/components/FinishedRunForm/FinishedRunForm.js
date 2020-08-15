@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 
 import {
   View,
@@ -10,17 +10,20 @@ import {
 import constants from "../../constants";
 
 import { TimerStateContext } from "../../store/TimerProvider";
-import { LocationStateContext } from "../../store/LocationProvider";
+import {
+  LocationStateContext,
+  LocationContext,
+} from "../../store/LocationProvider";
 
 export const FinishedRunForm = (props) => {
+  const [name, setName] = useState("");
   const {
     state: { time },
   } = useContext(TimerStateContext);
   const {
     state: { distance },
   } = useContext(LocationStateContext);
-
-  console.log(distance);
+  const { submitResults } = useContext(LocationContext);
 
   const formatTime = (time) => {
     const seconds = Math.round(time / 60);
@@ -44,6 +47,11 @@ export const FinishedRunForm = (props) => {
     return formatedDate;
   };
 
+  const submitData = () => {
+    submitResults(distance, Date(), time, name);
+    props.setModalVisible(false);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.dataContainer}>
@@ -60,10 +68,14 @@ export const FinishedRunForm = (props) => {
       </View>
       <View style={styles.dataContainer}>
         <Text style={styles.dataText}>Name: </Text>
-        <TextInput />
+        <TextInput
+          value={name}
+          onChangeText={(text) => setName(text)}
+          style={styles.input}
+        />
       </View>
       <TouchableOpacity
-        onPress={() => props.setModalVisible(false)}
+        onPress={() => submitData()}
         style={styles.submitButton}
       >
         <Text>submit</Text>
@@ -92,10 +104,23 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: "75%",
+    marginVertical: 20,
   },
   dataText: {
     fontSize: 25,
     color: constants.primary.textColor,
     fontFamily: constants.primary.fontFamily,
+  },
+  input: {
+    width: "60%",
+    height: 40,
+    marginBottom: "10%",
+    textAlign: "center",
+    borderBottomColor: constants.primary.textColor,
+    borderBottomWidth: 1,
+    color: constants.primary.textColor,
+    fontFamily: constants.primary.fontFamily,
+    textDecorationLine: "none",
+    fontSize: 18,
   },
 });
