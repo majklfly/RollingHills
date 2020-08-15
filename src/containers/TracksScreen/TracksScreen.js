@@ -1,6 +1,6 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 
-import { ScrollView, Text, StyleSheet } from "react-native";
+import { ScrollView, Text, StyleSheet, FlatList, View } from "react-native";
 import { Background } from "../../components/Background/Background";
 
 import {
@@ -10,15 +10,8 @@ import {
 
 import constants from "../../constants";
 
-const formatTracks = (tracks) => {
-  if (tracks) {
-    tracks.map((track) =>
-      console.log(track.doc.Xe.proto.mapValue.fields.date.stringValue)
-    );
-  }
-};
-
 const TracksScreen = () => {
+  const [track, setTracks] = useState([]);
   const { fetchData } = useContext(LocationContext);
   const {
     state: { tracks },
@@ -28,13 +21,35 @@ const TracksScreen = () => {
     fetchData();
   }, []);
 
-  formatTracks();
+  useEffect(() => {
+    formatTracks(tracks);
+  }, [tracks]);
+
+  const formatTracks = (tracks) => {
+    let tracksLocal = [];
+    if (tracks) {
+      tracks.map((track) => {
+        const date = track.doc.Xe.proto.mapValue.fields.date.stringValue;
+        const month = date.split(" ")[1];
+        const day = date.split(" ")[2];
+        const year = date.split(" ")[3];
+        const time = date.split(" ")[4];
+        tracksLocal.push(month + " " + day + " " + year + " " + time);
+      });
+    }
+    setTracks(tracksLocal);
+  };
+
+  console.log(track);
 
   return (
     <>
       <Background />
       <ScrollView style={styles.mainContainer}>
         <Text>TracksScreen</Text>
+        {track.map((item) => {
+          return <Text>{item}</Text>;
+        })}
       </ScrollView>
     </>
   );

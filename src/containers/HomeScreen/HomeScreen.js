@@ -48,7 +48,7 @@ const HomeScreen = () => {
     <>
       <Background />
       <View style={styles.container}>
-        {user ? (
+        {user.displayName ? (
           <Text style={styles.greeting}>Hello, {user.displayName}</Text>
         ) : (
           <Text style={styles.greeting}>{logout()}</Text>
