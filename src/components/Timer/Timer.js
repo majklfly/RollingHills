@@ -1,38 +1,52 @@
-import React, { useState, useContext, useEffect, useCallback } from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
+import React, { useState, useContext, useEffect } from "react";
+import { View, Text, StyleSheet } from "react-native";
 import constants from "../../constants";
 
 import {
   LocationStateContext,
   LocationContext,
 } from "../../store/LocationProvider";
-import { set } from "react-native-reanimated";
+import { TimerActionContext } from "../../store/TimerProvider";
 
 export const Timer = () => {
   const [time, setTime] = useState({ ms: 0, s: 0, m: 0, h: 0 });
+  const [totalTime, setTotalTime] = useState({ total: 0 });
+  const [totalInterv, setTotalInterv] = useState();
   const [interv, setInterv] = useState();
   const {
     state: { recording, finished },
   } = useContext(LocationStateContext);
   const { cleanup } = useContext(LocationContext);
+  const { timerFinished } = useContext(TimerActionContext);
 
   var updatedMs = time.ms,
     updatedS = time.s,
     updatedM = time.m,
     updatedH = time.h;
 
+  var updatedTotalTime = totalTime.total;
+
   const start = () => {
     run();
     setInterv(setInterval(run, 10));
+    setTotalInterv(setInterval(countTotal, 10));
   };
 
   const stop = () => {
     clearInterval(interv);
+    clearInterval(totalInterv);
   };
 
   const reset = () => {
     clearInterval(interv);
+    clearInterval(totalInterv);
     setTime({ ms: 0, s: 0, m: 0, h: 0 });
+    setTotalTime({ total: 0 });
+  };
+
+  const countTotal = () => {
+    updatedTotalTime++;
+    setTotalTime({ total: updatedTotalTime });
   };
 
   const run = () => {
@@ -62,6 +76,7 @@ export const Timer = () => {
 
   useEffect(() => {
     if (finished) {
+      timerFinished(totalTime.total);
       reset();
     }
     return function cleanupie() {

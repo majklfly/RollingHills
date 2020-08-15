@@ -1,5 +1,5 @@
-import React, { useContext, useCallback } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useContext, useCallback, useState } from "react";
+import { View, Text, StyleSheet, Modal } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 import { AuthContext, GlobalContext } from "../../store/AuthProvider";
@@ -12,9 +12,11 @@ import useLocation from "../../hooks/useLocation";
 import { Background } from "../../components/Background/Background";
 import { Map } from "../../components/Map/Map";
 import { Timer } from "../../components/Timer/Timer";
+import { FinishedRunForm } from "../../components/FinishedRunForm/FinishedRunForm";
 import constants from "../../constants";
 
 const HomeScreen = () => {
+  const [modalVisible, setModalVisible] = useState(false);
   const { logout } = useContext(AuthContext);
   const {
     state: { user },
@@ -53,7 +55,7 @@ const HomeScreen = () => {
         {recording ? (
           <View style={styles.pauseContainer}>
             <TouchableOpacity
-              onPress={() => runFinished()}
+              onPress={() => (setModalVisible(true), runFinished())}
               style={styles.pauseButton}
             >
               <Text style={styles.buttonText}>Finish</Text>
@@ -72,6 +74,11 @@ const HomeScreen = () => {
           >
             <Text style={styles.buttonText}>Run</Text>
           </TouchableOpacity>
+        )}
+        {modalVisible && (
+          <Modal animationType="fade" transparent={true}>
+            <FinishedRunForm setModalVisible={setModalVisible} />
+          </Modal>
         )}
       </View>
     </>

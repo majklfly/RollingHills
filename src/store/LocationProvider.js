@@ -1,4 +1,8 @@
-import React, { createContext, useReducer } from "react";
+import React, { createContext, useReducer, useContext } from "react";
+import Firebase from "../../firebase";
+import { GlobalContext } from "../store/AuthProvider";
+
+const db = Firebase.firestore();
 
 export const LocationContext = createContext({
   startRecording: () => {},
@@ -47,6 +51,9 @@ const locationReducer = (state, action) => {
 
 export const LocationProvider = ({ children }) => {
   const [state, dispatch] = useReducer(locationReducer, initialState);
+  const {
+    state: { user },
+  } = useContext(GlobalContext);
 
   const startRecording = () => {
     dispatch({ type: "start_recording" });
@@ -57,6 +64,14 @@ export const LocationProvider = ({ children }) => {
 
   const runFinished = () => {
     dispatch({ type: "run_finished" });
+    console.log(user.uid);
+    // db.collection("userdata")
+    //   .doc(user.uid)
+    //   .collection("performaces")
+    //   .doc("run1")
+    //   .set({
+    //     time: 201525,
+    //   });
   };
 
   const cleanup = () => {
