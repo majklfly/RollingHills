@@ -17,6 +17,11 @@ import constants from "../../constants";
 
 const HomeScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [latitude1, setLatitude1] = useState(null);
+  const [longitude1, setLongitude1] = useState(null);
+  const [latitude2, setLatitude2] = useState(null);
+  const [longitude2, setLongitude2] = useState(null);
+  const [status, setStatus] = useState(false);
   const { logout } = useContext(AuthContext);
   const {
     state: { user },
@@ -28,13 +33,13 @@ const HomeScreen = () => {
     runFinished,
   } = useContext(LocationContext);
   const {
-    state: { recording },
+    state: { recording, locations },
   } = useContext(LocationStateContext);
   const callback = useCallback(
     (location) => {
       addLocation(location, recording);
     },
-    [recording]
+    [recording, status]
   );
 
   const [err] = useLocation(true, callback);
@@ -55,7 +60,7 @@ const HomeScreen = () => {
         {recording ? (
           <View style={styles.pauseContainer}>
             <TouchableOpacity
-              onPress={() => (setModalVisible(true), runFinished())}
+              onPress={() => (setModalVisible(true), runFinished(locations))}
               style={styles.pauseButton}
             >
               <Text style={styles.buttonText}>Finish</Text>

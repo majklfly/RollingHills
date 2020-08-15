@@ -1,6 +1,7 @@
-import React, { createContext, useReducer, useContext } from "react";
+import React, { createContext, useReducer, useContext, useState } from "react";
 import Firebase from "../../firebase";
 import { GlobalContext } from "../store/AuthProvider";
+import { getDistance } from "geolib";
 
 const db = Firebase.firestore();
 
@@ -9,11 +10,13 @@ export const LocationContext = createContext({
   stopRecording: () => {},
   addLocation: () => {},
   runFinished: () => {},
+  calculateDistance: () => {},
 });
 
 export const LocationStateContext = createContext({
   currentLocation: null,
   locations: [],
+  distance: null,
   recording: false,
   finished: false,
 });
@@ -21,6 +24,7 @@ export const LocationStateContext = createContext({
 const initialState = {
   recording: false,
   locations: [],
+  distance: null,
   currentLocation: null,
   finished: false,
 };
@@ -44,6 +48,9 @@ const locationReducer = (state, action) => {
       };
     case "add_location":
       return { ...state, locations: [...state.locations, action.payload] };
+
+    case "add_distance":
+      return { ...state, distance: action.payload };
     default:
       return state;
   }
@@ -51,6 +58,7 @@ const locationReducer = (state, action) => {
 
 export const LocationProvider = ({ children }) => {
   const [state, dispatch] = useReducer(locationReducer, initialState);
+
   const {
     state: { user },
   } = useContext(GlobalContext);
@@ -62,9 +70,11 @@ export const LocationProvider = ({ children }) => {
     dispatch({ type: "stop_recording" });
   };
 
-  const runFinished = () => {
+  const runFinished = (locations) => {
     dispatch({ type: "run_finished" });
-    console.log(user.uid);
+    const distance = calculateDistance(locations);
+    dispatch({ type: "add_distance", payload: distance });
+    // console.log(user.uid);
     // db.collection("userdata")
     //   .doc(user.uid)
     //   .collection("performaces")
@@ -76,6 +86,30 @@ export const LocationProvider = ({ children }) => {
 
   const cleanup = () => {
     dispatch({ type: "cleanup" });
+  };
+
+  const calculateDistance = (locations) => {
+    let latitude1;
+    let longitude1;
+    let totalDistance = 0;
+    locations.map((location) => {
+      if (latitude1 === undefined && longitude1 === undefined) {
+        latitude1 = location.coords.latitude;
+        longitude1 = location.coords.longitude;
+      } else {
+        const distance = getDistance(
+          { latitude: latitude1, longitude: longitude1 },
+          {
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+          }
+        );
+        latitude1 = location.coords.latitude;
+        longitude1 = location.coords.longitude;
+        totalDistance = totalDistance + distance;
+      }
+    });
+    return totalDistance;
   };
 
   const addLocation = (location, recording) => {
@@ -93,6 +127,7 @@ export const LocationProvider = ({ children }) => {
           stopRecording,
           addLocation,
           runFinished,
+          calculateDistance,
           cleanup,
         }}
       >

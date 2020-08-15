@@ -10,11 +10,17 @@ import {
 import constants from "../../constants";
 
 import { TimerStateContext } from "../../store/TimerProvider";
+import { LocationStateContext } from "../../store/LocationProvider";
 
 export const FinishedRunForm = (props) => {
   const {
     state: { time },
   } = useContext(TimerStateContext);
+  const {
+    state: { distance },
+  } = useContext(LocationStateContext);
+
+  console.log(distance);
 
   const formatTime = (time) => {
     const seconds = Math.round(time / 60);
@@ -40,6 +46,10 @@ export const FinishedRunForm = (props) => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.dataContainer}>
+        <Text style={styles.dataText}>Distance: </Text>
+        <Text style={styles.dataText}>{distance} meters</Text>
+      </View>
       <View style={styles.dataContainer}>
         <Text style={styles.dataText}>Date: </Text>
         <Text style={styles.dataText}>{formatDate()}</Text>
