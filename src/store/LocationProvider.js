@@ -85,7 +85,7 @@ export const LocationProvider = ({ children }) => {
     dispatch({ type: "add_distance", payload: distance });
   };
 
-  const submitResults = (distance, date, time, name) => {
+  const submitResults = (distance, date, time, name, locations) => {
     try {
       db.collection("userdata")
         .doc(user.uid)
@@ -96,6 +96,7 @@ export const LocationProvider = ({ children }) => {
           date: date,
           time: time,
           name: name,
+          locations: locations,
         });
     } catch (e) {
       console.log(e.message);

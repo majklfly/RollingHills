@@ -1,4 +1,4 @@
-// import "../../_mockLocation";
+import "../../_mockLocation";
 import React, { useState, useContext } from "react";
 import { StyleSheet, ActivityIndicator } from "react-native";
 import MapView, { Polyline, Circle } from "react-native-maps";
@@ -8,7 +8,6 @@ import { mapStyle } from "./MapStyle";
 import * as TaskManager from "expo-task-manager";
 
 export const Map = () => {
-  const [location, setLocation] = useState(null);
   const {
     state: { currentLocation, locations },
   } = useContext(LocationStateContext);

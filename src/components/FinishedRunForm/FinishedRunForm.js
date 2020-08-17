@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 
 import {
   View,
@@ -17,13 +17,20 @@ import {
 
 export const FinishedRunForm = (props) => {
   const [name, setName] = useState("");
+  const [locs, setLocs] = useState([]);
   const {
     state: { time },
   } = useContext(TimerStateContext);
   const {
-    state: { distance },
+    state: { distance, locations },
   } = useContext(LocationStateContext);
   const { submitResults } = useContext(LocationContext);
+
+  useEffect(() => {
+    if (locations.length > 1) {
+      setLocs(locations);
+    }
+  }, [locations]);
 
   const formatTime = (time) => {
     const seconds = Math.round(time / 60);
@@ -48,7 +55,7 @@ export const FinishedRunForm = (props) => {
   };
 
   const submitData = () => {
-    submitResults(distance, Date(), time, name);
+    submitResults(distance, Date(), time, name, locs);
     props.setModalVisible(false);
   };
 

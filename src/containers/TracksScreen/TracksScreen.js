@@ -51,7 +51,6 @@ const TracksScreen = ({ navigation }) => {
         ) : (
           <>
             {data.map((item) => {
-              console.log(item.date);
               return (
                 <TouchableOpacity
                   style={styles.button}
