@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState, useCallback } from "react";
 
 import { ScrollView, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Background } from "../../components/Background/Background";
+import { NavigationEvents } from "react-navigation";
 
 import {
   LocationContext,
@@ -10,16 +11,20 @@ import {
 
 import constants from "../../constants";
 
-const TracksScreen = () => {
+const TracksScreen = ({ navigation }) => {
   const [data, setData] = useState([]);
   const { fetchData } = useContext(LocationContext);
   const {
     state: { tracks, error },
   } = useContext(LocationStateContext);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      fetchData();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   useEffect(() => {
     formatTracks(tracks);
@@ -46,8 +51,15 @@ const TracksScreen = () => {
         ) : (
           <>
             {data.map((item) => {
+              console.log(item.date);
               return (
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity
+                  style={styles.button}
+                  key={item.date.stringValue}
+                  onPress={() =>
+                    navigation.navigate("trackDetailScreen", { data: item })
+                  }
+                >
                   <Text style={styles.buttonText}>
                     {item.date.stringValue.split("GMT")[0]}
                   </Text>
