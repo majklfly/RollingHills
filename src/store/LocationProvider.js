@@ -17,6 +17,7 @@ export const LocationContext = createContext({
 
 export const LocationStateContext = createContext({
   currentLocation: null,
+  error: undefined,
   locations: [],
   distance: null,
   recording: false,
@@ -26,6 +27,7 @@ export const LocationStateContext = createContext({
 
 const initialState = {
   recording: false,
+  error: undefined,
   locations: [],
   distance: null,
   currentLocation: null,
@@ -54,6 +56,8 @@ const locationReducer = (state, action) => {
       return { ...state, locations: [...state.locations, action.payload] };
     case "update_trackslist":
       return { ...state, tracks: action.payload };
+    case "error":
+      return { ...state, error: action.payload };
     case "add_distance":
       return { ...state, distance: action.payload };
     default:
@@ -105,9 +109,11 @@ export const LocationProvider = ({ children }) => {
         .doc(user.uid)
         .collection("performaces")
         .get();
+      data.Dd.docChanges.length === 0 &&
+        dispatch({ type: "error", payload: "Haven't found any tracks" });
       dispatch({ type: "update_trackslist", payload: data.Dd.docChanges });
     } catch (e) {
-      console.log(e);
+      dispatch({ type: "error", payload: "Haven't found any tracks" });
     }
   };
 
