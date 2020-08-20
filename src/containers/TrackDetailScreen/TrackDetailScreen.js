@@ -2,11 +2,9 @@ import React from "react";
 
 import { View, Text, StyleSheet } from "react-native";
 
-import MapView, { Polyline } from "react-native-maps";
-
-import { mapStyle } from "../../components/Map/MapStyle";
-
 import constants from "../../constants";
+
+import { TrackDetailFlatList } from "../../components/TrackDetailFlatList/TrackDetailFlatList";
 
 const TrackDetailScreen = ({ route }) => {
   const formatTime = (time) => {
@@ -21,47 +19,11 @@ const TrackDetailScreen = ({ route }) => {
     }
   };
 
-  const formatCoordinates = (loc) => {
-    const latitude =
-      loc.mapValue.fields.coords.mapValue.fields.latitude.doubleValue;
-    const longitude =
-      loc.mapValue.fields.coords.mapValue.fields.longitude.doubleValue;
-    return { latitude: latitude, longitude: longitude };
-  };
-
-  const initialCoords = route.params.data.locations.arrayValue.values[0];
-  const initialLatitude =
-    initialCoords.mapValue.fields.coords.mapValue.fields.latitude.doubleValue;
-  const initialLongitude =
-    initialCoords.mapValue.fields.coords.mapValue.fields.longitude.doubleValue;
-
   return (
     <>
       <View style={styles.mainContainer}>
         <Text style={styles.title}>{route.params.data.name.stringValue}</Text>
-        {route.params.data.locations.arrayValue.values.length > 0 ? (
-          <MapView
-            style={styles.map}
-            customMapStyle={mapStyle}
-            initialRegion={{
-              latitude: initialLatitude,
-              longitude: initialLongitude,
-              longitudeDelta: 0.01,
-              latitudeDelta: 0.01,
-            }}
-          >
-            {route.params.data.locations.arrayValue.values && (
-              <Polyline
-                coordinates={route.params.data.locations.arrayValue.values.map(
-                  (loc) => formatCoordinates(loc)
-                )}
-                strokeWidth={4}
-                strokeColor="rgba(158,158,255,1)"
-              />
-            )}
-          </MapView>
-        ) : null}
-
+        <TrackDetailFlatList route={route} />
         <View style={styles.dataContainer}>
           <Text style={styles.datalabel}>Date:</Text>
           <Text style={styles.dataContent}>
@@ -100,12 +62,7 @@ const styles = StyleSheet.create({
     fontFamily: constants.primary.fontFamily,
     marginTop: "20%",
   },
-  map: {
-    width: "80%",
-    height: "40%",
-    alignSelf: "center",
-    marginTop: "5%",
-  },
+
   dataContainer: {
     width: "100%",
     height: "6%",
