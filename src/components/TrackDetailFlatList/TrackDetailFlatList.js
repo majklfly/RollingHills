@@ -88,7 +88,7 @@ export const TrackDetailFlatList = (props) => {
           } else if (item.id === "speedStatistic") {
             return (
               <View style={styles.slideView}>
-                <SpeedStatistics />
+                <SpeedStatistics data={props.route.params.data} />
                 <AntDesign name="swapleft" style={styles.iconSwipeLeft} />
               </View>
             );

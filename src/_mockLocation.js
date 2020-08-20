@@ -6,7 +6,7 @@ const getLocation = (increment) => {
   return {
     timestamp: 1000000,
     coords: {
-      speed: 0,
+      speed: Math.random() * 20,
       heading: 0,
       accuracy: 5,
       altitudeAccuracy: 5,
