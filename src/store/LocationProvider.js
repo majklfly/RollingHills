@@ -13,6 +13,7 @@ export const LocationContext = createContext({
   calculateDistance: () => {},
   submitResults: () => {},
   fetchData: () => {},
+  deleteRun: () => {},
 });
 
 export const LocationStateContext = createContext({
@@ -83,6 +84,10 @@ export const LocationProvider = ({ children }) => {
     dispatch({ type: "run_finished" });
     const distance = calculateDistance(locations);
     dispatch({ type: "add_distance", payload: distance });
+  };
+
+  const deleteRun = (date) => {
+    console.log(date);
   };
 
   const submitResults = (distance, date, time, name, locations) => {
@@ -164,6 +169,7 @@ export const LocationProvider = ({ children }) => {
           calculateDistance,
           submitResults,
           fetchData,
+          deleteRun,
           cleanup,
         }}
       >

@@ -20,8 +20,11 @@ const TrackDetailScreen = ({ route }) => {
   };
 
   return (
-    <>
-      <View style={styles.mainContainer}>
+    <View
+      key={route.params.data.time.integerValue}
+      style={styles.mainContainer}
+    >
+      <View>
         <Text style={styles.title}>{route.params.data.name.stringValue}</Text>
         <TrackDetailFlatList route={route} />
         <View style={styles.dataContainer}>
@@ -43,7 +46,7 @@ const TrackDetailScreen = ({ route }) => {
           </Text>
         </View>
       </View>
-    </>
+    </View>
   );
 };
 
@@ -64,11 +67,11 @@ const styles = StyleSheet.create({
   },
 
   dataContainer: {
-    width: "100%",
-    height: "6%",
-    padding: 10,
+    width: "95%",
+    height: "7%",
     flexDirection: "row",
     justifyContent: "space-between",
+    alignSelf: "center",
   },
   datalabel: {
     fontSize: 20,

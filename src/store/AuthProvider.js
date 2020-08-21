@@ -14,6 +14,7 @@ export const AuthContext = createContext({
   signInFacebook: () => {},
   changePassword: () => {},
   forgotPassword: () => {},
+  dispatchErrorMessage: () => {},
 });
 
 export const GlobalContext = createContext({
@@ -79,6 +80,13 @@ const authReducer = (state, action) => {
 
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
+
+  const dispatchErrorMessage = (e) => {
+    dispatch({ type: "error", payload: e });
+    setTimeout(function () {
+      dispatch({ type: "cleanError" });
+    }, 2000);
+  };
 
   const handleLoginErrors = (error) => {
     if (
@@ -233,10 +241,11 @@ export const AuthProvider = ({ children }) => {
 
   const signInFacebook = async () => {
     dispatch({ type: "login" });
+    console.log("dispatched");
     try {
       await Facebook.initializeAsync("213144473364363");
       const { type, token } = await Facebook.logInWithReadPermissionsAsync({
-        permissions: ["public_profile"],
+        permissions: ["email", "public_profile"],
       });
       if (type === "success") {
         const credential = firebase.auth.FacebookAuthProvider.credential(token);
@@ -288,6 +297,7 @@ export const AuthProvider = ({ children }) => {
           signInFacebook,
           changePassword,
           forgotPassword,
+          dispatchErrorMessage,
         }}
       >
         {children}

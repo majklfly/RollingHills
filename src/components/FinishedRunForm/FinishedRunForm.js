@@ -15,6 +15,8 @@ import {
   LocationContext,
 } from "../../store/LocationProvider";
 
+import { AuthContext, GlobalContext } from "../../store/AuthProvider";
+
 export const FinishedRunForm = (props) => {
   const [name, setName] = useState("");
   const [locs, setLocs] = useState([]);
@@ -25,6 +27,11 @@ export const FinishedRunForm = (props) => {
     state: { distance, locations },
   } = useContext(LocationStateContext);
   const { submitResults } = useContext(LocationContext);
+
+  const { dispatchErrorMessage } = useContext(AuthContext);
+  const {
+    state: { errorMessage },
+  } = useContext(GlobalContext);
 
   useEffect(() => {
     if (locations.length > 1) {
@@ -55,8 +62,11 @@ export const FinishedRunForm = (props) => {
   };
 
   const submitData = () => {
-    submitResults(distance, Date(), time, name, locs);
-    props.setModalVisible(false);
+    if (name.length > 1) {
+      submitResults(distance, Date(), time, name, locs);
+      props.setModalVisible(false);
+    }
+    dispatchErrorMessage("please enter name");
   };
 
   return (
@@ -81,6 +91,7 @@ export const FinishedRunForm = (props) => {
           style={styles.input}
         />
       </View>
+      <Text style={styles.errorMessage}>{errorMessage}</Text>
       <TouchableOpacity
         onPress={() => submitData()}
         style={styles.submitButton}
@@ -129,5 +140,11 @@ const styles = StyleSheet.create({
     fontFamily: constants.primary.fontFamily,
     textDecorationLine: "none",
     fontSize: 18,
+  },
+  errorMessage: {
+    color: "red",
+    fontFamily: constants.primary.fontFamily,
+    position: "relative",
+    top: -30,
   },
 });

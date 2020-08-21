@@ -29,7 +29,9 @@ export const UpdatePasswordForm = (props) => {
         />
       </TouchableOpacity>
       <Text style={styles.errorMessage}>{state.errorMessage}</Text>
-      <Text style={styles.successMessage}>{state.successMessage}</Text>
+      {state.successMessage !== null && (
+        <Text style={styles.successMessage}>{state.successMessage}</Text>
+      )}
       <Form style={styles.form}>
         <Item floatingLabel>
           <Label style={styles.label}>Your Email</Label>

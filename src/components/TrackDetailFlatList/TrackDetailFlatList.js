@@ -61,7 +61,7 @@ export const TrackDetailFlatList = (props) => {
         renderItem={({ item }) => {
           if (item.id === "map") {
             return (
-              <View style={styles.slideView}>
+              <View style={styles.slideView} key={item.id}>
                 <MapView
                   style={styles.map}
                   customMapStyle={mapStyle}
@@ -87,7 +87,7 @@ export const TrackDetailFlatList = (props) => {
             );
           } else if (item.id === "speedStatistic") {
             return (
-              <View style={styles.slideView}>
+              <View style={styles.slideView} key={item.id}>
                 <SpeedStatistics data={props.route.params.data} />
                 <AntDesign name="swapleft" style={styles.iconSwipeLeft} />
               </View>

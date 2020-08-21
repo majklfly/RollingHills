@@ -1,6 +1,13 @@
-import React, { useContext, useEffect, useState, useCallback } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
-import { ScrollView, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  ScrollView,
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Modal,
+} from "react-native";
 import { Background } from "../../components/Background/Background";
 import { NavigationEvents } from "react-navigation";
 
@@ -13,12 +20,13 @@ import constants from "../../constants";
 
 const TracksScreen = ({ navigation }) => {
   const [data, setData] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
   const { fetchData } = useContext(LocationContext);
   const {
     state: { tracks, error },
   } = useContext(LocationStateContext);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       fetchData();
     });
@@ -41,6 +49,10 @@ const TracksScreen = ({ navigation }) => {
     setData(dataLocal);
   };
 
+  const deleteRun = (item) => {
+    console.log("triggered", item);
+  };
+
   return (
     <>
       <Background />
@@ -58,6 +70,7 @@ const TracksScreen = ({ navigation }) => {
                   onPress={() =>
                     navigation.navigate("trackDetailScreen", { data: item })
                   }
+                  onLongPress={() => setModalVisible(true)}
                 >
                   <Text style={styles.buttonText}>
                     {item.date.stringValue.split("GMT")[0]}
@@ -70,6 +83,24 @@ const TracksScreen = ({ navigation }) => {
             })}
           </>
         )}
+        <Modal visible={modalVisible} transparent={true}>
+          <View style={styles.modal}>
+            <Text style={styles.deleteText}>
+              Would you like to delete this run?
+            </Text>
+            <View style={styles.modalButtonContainer}>
+              <TouchableOpacity style={styles.modalButton} onPress={() => {}}>
+                <Text style={styles.modalButtonText}>Yes</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text style={styles.modalButtonText}>No</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
       </ScrollView>
     </>
   );
@@ -120,6 +151,39 @@ const styles = StyleSheet.create({
     fontFamily: constants.primary.fontFamily,
     alignSelf: "center",
     marginTop: "10%",
+  },
+  modal: {
+    backgroundColor: constants.primary.containerColor,
+    width: "90%",
+    height: "60%",
+    alignSelf: "center",
+    marginTop: "40%",
+    borderRadius: 20,
+    paddingVertical: "5%",
+  },
+  deleteText: {
+    color: constants.primary.textColor,
+    fontFamily: constants.primary.fontFamily,
+    fontSize: 30,
+    textAlign: "center",
+    paddingHorizontal: "5%",
+  },
+  modalButtonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    marginTop: "10%",
+  },
+  modalButton: {
+    backgroundColor: constants.primary.buttonColor,
+    width: "30%",
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+  },
+  modalButtonText: {
+    color: constants.primary.textColor,
+    fontFamily: constants.primary.fontFamily,
   },
 });
 
