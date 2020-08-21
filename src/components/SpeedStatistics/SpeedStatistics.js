@@ -8,29 +8,18 @@ import constants from "../../constants";
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
-const data = {
-  labels: ["January", "February", "March", "April", "May", "June"],
-  datasets: [
-    {
-      data: [20, 45, 28, 80, 99, 43],
-    },
-  ],
-};
-
 export const SpeedStatistics = (props) => {
-  const [dataset, setDataset] = useState([]);
-
-  useEffect(() => {
-    const localDataset = [];
+  const formatDataset = () => {
+    let localDataset = [];
     props.data.locations.arrayValue.values.map((item) => {
       localDataset.push(
         item.mapValue.fields.coords.mapValue.fields.speed.doubleValue
       );
     });
-    setDataset([{ data: localDataset }]);
-  }, [props.data]);
+    return [{ data: localDataset }];
+  };
 
-  console.log(dataset);
+  const dataset = formatDataset();
 
   return (
     <View style={styles.mainContainer}>

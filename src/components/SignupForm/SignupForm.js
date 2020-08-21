@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { Form, Item, Button, Label, Input } from "native-base";
 
 import { FontAwesome } from "@expo/vector-icons";

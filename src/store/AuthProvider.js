@@ -12,6 +12,7 @@ export const AuthContext = createContext({
   signup: () => {},
   signInGoogle: () => {},
   signInFacebook: () => {},
+  changePassword: () => {},
 });
 
 export const GlobalContext = createContext({
@@ -92,6 +93,11 @@ export const AuthProvider = ({ children }) => {
       "The password is invalid or the user does not have a password."
     ) {
       dispatch({ type: "error", payload: "Please enter correct password." });
+    } else if (
+      (error.message =
+        'updatePassword failed: First argument "password" must be a valid string.')
+    ) {
+      dispatch({ type: "error", payload: "Please enter new password" });
     } else {
       console.log(error);
     }
@@ -121,17 +127,12 @@ export const AuthProvider = ({ children }) => {
     AsyncStorage.removeItem("user");
   };
 
-  const handleLogin = (user) => {
-    AsyncStorage.setItem("user", JSON.stringify(user));
-    dispatch({ type: "success", payload: user });
-  };
-
   const login = (email, password) => {
     dispatch({ type: "login" });
     try {
       Firebase.auth()
         .signInWithEmailAndPassword(email, password)
-        .then((data) => handleLogin(data.user))
+        .then((data) => resolveUser(data))
         .catch((e) => handleLoginErrors(e));
     } catch (error) {
       handleLoginErrors(error);
@@ -142,12 +143,38 @@ export const AuthProvider = ({ children }) => {
     try {
       Firebase.auth()
         .createUserWithEmailAndPassword(email, password)
-        .then((data) => handleLogin(data.user))
+        .then((data) => resolveUser(data))
         .catch((e) => {
           handleSignupErrors(e);
         });
     } catch (error) {
       handleSignupErrors(error);
+    }
+  };
+
+  const changePassword = (email, oldPassword, newPassword) => {
+    try {
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(email, oldPassword)
+        .then((user) => {
+          firebase
+            .auth()
+            .currentUser.updatePassword(newPassword)
+            .then((res) => {
+              console.log(res);
+            })
+            .catch((e) => {
+              console.log(e);
+              handleLoginErrors(e);
+            });
+        })
+        .catch((e) => {
+          console.log(e);
+          handleLoginErrors(e);
+        });
+    } catch (e) {
+      handleLoginErrors(e);
     }
   };
 
@@ -165,11 +192,16 @@ export const AuthProvider = ({ children }) => {
         );
         Firebase.auth()
           .signInWithCredential(credential)
-          .then((data) => dispatch({ type: "success", payload: data.user }));
+          .then((data) => resolveUser());
       }
     } catch (e) {
       console.log(error);
     }
+  };
+
+  const resolveUser = async (data) => {
+    const resData = await firebase.auth().currentUser.toJSON();
+    dispatch({ type: "success", payload: resData });
   };
 
   const signInFacebook = async () => {
@@ -184,7 +216,7 @@ export const AuthProvider = ({ children }) => {
         firebase
           .auth()
           .signInWithCredential(credential)
-          .then((data) => dispatch({ type: "success", payload: data.user }))
+          .then((data) => resolveUser(data))
           .catch((error) => console.log("here", error));
       } else {
         // type === 'cancel'
@@ -205,7 +237,14 @@ export const AuthProvider = ({ children }) => {
   return (
     <GlobalContext.Provider value={{ state }}>
       <AuthContext.Provider
-        value={{ login, logout, signup, signInGoogle, signInFacebook }}
+        value={{
+          login,
+          logout,
+          signup,
+          signInGoogle,
+          signInFacebook,
+          changePassword,
+        }}
       >
         {children}
       </AuthContext.Provider>
