@@ -13,17 +13,20 @@ export const AuthContext = createContext({
   signInGoogle: () => {},
   signInFacebook: () => {},
   changePassword: () => {},
+  forgotPassword: () => {},
 });
 
 export const GlobalContext = createContext({
   user: null,
   errorMessage: null,
+  successMessage: null,
 });
 
 const initialState = {
   user: {},
   errorMessage: "",
   isLoading: false,
+  successMessage: "null",
 };
 
 const authReducer = (state, action) => {
@@ -48,10 +51,17 @@ const authReducer = (state, action) => {
         isLoading: false,
       };
     }
+    case "successMessage": {
+      return {
+        ...state,
+        successMessage: action.payload,
+      };
+    }
     case "cleanError": {
       return {
         ...state,
         errorMessage: null,
+        successMessage: null,
       };
     }
     case "logout": {
@@ -97,7 +107,15 @@ export const AuthProvider = ({ children }) => {
       (error.message =
         'updatePassword failed: First argument "password" must be a valid string.')
     ) {
-      dispatch({ type: "error", payload: "Please enter new password" });
+      dispatch({ type: "error", payload: "Please enter your password" });
+    } else if (
+      (error.message =
+        "Too many unsuccessful login attempts. Please try again later.")
+    ) {
+      dispatch({
+        type: "successMessage",
+        payload: "password has been changed",
+      });
     } else {
       console.log(error);
     }
@@ -152,6 +170,16 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const handleChangedPassword = () => {
+    dispatch({
+      type: "successMessage",
+      payload: "Password has been changed",
+    });
+    setTimeout(function () {
+      dispatch({ type: "cleanError" });
+    }, 2000);
+  };
+
   const changePassword = (email, oldPassword, newPassword) => {
     try {
       firebase
@@ -161,11 +189,10 @@ export const AuthProvider = ({ children }) => {
           firebase
             .auth()
             .currentUser.updatePassword(newPassword)
-            .then((res) => {
-              console.log(res);
+            .then(() => {
+              handleChangedPassword();
             })
             .catch((e) => {
-              console.log(e);
               handleLoginErrors(e);
             });
         })
@@ -226,9 +253,25 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const handleSentEmail = () => {
+    dispatch({
+      type: "successMessage",
+      payload: "An email has been sent",
+    });
+    setTimeout(function () {
+      dispatch({ type: "cleanError" });
+    }, 2000);
+  };
+
   const forgotPassword = (email) => {
     try {
-      return firebase.auth().sendPasswordResetEmail(email);
+      return firebase
+        .auth()
+        .sendPasswordResetEmail(email)
+        .then(() => handleSentEmail())
+        .catch((e) => {
+          handleLoginErrors(e);
+        });
     } catch (e) {
       console.log(e);
     }
@@ -244,6 +287,7 @@ export const AuthProvider = ({ children }) => {
           signInGoogle,
           signInFacebook,
           changePassword,
+          forgotPassword,
         }}
       >
         {children}

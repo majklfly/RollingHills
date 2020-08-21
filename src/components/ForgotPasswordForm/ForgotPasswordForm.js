@@ -6,11 +6,14 @@ import { FontAwesome } from "@expo/vector-icons";
 
 import constants from "../../constants";
 
-import { AuthContext } from "../../store/AuthProvider";
+import { AuthContext, GlobalContext } from "../../store/AuthProvider";
 
 export const ForgotPasswordForm = (props) => {
   const [email, setEmail] = useState(null);
   const { forgotPassword } = useContext(AuthContext);
+  const {
+    state: { successMessage },
+  } = useContext(GlobalContext);
   return (
     <View>
       <Form style={styles.form}>
@@ -39,6 +42,7 @@ export const ForgotPasswordForm = (props) => {
         >
           <Text style={styles.buttonText}>Reset my password</Text>
         </Button>
+        <Text style={styles.successMessage}>{successMessage}</Text>
       </Form>
     </View>
   );
@@ -65,5 +69,12 @@ const styles = StyleSheet.create({
     fontSize: 40,
     alignSelf: "flex-end",
     color: "white",
+  },
+  successMessage: {
+    color: constants.primary.textColor,
+    fontFamily: constants.primary.fontFamily,
+    fontSize: 15,
+    alignSelf: "center",
+    marginTop: 20,
   },
 });

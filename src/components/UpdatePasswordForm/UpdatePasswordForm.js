@@ -14,7 +14,7 @@ export const UpdatePasswordForm = (props) => {
   const { changePassword } = useContext(AuthContext);
   const { state } = useContext(GlobalContext);
 
-  console.log(state.errorMessage);
+  console.log(state.successMessage);
 
   return (
     <View style={styles.mainContainer}>
@@ -29,11 +29,12 @@ export const UpdatePasswordForm = (props) => {
         />
       </TouchableOpacity>
       <Text style={styles.errorMessage}>{state.errorMessage}</Text>
+      <Text style={styles.successMessage}>{state.successMessage}</Text>
       <Form style={styles.form}>
         <Item floatingLabel>
           <Label style={styles.label}>Your Email</Label>
           <Input
-            style={{ color: "white" }}
+            style={styles.input}
             value={email}
             autoCorrent={false}
             autoCapitalize="none"
@@ -43,7 +44,7 @@ export const UpdatePasswordForm = (props) => {
         <Item floatingLabel>
           <Label style={styles.label}>Current Password</Label>
           <Input
-            style={{ color: "white" }}
+            style={styles.input}
             value={currentPassword}
             autoCorrent={false}
             autoCapitalize="none"
@@ -57,7 +58,6 @@ export const UpdatePasswordForm = (props) => {
             autoCorrent={false}
             value={newPassword}
             autoCapitalize="none"
-            secureTextEntry
             onChangeText={(value) => {
               setNewPassword(value);
             }}
@@ -115,6 +115,14 @@ const styles = StyleSheet.create({
   },
   errorMessage: {
     color: "red",
+    fontFamily: constants.primary.fontFamily,
+    fontSize: 16,
+    alignSelf: "center",
+    marginTop: "30%",
+    position: "absolute",
+  },
+  successMessage: {
+    color: constants.primary.textColor,
     fontFamily: constants.primary.fontFamily,
     fontSize: 16,
     alignSelf: "center",
