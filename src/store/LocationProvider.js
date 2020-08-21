@@ -14,6 +14,7 @@ export const LocationContext = createContext({
   submitResults: () => {},
   fetchData: () => {},
   deleteRun: () => {},
+  mockMovement: () => {},
 });
 
 export const LocationStateContext = createContext({
@@ -24,6 +25,7 @@ export const LocationStateContext = createContext({
   recording: false,
   finished: false,
   tracks: [],
+  mockRunning: false,
 });
 
 const initialState = {
@@ -34,6 +36,7 @@ const initialState = {
   currentLocation: null,
   finished: false,
   tracks: [],
+  mockRunning: false,
 };
 
 const locationReducer = (state, action) => {
@@ -61,6 +64,8 @@ const locationReducer = (state, action) => {
       return { ...state, error: action.payload };
     case "add_distance":
       return { ...state, distance: action.payload };
+    case "mock_running":
+      return { ...state, mockRunning: action.payload };
     default:
       return state;
   }
@@ -87,7 +92,19 @@ export const LocationProvider = ({ children }) => {
   };
 
   const deleteRun = (date) => {
-    console.log(date);
+    try {
+      db.collection("userdata")
+        .doc(user.uid)
+        .collection("performaces")
+        .doc(date.date.stringValue)
+        .delete();
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+  const mockMovement = (value) => {
+    dispatch({ type: "mock_running", payload: value });
   };
 
   const submitResults = (distance, date, time, name, locations) => {
@@ -170,6 +187,7 @@ export const LocationProvider = ({ children }) => {
           submitResults,
           fetchData,
           deleteRun,
+          mockMovement,
           cleanup,
         }}
       >

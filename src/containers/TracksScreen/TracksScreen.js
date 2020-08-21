@@ -21,7 +21,8 @@ import constants from "../../constants";
 const TracksScreen = ({ navigation }) => {
   const [data, setData] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-  const { fetchData } = useContext(LocationContext);
+  const [currentRun, setCurrentRun] = useState(null);
+  const { fetchData, deleteRun } = useContext(LocationContext);
   const {
     state: { tracks, error },
   } = useContext(LocationStateContext);
@@ -49,10 +50,6 @@ const TracksScreen = ({ navigation }) => {
     setData(dataLocal);
   };
 
-  const deleteRun = (item) => {
-    console.log("triggered", item);
-  };
-
   return (
     <>
       <Background />
@@ -70,7 +67,9 @@ const TracksScreen = ({ navigation }) => {
                   onPress={() =>
                     navigation.navigate("trackDetailScreen", { data: item })
                   }
-                  onLongPress={() => setModalVisible(true)}
+                  onLongPress={() => (
+                    setModalVisible(true), setCurrentRun(item)
+                  )}
                 >
                   <Text style={styles.buttonText}>
                     {item.date.stringValue.split("GMT")[0]}
@@ -89,7 +88,14 @@ const TracksScreen = ({ navigation }) => {
               Would you like to delete this run?
             </Text>
             <View style={styles.modalButtonContainer}>
-              <TouchableOpacity style={styles.modalButton} onPress={() => {}}>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={() => (
+                  deleteRun(currentRun),
+                  setModalVisible(false),
+                  navigation.navigate("homeScreen")
+                )}
+              >
                 <Text style={styles.modalButtonText}>Yes</Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -155,9 +161,9 @@ const styles = StyleSheet.create({
   modal: {
     backgroundColor: constants.primary.containerColor,
     width: "90%",
-    height: "60%",
+    height: "65%",
     alignSelf: "center",
-    marginTop: "40%",
+    marginTop: "32%",
     borderRadius: 20,
     paddingVertical: "5%",
   },

@@ -1,5 +1,5 @@
-import React, { useContext, useCallback, useState } from "react";
-import { View, Text, StyleSheet, Modal } from "react-native";
+import React, { useContext, useCallback, useState, useEffect } from "react";
+import { View, Text, StyleSheet, Modal, Switch } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 import { AuthContext, GlobalContext } from "../../store/AuthProvider";
@@ -22,6 +22,7 @@ const HomeScreen = () => {
   const [latitude2, setLatitude2] = useState(null);
   const [longitude2, setLongitude2] = useState(null);
   const [status, setStatus] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(false);
   const { logout } = useContext(AuthContext);
   const {
     state: { user },
@@ -31,6 +32,7 @@ const HomeScreen = () => {
     startRecording,
     stopRecording,
     runFinished,
+    mockMovement,
   } = useContext(LocationContext);
   const {
     state: { recording, locations },
@@ -42,7 +44,13 @@ const HomeScreen = () => {
     [recording, status]
   );
 
+  useEffect(() => {
+    mockMovement(isEnabled);
+  }, [isEnabled]);
+
   const [err] = useLocation(true, callback);
+
+  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
   return (
     <>
@@ -55,6 +63,14 @@ const HomeScreen = () => {
         )}
         <View style={styles.mapContainer}>
           <Map />
+        </View>
+        <View style={styles.mockContainer}>
+          <Text style={styles.mockText}>Mock movement</Text>
+          <Switch
+            onValueChange={toggleSwitch}
+            value={isEnabled}
+            thumbColor={isEnabled ? constants.primary.buttonColor : "#f4f3f4"}
+          />
         </View>
         <Timer />
         {recording ? (
@@ -125,8 +141,23 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  mockContainer: {
+    width: "90%",
+    height: 50,
+    marginTop: "5%",
+    backgroundColor: constants.primary.containerColor,
+    borderRadius: 5,
+    justifyContent: "space-evenly",
+    flexDirection: "row",
+  },
+  mockText: {
+    color: constants.primary.textColor,
+    fontFamily: constants.primary.fontFamily,
+    fontSize: 18,
+    alignSelf: "center",
+  },
   recordButton: {
-    marginTop: "10%",
+    marginTop: "5%",
     width: 300,
     height: 50,
     backgroundColor: constants.primary.buttonColor,
@@ -144,7 +175,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "80%",
     justifyContent: "space-between",
-    marginTop: "10%",
+    marginTop: "5%",
   },
   pauseButton: {
     width: 150,

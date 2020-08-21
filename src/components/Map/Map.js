@@ -1,6 +1,5 @@
-import "../../_mockLocation";
-import React, { useState, useContext } from "react";
-import { StyleSheet, ActivityIndicator } from "react-native";
+import React, { useContext, useEffect, useState, useCallback } from "react";
+import { StyleSheet, ActivityIndicator, RefreshControl } from "react-native";
 import MapView, { Polyline, Circle } from "react-native-maps";
 import { LocationStateContext } from "../../store/LocationProvider";
 import { mapStyle } from "./MapStyle";
@@ -8,13 +7,30 @@ import { mapStyle } from "./MapStyle";
 import * as TaskManager from "expo-task-manager";
 
 export const Map = () => {
+  const [refreshing, setRefreshing] = useState(false);
   const {
-    state: { currentLocation, locations },
+    state: { currentLocation, locations, mockRunning },
   } = useContext(LocationStateContext);
 
   if (!currentLocation) {
     return <ActivityIndicator size="large" style={{ marginTop: 150 }} />;
   }
+
+  const onRefresh = useCallback(() => {
+    console.log("triggered");
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, [mockRunning]);
+
+  console.log(mockRunning);
+
+  useEffect(() => {
+    mockRunning ? (
+      require("../../_mockLocation")
+    ) : (
+      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+    );
+  }, [mockRunning]);
 
   return (
     <MapView
