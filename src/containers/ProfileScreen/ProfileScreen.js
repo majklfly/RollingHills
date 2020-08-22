@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -13,7 +13,7 @@ import moment from "moment";
 import { Background } from "../../components/Background/Background";
 import { UpdatePasswordForm } from "../../components/UpdatePasswordForm/UpdatePasswordForm";
 
-import { GlobalContext } from "../../store/AuthProvider";
+import { GlobalContext, AuthContext } from "../../store/AuthProvider";
 import constants from "../../constants";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
@@ -24,14 +24,18 @@ const ProfileScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
   const {
-    state: { user },
+    state: { user, dayMode },
   } = useContext(GlobalContext);
+  const { setDayMode } = useContext(AuthContext);
 
   const formatDate = (date) => {
     return moment(new Date(parseInt(date))).format("DD/MM/YYYY");
   };
 
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+  useEffect(() => {
+    setDayMode(isEnabled);
+  }, [isEnabled]);
 
   return (
     <View>
@@ -39,27 +43,55 @@ const ProfileScreen = () => {
       <View style={styles.mainContainer}>
         <View style={styles.contentContainer}>
           <Image source={{ uri: user.photoURL }} style={styles.profileImage} />
-          <Text style={styles.title}>{user.displayName}</Text>
+          <Text style={dayMode ? styles.titleLight : styles.title}>
+            {user.displayName}
+          </Text>
           <View style={styles.contentLine}>
-            <Text style={styles.contentLabel}>Joined us</Text>
-            <Text style={styles.contentData}>{formatDate(user.createdAt)}</Text>
+            <Text
+              style={dayMode ? styles.contentLabelLight : styles.contentLabel}
+            >
+              Joined us
+            </Text>
+            <Text
+              style={dayMode ? styles.contentDataLight : styles.contentData}
+            >
+              {formatDate(user.createdAt)}
+            </Text>
           </View>
           <View style={styles.contentLine}>
-            <Text style={styles.contentLabel}>last login</Text>
-            <Text style={styles.contentData}>
+            <Text
+              style={dayMode ? styles.contentLabelLight : styles.contentLabel}
+            >
+              last login
+            </Text>
+            <Text
+              style={dayMode ? styles.contentDataLight : styles.contentData}
+            >
               {formatDate(user.lastLoginAt)}
             </Text>
           </View>
           <View style={styles.contentLine}>
             <TouchableOpacity
-              style={styles.passwordButton}
+              style={
+                dayMode ? styles.passwordButtonLight : styles.passwordButton
+              }
               onPress={() => setModalVisible(true)}
             >
-              <Text style={styles.passwordButtonText}>update Password</Text>
+              <Text
+                style={
+                  dayMode
+                    ? styles.passwordButtonTextLight
+                    : styles.passwordButtonText
+                }
+              >
+                update Password
+              </Text>
             </TouchableOpacity>
           </View>
           <View style={styles.contentLine}>
-            <Text style={styles.contentLabel}>
+            <Text
+              style={dayMode ? styles.contentLabelLight : styles.contentLabel}
+            >
               {isEnabled ? "Switch to Night Mode" : "Switch to Day Mode"}
             </Text>
             <Switch
@@ -91,6 +123,13 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginTop: 20,
   },
+  titleLight: {
+    color: constants.secondary.textColor,
+    fontFamily: constants.secondary.fontFamily,
+    fontSize: 30,
+    alignSelf: "center",
+    marginTop: 20,
+  },
   profileImage: {
     width: 80,
     height: 80,
@@ -116,9 +155,18 @@ const styles = StyleSheet.create({
     color: constants.primary.textColor,
     fontFamily: constants.primary.fontFamily,
   },
+  contentLabelLight: {
+    color: constants.secondary.textColor,
+    fontFamily: constants.secondary.fontFamily,
+  },
   contentData: {
     color: constants.primary.textColor,
     fontFamily: constants.primary.fontFamily,
+    fontSize: 25,
+  },
+  contentDataLight: {
+    color: constants.secondary.textColor,
+    fontFamily: constants.secondary.fontFamily,
     fontSize: 25,
   },
   passwordButton: {
@@ -130,9 +178,23 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 10,
   },
+  passwordButtonLight: {
+    backgroundColor: constants.secondary.buttonColor,
+    width: "80%",
+    alignSelf: "center",
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+  },
   passwordButtonText: {
     color: constants.primary.textColor,
     fontFamily: constants.primary.fontFamily,
+    fontSize: 16,
+  },
+  passwordButtonTextLight: {
+    color: constants.secondary.textColor,
+    fontFamily: constants.secondary.fontFamily,
     fontSize: 16,
   },
 });

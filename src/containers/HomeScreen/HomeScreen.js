@@ -17,10 +17,6 @@ import constants from "../../constants";
 
 const HomeScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [latitude1, setLatitude1] = useState(null);
-  const [longitude1, setLongitude1] = useState(null);
-  const [latitude2, setLatitude2] = useState(null);
-  const [longitude2, setLongitude2] = useState(null);
   const [status, setStatus] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
   const { logout } = useContext(AuthContext);

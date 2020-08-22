@@ -15,12 +15,14 @@ export const AuthContext = createContext({
   changePassword: () => {},
   forgotPassword: () => {},
   dispatchErrorMessage: () => {},
+  setDayMode: () => {},
 });
 
 export const GlobalContext = createContext({
   user: null,
   errorMessage: null,
   successMessage: null,
+  dayMode: false,
 });
 
 const initialState = {
@@ -28,6 +30,7 @@ const initialState = {
   errorMessage: "",
   isLoading: false,
   successMessage: "null",
+  dayMode: false,
 };
 
 const authReducer = (state, action) => {
@@ -57,6 +60,9 @@ const authReducer = (state, action) => {
         ...state,
         successMessage: action.payload,
       };
+    }
+    case "dayMode": {
+      return { ...state, dayMode: action.payload };
     }
     case "cleanError": {
       return {
@@ -285,6 +291,9 @@ export const AuthProvider = ({ children }) => {
       console.log(e);
     }
   };
+  const setDayMode = (value) => {
+    dispatch({ type: "dayMode", payload: value });
+  };
 
   return (
     <GlobalContext.Provider value={{ state }}>
@@ -298,6 +307,7 @@ export const AuthProvider = ({ children }) => {
           changePassword,
           forgotPassword,
           dispatchErrorMessage,
+          setDayMode,
         }}
       >
         {children}
