@@ -1,5 +1,11 @@
-import React, { useState, useContext } from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import React, { useState, useContext, useEffect } from "react";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  AsyncStorage,
+} from "react-native";
 import { Form, Item, Button, Label, Input } from "native-base";
 
 import { FontAwesome } from "@expo/vector-icons";
@@ -10,10 +16,21 @@ import { AuthContext, GlobalContext } from "../../store/AuthProvider";
 
 export const ForgotPasswordForm = (props) => {
   const [email, setEmail] = useState(null);
+  const [dayMode, setDayModeLocal] = useState(null);
   const { forgotPassword } = useContext(AuthContext);
   const {
     state: { successMessage },
   } = useContext(GlobalContext);
+
+  useEffect(() => {
+    const retrieveDayMode = async () => {
+      const result = await AsyncStorage.getItem("dayMode");
+      const value = result === "true" ? true : false;
+      setDayModeLocal(value);
+    };
+    retrieveDayMode();
+  });
+
   return (
     <View>
       <Form style={styles.form}>
@@ -21,9 +38,15 @@ export const ForgotPasswordForm = (props) => {
           <FontAwesome name="close" style={styles.icon} />
         </TouchableOpacity>
         <Item floatingLabel>
-          <Label style={styles.label}>Email</Label>
+          <Label style={dayMode ? styles.labelLight : styles.label}>
+            Email
+          </Label>
           <Input
-            style={{ color: "white" }}
+            style={{
+              color: dayMode
+                ? constants.secondary.textColor
+                : constants.primary.textColor,
+            }}
             value={email}
             autoCorrent={false}
             autoCapitalize="none"
@@ -35,14 +58,24 @@ export const ForgotPasswordForm = (props) => {
           rounded
           style={{
             marginTop: 20,
-            backgroundColor: constants.primary.buttonColor,
+            backgroundColor: dayMode
+              ? constants.secondary.buttonColor
+              : constants.primary.buttonColor,
             marginTop: 50,
           }}
           onPress={() => forgotPassword(email)}
         >
-          <Text style={styles.buttonText}>Reset my password</Text>
+          <Text style={dayMode ? styles.buttonTextLight : styles.buttonText}>
+            Reset my password
+          </Text>
         </Button>
-        <Text style={styles.successMessage}>{successMessage}</Text>
+        {successMessage !== "null" ? (
+          <Text
+            style={dayMode ? styles.successMessageLight : styles.successMessage}
+          >
+            {successMessage}
+          </Text>
+        ) : null}
       </Form>
     </View>
   );
@@ -52,6 +85,11 @@ const styles = StyleSheet.create({
   label: {
     color: constants.primary.textColor,
     fontFamily: constants.primary.fontFamily,
+    padding: 5,
+  },
+  labelLight: {
+    color: constants.secondary.textColor,
+    fontFamily: constants.secondary.fontFamily,
     padding: 5,
   },
   form: {
@@ -65,6 +103,10 @@ const styles = StyleSheet.create({
     color: constants.primary.textColor,
     fontFamily: constants.primary.fontFamily,
   },
+  buttonTextLight: {
+    color: constants.secondary.textColor,
+    fontFamily: constants.secondary.fontFamily,
+  },
   icon: {
     fontSize: 40,
     alignSelf: "flex-end",
@@ -73,6 +115,13 @@ const styles = StyleSheet.create({
   successMessage: {
     color: constants.primary.textColor,
     fontFamily: constants.primary.fontFamily,
+    fontSize: 15,
+    alignSelf: "center",
+    marginTop: 20,
+  },
+  successMessageLight: {
+    color: constants.secondary.textColor,
+    fontFamily: constants.secondary.fontFamily,
     fontSize: 15,
     alignSelf: "center",
     marginTop: 20,

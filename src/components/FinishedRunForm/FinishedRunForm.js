@@ -30,7 +30,7 @@ export const FinishedRunForm = (props) => {
 
   const { dispatchErrorMessage } = useContext(AuthContext);
   const {
-    state: { errorMessage },
+    state: { errorMessage, dayMode },
   } = useContext(GlobalContext);
 
   useEffect(() => {
@@ -70,31 +70,45 @@ export const FinishedRunForm = (props) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={dayMode ? styles.containerLight : styles.container}>
       <View style={styles.dataContainer}>
-        <Text style={styles.dataText}>Distance: </Text>
-        <Text style={styles.dataText}>{distance} meters</Text>
+        <Text style={dayMode ? styles.dataTextLight : styles.dataText}>
+          Distance:{" "}
+        </Text>
+        <Text style={dayMode ? styles.dataTextLight : styles.dataText}>
+          {distance} meters
+        </Text>
       </View>
       <View style={styles.dataContainer}>
-        <Text style={styles.dataText}>Date: </Text>
-        <Text style={styles.dataText}>{formatDate()}</Text>
+        <Text style={dayMode ? styles.dataTextLight : styles.dataText}>
+          Date:{" "}
+        </Text>
+        <Text style={dayMode ? styles.dataTextLight : styles.dataText}>
+          {formatDate()}
+        </Text>
       </View>
       <View style={styles.dataContainer}>
-        <Text style={styles.dataText}>Duration: </Text>
-        <Text style={styles.dataText}>{formatTime(time)}s</Text>
+        <Text style={dayMode ? styles.dataTextLight : styles.dataText}>
+          Duration:{" "}
+        </Text>
+        <Text style={dayMode ? styles.dataTextLight : styles.dataText}>
+          {formatTime(time)}s
+        </Text>
       </View>
       <View style={styles.dataContainer}>
-        <Text style={styles.dataText}>Name: </Text>
+        <Text style={dayMode ? styles.dataTextLight : styles.dataText}>
+          Name:{" "}
+        </Text>
         <TextInput
           value={name}
           onChangeText={(text) => setName(text)}
-          style={styles.input}
+          style={dayMode ? styles.inputLight : styles.input}
         />
       </View>
       <Text style={styles.errorMessage}>{errorMessage}</Text>
       <TouchableOpacity
         onPress={() => submitData()}
-        style={styles.submitButton}
+        style={dayMode ? styles.submitButtonLight : styles.submitButton}
       >
         <Text>submit</Text>
       </TouchableOpacity>
@@ -110,6 +124,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  containerLight: {
+    flex: 1,
+    backgroundColor: constants.secondary.containerColor,
+    opacity: 0.8,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   submitButton: {
     backgroundColor: constants.primary.buttonColor,
     width: "60%",
@@ -117,6 +138,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
+  },
+  submitButtonLight: {
+    backgroundColor: constants.secondary.buttonColor,
+    width: "60%",
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    elevation: 20,
   },
   dataContainer: {
     flexDirection: "row",
@@ -129,6 +159,11 @@ const styles = StyleSheet.create({
     color: constants.primary.textColor,
     fontFamily: constants.primary.fontFamily,
   },
+  dataTextLight: {
+    fontSize: 25,
+    color: constants.secondary.textColor,
+    fontFamily: constants.secondary.fontFamily,
+  },
   input: {
     width: "60%",
     height: 40,
@@ -138,6 +173,18 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     color: constants.primary.textColor,
     fontFamily: constants.primary.fontFamily,
+    textDecorationLine: "none",
+    fontSize: 18,
+  },
+  inputLight: {
+    width: "60%",
+    height: 40,
+    marginBottom: "10%",
+    textAlign: "center",
+    borderBottomColor: constants.secondary.textColor,
+    borderBottomWidth: 1,
+    color: constants.secondary.textColor,
+    fontFamily: constants.secondary.fontFamily,
     textDecorationLine: "none",
     fontSize: 18,
   },

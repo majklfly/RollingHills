@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Dimensions,
   Modal,
-  Switch,
+  AsyncStorage,
 } from "react-native";
 import moment from "moment";
 
@@ -22,26 +22,33 @@ const height = Dimensions.get("window").height;
 
 const ProfileScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [isEnabled, setIsEnabled] = useState(false);
+  const [dayMode, setDayMode] = useState(false);
   const {
-    state: { user, dayMode },
+    state: { user },
   } = useContext(GlobalContext);
-  const { setDayMode } = useContext(AuthContext);
 
   const formatDate = (date) => {
     return moment(new Date(parseInt(date))).format("DD/MM/YYYY");
   };
 
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   useEffect(() => {
-    setDayMode(isEnabled);
-  }, [isEnabled]);
+    const retrieveDayMode = async () => {
+      const result = await AsyncStorage.getItem("dayMode");
+      const value = result === "true" ? true : false;
+      setDayMode(value);
+    };
+    retrieveDayMode();
+  });
 
   return (
     <View>
       <Background />
       <View style={styles.mainContainer}>
-        <View style={styles.contentContainer}>
+        <View
+          style={
+            dayMode ? styles.contentContainerLight : styles.contentContainer
+          }
+        >
           <Image source={{ uri: user.photoURL }} style={styles.profileImage} />
           <Text style={dayMode ? styles.titleLight : styles.title}>
             {user.displayName}
@@ -88,19 +95,6 @@ const ProfileScreen = () => {
               </Text>
             </TouchableOpacity>
           </View>
-          <View style={styles.contentLine}>
-            <Text
-              style={dayMode ? styles.contentLabelLight : styles.contentLabel}
-            >
-              {isEnabled ? "Switch to Night Mode" : "Switch to Day Mode"}
-            </Text>
-            <Switch
-              trackColor={{ false: "#767577", true: "#81b0ff" }}
-              thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
-              onValueChange={toggleSwitch}
-              value={isEnabled}
-            />
-          </View>
         </View>
       </View>
       <Modal visible={modalVisible} animationType="fade" transparent={true}>
@@ -142,6 +136,14 @@ const styles = StyleSheet.create({
     height: height * 0.7,
     marginTop: height * 0.15,
     backgroundColor: constants.primary.containerColor,
+    alignSelf: "center",
+    borderRadius: 20,
+  },
+  contentContainerLight: {
+    width: "90%",
+    height: height * 0.7,
+    marginTop: height * 0.15,
+    backgroundColor: constants.secondary.containerColor,
     alignSelf: "center",
     borderRadius: 20,
   },

@@ -1,17 +1,19 @@
 import React, { useState, useContext, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, AsyncStorage } from "react-native";
 import constants from "../../constants";
 
 import {
   LocationStateContext,
   LocationContext,
 } from "../../store/LocationProvider";
+import { GlobalContext } from "../../store/AuthProvider";
 import { TimerActionContext } from "../../store/TimerProvider";
 
 export const Timer = () => {
   const [time, setTime] = useState({ ms: 0, s: 0, m: 0, h: 0 });
   const [totalTime, setTotalTime] = useState({ total: 0 });
   const [totalInterv, setTotalInterv] = useState();
+  const [dayMode, setDayModeLocal] = useState(false);
   const [interv, setInterv] = useState();
   const {
     state: { recording, finished },
@@ -84,12 +86,29 @@ export const Timer = () => {
     };
   }, [finished]);
 
+  useEffect(() => {
+    const retrieveDayMode = async () => {
+      const result = await AsyncStorage.getItem("dayMode");
+      const value = result === "true" ? true : false;
+      setDayModeLocal(value);
+    };
+    retrieveDayMode();
+  });
+
   return (
-    <View style={styles.timeContainer}>
-      <Text style={styles.time}>{time.h >= 10 ? time.h : "0" + time.h} :</Text>
-      <Text style={styles.time}>{time.m >= 10 ? time.m : "0" + time.m} :</Text>
-      <Text style={styles.time}>{time.s >= 10 ? time.s : "0" + time.s} :</Text>
-      <Text style={styles.time}>{time.ms >= 10 ? time.ms : "0" + time.ms}</Text>
+    <View style={dayMode ? styles.timeContainerLight : styles.timeContainer}>
+      <Text style={dayMode ? styles.timeLight : styles.time}>
+        {time.h >= 10 ? time.h : "0" + time.h} :
+      </Text>
+      <Text style={dayMode ? styles.timeLight : styles.time}>
+        {time.m >= 10 ? time.m : "0" + time.m} :
+      </Text>
+      <Text style={dayMode ? styles.timeLight : styles.time}>
+        {time.s >= 10 ? time.s : "0" + time.s} :
+      </Text>
+      <Text style={dayMode ? styles.timeLight : styles.time}>
+        {time.ms >= 10 ? time.ms : "0" + time.ms}
+      </Text>
     </View>
   );
 };
@@ -104,9 +123,23 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     flexDirection: "row",
   },
+  timeContainerLight: {
+    backgroundColor: constants.secondary.containerColor,
+    width: "90%",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: "5%",
+    borderRadius: 10,
+    flexDirection: "row",
+  },
   time: {
     padding: "2%",
     color: constants.primary.textColor,
+    fontSize: 45,
+  },
+  timeLight: {
+    padding: "2%",
+    color: constants.secondary.textColor,
     fontSize: 45,
   },
 });

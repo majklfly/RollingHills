@@ -1,16 +1,38 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 
 import { createStackNavigator } from "@react-navigation/stack";
 import HomeScreen from "../containers/HomeScreen/HomeScreen";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
-import { AuthContext } from "../store/AuthProvider";
+import { AuthContext, GlobalContext } from "../store/AuthProvider";
 import constants from "../constants";
+
+import { Switch, View, AsyncStorage } from "react-native";
 
 const Stack = createStackNavigator();
 
 export const HomeStack = () => {
-  const { logout } = useContext(AuthContext);
+  const { logout, setDayMode } = useContext(AuthContext);
+  const [dayMode, setDayModeLocal] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(null);
+
+  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+
+  useEffect(() => {
+    if (isEnabled !== null) {
+      AsyncStorage.setItem("dayMode", isEnabled.toString());
+      setDayMode(isEnabled);
+    }
+  }, [isEnabled]);
+
+  useEffect(() => {
+    const retrieveDayMode = async () => {
+      const result = await AsyncStorage.getItem("dayMode");
+      const value = result === "true" ? true : false;
+      setDayModeLocal(value);
+    };
+    retrieveDayMode();
+  });
 
   return (
     <Stack.Navigator>
@@ -23,23 +45,29 @@ export const HomeStack = () => {
                 style={{ marginRight: 20 }}
                 onPress={() => logout()}
               >
-                <FontAwesome name="sign-out-alt" size={30} color="white" />
+                <FontAwesome
+                  name="sign-out-alt"
+                  size={30}
+                  color={
+                    dayMode
+                      ? constants.secondary.textColor
+                      : constants.primary.textColor
+                  }
+                />
               </TouchableOpacity>
             );
           },
           headerLeft: () => {
             return (
-              <TouchableOpacity
-                style={{ marginLeft: 20 }}
-                onPress={() => logout()}
-              >
-                <FontAwesome name="ellipsis-v" size={30} color="white" />
-              </TouchableOpacity>
+              <View style={{ marginLeft: 10 }}>
+                <Switch
+                  trackColor={{ false: "#767577", true: "#81b0ff" }}
+                  thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+                  onValueChange={toggleSwitch}
+                  value={isEnabled}
+                />
+              </View>
             );
-          },
-          headerStyle: {
-            backgroundColor: constants.primary.containerColor,
-            opacity: 0.6,
           },
           headerTransparent: true,
           headerTitle: false,

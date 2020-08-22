@@ -7,9 +7,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   Modal,
+  AsyncStorage,
 } from "react-native";
 import { Background } from "../../components/Background/Background";
-import { NavigationEvents } from "react-navigation";
 
 import {
   LocationContext,
@@ -22,6 +22,7 @@ const TracksScreen = ({ navigation }) => {
   const [data, setData] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [currentRun, setCurrentRun] = useState(null);
+  const [dayMode, setDayMode] = useState(false);
   const { fetchData, deleteRun } = useContext(LocationContext);
   const {
     state: { tracks, error },
@@ -34,6 +35,15 @@ const TracksScreen = ({ navigation }) => {
 
     return unsubscribe;
   }, [navigation]);
+
+  useEffect(() => {
+    const retrieveDayMode = async () => {
+      const result = await AsyncStorage.getItem("dayMode");
+      const value = result === "true" ? true : false;
+      setDayMode(value);
+    };
+    retrieveDayMode();
+  });
 
   useEffect(() => {
     formatTracks(tracks);
@@ -53,8 +63,12 @@ const TracksScreen = ({ navigation }) => {
   return (
     <>
       <Background />
-      <Text style={styles.title}>Finished Tracks</Text>
-      <ScrollView style={styles.mainContainer}>
+      <Text style={dayMode ? styles.titleLight : styles.title}>
+        Finished Tracks
+      </Text>
+      <ScrollView
+        style={dayMode ? styles.mainContainerLight : styles.mainContainer}
+      >
         {error ? (
           <Text style={styles.errorMessage}>{error}</Text>
         ) : (
@@ -62,7 +76,7 @@ const TracksScreen = ({ navigation }) => {
             {data.map((item) => {
               return (
                 <TouchableOpacity
-                  style={styles.button}
+                  style={dayMode ? styles.buttonLight : styles.button}
                   key={item.date.stringValue}
                   onPress={() =>
                     navigation.navigate("trackDetailScreen", { data: item })
@@ -71,10 +85,18 @@ const TracksScreen = ({ navigation }) => {
                     setModalVisible(true), setCurrentRun(item)
                   )}
                 >
-                  <Text style={styles.buttonText}>
+                  <Text
+                    style={dayMode ? styles.buttonTextLight : styles.buttonText}
+                  >
                     {item.date.stringValue.split("GMT")[0]}
                   </Text>
-                  <Text style={styles.buttonTextName}>
+                  <Text
+                    style={
+                      dayMode
+                        ? styles.buttonTextNameLight
+                        : styles.buttonTextName
+                    }
+                  >
                     {item.name.stringValue}
                   </Text>
                 </TouchableOpacity>
@@ -83,26 +105,42 @@ const TracksScreen = ({ navigation }) => {
           </>
         )}
         <Modal visible={modalVisible} transparent={true}>
-          <View style={styles.modal}>
-            <Text style={styles.deleteText}>
+          <View style={dayMode ? styles.modalLight : styles.modal}>
+            <Text style={dayMode ? styles.deleteTextLight : styles.deleteText}>
               Would you like to delete this run?
             </Text>
             <View style={styles.modalButtonContainer}>
               <TouchableOpacity
-                style={styles.modalButton}
+                style={dayMode ? styles.modalButtonLight : styles.modalButton}
                 onPress={() => (
                   deleteRun(currentRun),
                   setModalVisible(false),
                   navigation.navigate("homeScreen")
                 )}
               >
-                <Text style={styles.modalButtonText}>Yes</Text>
+                <Text
+                  style={
+                    dayMode
+                      ? styles.modalButtonTextLight
+                      : styles.modalButtonText
+                  }
+                >
+                  Yes
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={styles.modalButton}
+                style={dayMode ? styles.modalButtonLight : styles.modalButton}
                 onPress={() => setModalVisible(false)}
               >
-                <Text style={styles.modalButtonText}>No</Text>
+                <Text
+                  style={
+                    dayMode
+                      ? styles.modalButtonTextLight
+                      : styles.modalButtonText
+                  }
+                >
+                  No
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -123,9 +161,27 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingVertical: "5%",
   },
+  mainContainerLight: {
+    width: "90%",
+    height: "60%",
+    position: "absolute",
+    alignSelf: "center",
+    marginTop: "40%",
+    backgroundColor: constants.secondary.containerColor,
+    borderRadius: 20,
+    paddingVertical: "5%",
+  },
   title: {
     color: constants.primary.textColor,
     fontFamily: constants.primary.fontFamily,
+    alignSelf: "center",
+    fontSize: 30,
+    position: "absolute",
+    top: "10%",
+  },
+  titleLight: {
+    color: constants.secondary.textColor,
+    fontFamily: constants.secondary.fontFamily,
     alignSelf: "center",
     fontSize: 30,
     position: "absolute",
@@ -141,14 +197,35 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
   },
+  buttonLight: {
+    width: "90%",
+    height: 60,
+    padding: 5,
+    alignSelf: "center",
+    marginTop: 10,
+    borderColor: constants.secondary.textColor,
+    borderRadius: 10,
+    borderWidth: 1,
+  },
   buttonText: {
     color: constants.primary.textColor,
     fontFamily: constants.primary.fontFamily,
     marginLeft: "5%",
   },
+  buttonTextLight: {
+    color: constants.secondary.textColor,
+    fontFamily: constants.secondary.fontFamily,
+    marginLeft: "5%",
+  },
   buttonTextName: {
     color: constants.primary.textColor,
     fontFamily: constants.primary.fontFamily,
+    alignSelf: "flex-end",
+    marginRight: "5%",
+  },
+  buttonTextNameLight: {
+    color: constants.secondary.textColor,
+    fontFamily: constants.secondary.fontFamily,
     alignSelf: "flex-end",
     marginRight: "5%",
   },
@@ -167,9 +244,25 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingVertical: "5%",
   },
+  modalLight: {
+    backgroundColor: constants.secondary.containerColor,
+    width: "90%",
+    height: "65%",
+    alignSelf: "center",
+    marginTop: "32%",
+    borderRadius: 20,
+    paddingVertical: "5%",
+  },
   deleteText: {
     color: constants.primary.textColor,
     fontFamily: constants.primary.fontFamily,
+    fontSize: 30,
+    textAlign: "center",
+    paddingHorizontal: "5%",
+  },
+  deleteTextLight: {
+    color: constants.secondary.textColor,
+    fontFamily: constants.secondary.fontFamily,
     fontSize: 30,
     textAlign: "center",
     paddingHorizontal: "5%",
@@ -187,9 +280,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 10,
   },
+  modalButtonLight: {
+    backgroundColor: constants.secondary.buttonColor,
+    width: "30%",
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+  },
   modalButtonText: {
     color: constants.primary.textColor,
     fontFamily: constants.primary.fontFamily,
+  },
+  modalButtonTextLight: {
+    color: constants.secondary.textColor,
+    fontFamily: constants.secondary.fontFamily,
   },
 });
 

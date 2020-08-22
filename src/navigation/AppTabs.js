@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
 
@@ -11,7 +11,12 @@ import constants from "../constants";
 
 const Tabs = createBottomTabNavigator();
 
+import { GlobalContext } from "../store/AuthProvider";
+
 export const AppTabs = () => {
+  const {
+    state: { dayMode },
+  } = useContext(GlobalContext);
   return (
     <Tabs.Navigator
       screenOptions={({ route }) => ({
@@ -27,18 +32,23 @@ export const AppTabs = () => {
           } else if (route.name === "Statistics") {
             iconName = "clipboard-list";
           }
-          // You can return any component that you like here!
           return <FontAwesome name={iconName} size={size} color={color} />;
         },
       })}
       tabBarOptions={{
-        activeTintColor: constants.primary.activeTextColor,
-        inactiveTintColor: constants.primary.textColor,
+        activeTintColor: dayMode
+          ? constants.secondary.activeTextColor
+          : constants.primary.activeTextColor,
+        inactiveTintColor: dayMode
+          ? constants.secondary.textColor
+          : constants.primary.textColor,
         showLabel: false,
         style: {
           opacity: 0.5,
           position: "absolute",
-          backgroundColor: constants.primary.containerColor,
+          backgroundColor: dayMode
+            ? constants.secondary.containerColor
+            : constants.primary.containerColor,
           border: "none",
           borderRadius: 15,
           marginBottom: "5%",

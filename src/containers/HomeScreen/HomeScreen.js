@@ -1,5 +1,12 @@
 import React, { useContext, useCallback, useState, useEffect } from "react";
-import { View, Text, StyleSheet, Modal, Switch } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Modal,
+  Switch,
+  AsyncStorage,
+} from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 import { AuthContext, GlobalContext } from "../../store/AuthProvider";
@@ -17,8 +24,8 @@ import constants from "../../constants";
 
 const HomeScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [status, setStatus] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
+  const [dayMode, setDayModeLocal] = useState(false);
   const { logout } = useContext(AuthContext);
   const {
     state: { user },
@@ -37,8 +44,17 @@ const HomeScreen = () => {
     (location) => {
       addLocation(location, recording);
     },
-    [recording, status]
+    [recording]
   );
+
+  useEffect(() => {
+    const retrieveDayMode = async () => {
+      const result = await AsyncStorage.getItem("dayMode");
+      const value = result === "true" ? true : false;
+      setDayModeLocal(value);
+    };
+    retrieveDayMode();
+  });
 
   useEffect(() => {
     mockMovement(isEnabled);
@@ -48,20 +64,30 @@ const HomeScreen = () => {
 
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
+  console.log(dayMode);
+
   return (
     <>
       <Background />
       <View style={styles.container}>
         {user.displayName ? (
-          <Text style={styles.greeting}>Hello, {user.displayName}</Text>
+          <Text style={dayMode ? styles.greetingLight : styles.greeting}>
+            Hello, {user.displayName}
+          </Text>
         ) : (
-          <Text style={styles.greeting}>{logout()}</Text>
+          <Text style={dayMode ? styles.greetingLight : styles.greeting}>
+            {logout()}
+          </Text>
         )}
-        <View style={styles.mapContainer}>
+        <View style={dayMode ? styles.mapContainerLight : styles.mapContainer}>
           <Map />
         </View>
-        <View style={styles.mockContainer}>
-          <Text style={styles.mockText}>Mock movement</Text>
+        <View
+          style={dayMode ? styles.mockContainerLight : styles.mockContainer}
+        >
+          <Text style={dayMode ? styles.mockTextLight : styles.mockText}>
+            Mock movement
+          </Text>
           <Switch
             onValueChange={toggleSwitch}
             value={isEnabled}
@@ -73,23 +99,33 @@ const HomeScreen = () => {
           <View style={styles.pauseContainer}>
             <TouchableOpacity
               onPress={() => (setModalVisible(true), runFinished(locations))}
-              style={styles.pauseButton}
+              style={dayMode ? styles.pauseButtonLight : styles.pauseButton}
             >
-              <Text style={styles.buttonText}>Finish</Text>
+              <Text
+                style={dayMode ? styles.buttonTextLight : styles.buttonText}
+              >
+                Finish
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => stopRecording()}
-              style={styles.pauseButton}
+              style={dayMode ? styles.pauseButtonLight : styles.pauseButton}
             >
-              <Text style={styles.buttonText}>Pause</Text>
+              <Text
+                style={dayMode ? styles.buttonTextLight : styles.buttonText}
+              >
+                Pause
+              </Text>
             </TouchableOpacity>
           </View>
         ) : (
           <TouchableOpacity
             onPress={() => startRecording()}
-            style={styles.recordButton}
+            style={dayMode ? styles.recordButtonLight : styles.recordButton}
           >
-            <Text style={styles.buttonText}>Run</Text>
+            <Text style={dayMode ? styles.buttonTextLight : styles.buttonText}>
+              Run
+            </Text>
           </TouchableOpacity>
         )}
         {modalVisible && (
@@ -122,6 +158,14 @@ const styles = StyleSheet.create({
     marginTop: "30%",
     fontFamily: constants.primary.fontFamily,
   },
+  greetingLight: {
+    fontSize: 30,
+    color: constants.secondary.textColor,
+    width: "100%",
+    left: "10%",
+    marginTop: "30%",
+    fontFamily: constants.secondary.fontFamily,
+  },
   container: {
     alignItems: "center",
     width: "100%",
@@ -137,6 +181,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  mapContainerLight: {
+    width: "95%",
+    height: "40%",
+    backgroundColor: constants.secondary.containerColor,
+    borderRadius: 10,
+    marginTop: "5%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   mockContainer: {
     width: "90%",
     height: 50,
@@ -146,9 +199,24 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     flexDirection: "row",
   },
+  mockContainerLight: {
+    width: "90%",
+    height: 50,
+    marginTop: "5%",
+    backgroundColor: constants.secondary.containerColor,
+    borderRadius: 5,
+    justifyContent: "space-evenly",
+    flexDirection: "row",
+  },
   mockText: {
     color: constants.primary.textColor,
     fontFamily: constants.primary.fontFamily,
+    fontSize: 18,
+    alignSelf: "center",
+  },
+  mockTextLight: {
+    color: constants.secondary.textColor,
+    fontFamily: constants.secondary.fontFamily,
     fontSize: 18,
     alignSelf: "center",
   },
@@ -162,9 +230,24 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     elevation: 10,
   },
+  recordButtonLight: {
+    marginTop: "5%",
+    width: 300,
+    height: 50,
+    backgroundColor: constants.secondary.buttonColor,
+    borderRadius: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 10,
+  },
   buttonText: {
     color: constants.primary.textColor,
     fontFamily: constants.primary.fontFamily,
+    fontSize: 17,
+  },
+  buttonTextLight: {
+    color: constants.secondary.textColor,
+    fontFamily: constants.secondary.fontFamily,
     fontSize: 17,
   },
   pauseContainer: {
@@ -177,6 +260,15 @@ const styles = StyleSheet.create({
     width: 150,
     height: 50,
     backgroundColor: constants.primary.buttonColor,
+    borderRadius: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 10,
+  },
+  pauseButtonLight: {
+    width: 150,
+    height: 50,
+    backgroundColor: constants.secondary.buttonColor,
     borderRadius: 20,
     alignItems: "center",
     justifyContent: "center",

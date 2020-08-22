@@ -1,22 +1,28 @@
-import React, { useContext, useEffect, useState, useCallback } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import * as Location from "expo-location";
-import {
-  StyleSheet,
-  ActivityIndicator,
-  RefreshControl,
-  Button,
-} from "react-native";
+import { StyleSheet, ActivityIndicator, AsyncStorage } from "react-native";
 import MapView, { Polyline, Circle } from "react-native-maps";
 import { LocationStateContext } from "../../store/LocationProvider";
+
 import { mapStyle } from "./MapStyle";
+import { mapStyleLight } from "./MapStyleLight";
 
 import * as TaskManager from "expo-task-manager";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
 export const Map = () => {
+  const [dayMode, setDayMode] = useState(false);
   const {
     state: { currentLocation, locations, mockRunning },
   } = useContext(LocationStateContext);
+
+  useEffect(() => {
+    const retrieveDayMode = async () => {
+      const result = await AsyncStorage.getItem("dayMode");
+      const value = result === "true" ? true : false;
+      setDayMode(value);
+    };
+    retrieveDayMode();
+  });
 
   if (!currentLocation) {
     return <ActivityIndicator size="large" style={{ marginTop: 150 }} />;
@@ -52,7 +58,6 @@ export const Map = () => {
   useEffect(() => {
     const interval = setInterval(timer, 1000);
     if (mockRunning === false) {
-      console.log(window);
       clearInterval(interval);
     }
   }, [mockRunning]);
@@ -73,7 +78,7 @@ export const Map = () => {
           latitudeDelta: 0.004,
           longitudeDelta: 0.004,
         }}
-        customMapStyle={mapStyle}
+        customMapStyle={dayMode ? mapStyleLight : mapStyle}
       >
         <Circle
           center={currentLocation.coords}
