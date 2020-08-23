@@ -48,13 +48,19 @@ export const UpdatePasswordForm = (props) => {
       </TouchableOpacity>
       <Text style={styles.errorMessage}>{state.errorMessage}</Text>
       {state.successMessage !== "null" && (
-        <Text style={styles.successMessage}>{state.successMessage}</Text>
+        <Text
+          style={dayMode ? state.successMessageLight : styles.successMessage}
+        >
+          {state.successMessage}
+        </Text>
       )}
       <Form style={styles.form}>
         <Item floatingLabel>
-          <Label style={styles.label}>Your Email</Label>
+          <Label style={dayMode ? styles.labelLight : styles.label}>
+            Your Email
+          </Label>
           <Input
-            style={styles.input}
+            style={dayMode ? styles.inputLight : styles.input}
             value={email}
             autoCorrent={false}
             autoCapitalize="none"
@@ -62,9 +68,11 @@ export const UpdatePasswordForm = (props) => {
           ></Input>
         </Item>
         <Item floatingLabel>
-          <Label style={styles.label}>Current Password</Label>
+          <Label style={dayMode ? styles.labelLight : styles.label}>
+            Current Password
+          </Label>
           <Input
-            style={styles.input}
+            style={dayMode ? styles.inputLight : styles.input}
             value={currentPassword}
             autoCorrent={false}
             autoCapitalize="none"
@@ -72,9 +80,12 @@ export const UpdatePasswordForm = (props) => {
           ></Input>
         </Item>
         <Item floatingLabel>
-          <Label style={styles.label}> New Password</Label>
+          <Label style={dayMode ? styles.labelLight : styles.label}>
+            {" "}
+            New Password
+          </Label>
           <Input
-            style={styles.input}
+            style={dayMode ? styles.inputLight : styles.input}
             autoCorrent={false}
             value={newPassword}
             autoCapitalize="none"
@@ -91,11 +102,15 @@ export const UpdatePasswordForm = (props) => {
             borderRadius: 10,
             height: 50,
             alignSelf: "center",
-            backgroundColor: constants.primary.buttonColor,
+            backgroundColor: dayMode
+              ? constants.secondary.buttonColor
+              : constants.primary.buttonColor,
           }}
           onPress={() => changePassword(email, currentPassword, newPassword)}
         >
-          <Text style={styles.buttonText}>Update Password</Text>
+          <Text style={dayMode ? styles.buttonTextLight : styles.buttonText}>
+            Update Password
+          </Text>
         </Button>
       </Form>
     </View>
@@ -127,15 +142,29 @@ const styles = StyleSheet.create({
     fontFamily: constants.primary.fontFamily,
     padding: 5,
   },
-  labelLight: {},
+  labelLight: {
+    color: constants.secondary.textColor,
+    fontFamily: constants.secondary.fontFamily,
+    padding: 5,
+  },
   input: {
     color: constants.primary.textColor,
     fontFamily: constants.primary.fontFamily,
     width: 70,
   },
+  inputLight: {
+    color: constants.secondary.textColor,
+    fontFamily: constants.secondary.fontFamily,
+    width: 70,
+  },
   buttonText: {
     color: constants.primary.textColor,
     fontFamily: constants.primary.fontFamily,
+    fontSize: 16,
+  },
+  buttonTextLight: {
+    color: constants.secondary.textColor,
+    fontFamily: constants.secondary.fontFamily,
     fontSize: 16,
   },
   errorMessage: {
@@ -149,6 +178,14 @@ const styles = StyleSheet.create({
   successMessage: {
     color: constants.primary.textColor,
     fontFamily: constants.primary.fontFamily,
+    fontSize: 16,
+    alignSelf: "center",
+    marginTop: "30%",
+    position: "absolute",
+  },
+  successMessageLight: {
+    color: constants.secondary.textColor,
+    fontFamily: constants.secondary.fontFamily,
     fontSize: 16,
     alignSelf: "center",
     marginTop: "30%",
