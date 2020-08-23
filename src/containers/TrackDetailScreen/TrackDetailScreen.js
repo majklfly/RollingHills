@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, AsyncStorage } from "react-native";
 
 import constants from "../../constants";
 
 import { TrackDetailFlatList } from "../../components/TrackDetailFlatList/TrackDetailFlatList";
 
 const TrackDetailScreen = ({ route }) => {
+  const [dayMode, setDayModeLocal] = useState(null);
   const formatTime = (time) => {
     const seconds = Math.round(time / 60);
     if (seconds < 60) {
@@ -19,29 +20,46 @@ const TrackDetailScreen = ({ route }) => {
     }
   };
 
+  useEffect(() => {
+    const retrieveDayMode = async () => {
+      const result = await AsyncStorage.getItem("dayMode");
+      const value = result === "true" ? true : false;
+      setDayModeLocal(value);
+    };
+    retrieveDayMode();
+  });
+
   return (
     <View
       key={route.params.data.time.integerValue}
-      style={styles.mainContainer}
+      style={dayMode ? styles.mainContainerLight : styles.mainContainer}
     >
       <View>
-        <Text style={styles.title}>{route.params.data.name.stringValue}</Text>
+        <Text style={dayMode ? styles.titleLight : styles.title}>
+          {route.params.data.name.stringValue}
+        </Text>
         <TrackDetailFlatList route={route} />
         <View style={styles.dataContainer}>
-          <Text style={styles.datalabel}>Date:</Text>
-          <Text style={styles.dataContent}>
+          <Text style={dayMode ? styles.datalabelLight : styles.datalabel}>
+            Date:
+          </Text>
+          <Text style={dayMode ? styles.dataContentLight : styles.dataContent}>
             {route.params.data.date.stringValue.split("GMT")[0]}
           </Text>
         </View>
         <View style={styles.dataContainer}>
-          <Text style={styles.datalabel}>Distance:</Text>
-          <Text style={styles.dataContent}>
+          <Text style={dayMode ? styles.datalabelLight : styles.datalabel}>
+            Distance:
+          </Text>
+          <Text style={dayMode ? styles.dataContentLight : styles.dataContent}>
             {route.params.data.distance.integerValue} meters
           </Text>
         </View>
         <View style={styles.dataContainer}>
-          <Text style={styles.datalabel}>Time:</Text>
-          <Text style={styles.dataContent}>
+          <Text style={dayMode ? styles.datalabelLight : styles.datalabel}>
+            Time:
+          </Text>
+          <Text style={dayMode ? styles.dataContentLight : styles.dataContent}>
             {formatTime(route.params.data.time.integerValue)} seconds
           </Text>
         </View>
@@ -58,6 +76,13 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
+  mainContainerLight: {
+    backgroundColor: constants.secondary.containerColor,
+    flex: 1,
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+  },
   title: {
     alignSelf: "center",
     fontSize: 30,
@@ -65,7 +90,13 @@ const styles = StyleSheet.create({
     fontFamily: constants.primary.fontFamily,
     marginTop: "20%",
   },
-
+  titleLight: {
+    alignSelf: "center",
+    fontSize: 30,
+    color: constants.secondary.textColor,
+    fontFamily: constants.secondary.fontFamily,
+    marginTop: "20%",
+  },
   dataContainer: {
     width: "95%",
     height: "7%",
@@ -78,10 +109,20 @@ const styles = StyleSheet.create({
     color: constants.primary.textColor,
     fontFamily: constants.primary.fontFamily,
   },
+  datalabelLight: {
+    fontSize: 20,
+    color: constants.secondary.textColor,
+    fontFamily: constants.secondary.fontFamily,
+  },
   dataContent: {
     fontSize: 20,
     color: constants.primary.textColor,
     fontFamily: constants.primary.fontFamily,
+  },
+  dataContentLight: {
+    fontSize: 20,
+    color: constants.secondary.textColor,
+    fontFamily: constants.secondary.fontFamily,
   },
 });
 

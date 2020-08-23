@@ -28,7 +28,7 @@ export const UpdatePasswordForm = (props) => {
       setDayModeLocal(value);
     };
     retrieveDayMode();
-  }, []);
+  });
 
   return (
     <View style={dayMode ? styles.mainContainerLight : styles.mainContainer}>

@@ -1,4 +1,5 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { AsyncStorage } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
 
@@ -11,12 +12,18 @@ import constants from "../constants";
 
 const Tabs = createBottomTabNavigator();
 
-import { GlobalContext } from "../store/AuthProvider";
-
 export const AppTabs = () => {
-  const {
-    state: { dayMode },
-  } = useContext(GlobalContext);
+  const [dayMode, setDayModeLocal] = useState(null);
+
+  useEffect(() => {
+    const retrieveDayMode = async () => {
+      const result = await AsyncStorage.getItem("dayMode");
+      const value = result === "true" ? true : false;
+      setDayModeLocal(value);
+    };
+    retrieveDayMode();
+  });
+
   return (
     <Tabs.Navigator
       screenOptions={({ route }) => ({
