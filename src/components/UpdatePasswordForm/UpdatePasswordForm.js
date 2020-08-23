@@ -1,5 +1,11 @@
-import React, { useState, useContext } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import React, { useState, useContext, useEffect } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  AsyncStorage,
+} from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { Form, Item, Button, Label, Input } from "native-base";
 import constants from "../../constants";
@@ -9,15 +15,23 @@ import { AuthContext, GlobalContext } from "../../store/AuthProvider";
 export const UpdatePasswordForm = (props) => {
   const [email, setEmail] = useState(null);
   const [currentPassword, setCurrentPassword] = useState(null);
+  const [dayMode, setDayModeLocal] = useState(null);
   const [newPassword, setNewPassword] = useState(null);
 
   const { changePassword } = useContext(AuthContext);
   const { state } = useContext(GlobalContext);
 
-  console.log(state.successMessage);
+  useEffect(() => {
+    const retrieveDayMode = async () => {
+      const result = await AsyncStorage.getItem("dayMode");
+      const value = result === "true" ? true : false;
+      setDayModeLocal(value);
+    };
+    retrieveDayMode();
+  }, []);
 
   return (
-    <View style={styles.mainContainer}>
+    <View style={dayMode ? styles.mainContainerLight : styles.mainContainer}>
       <TouchableOpacity
         onPress={() => props.setModalVisible(false)}
         style={styles.closeIcon}
@@ -25,11 +39,15 @@ export const UpdatePasswordForm = (props) => {
         <AntDesign
           name="closecircleo"
           size={35}
-          color={constants.primary.textColor}
+          color={
+            dayMode
+              ? constants.secondary.textColor
+              : constants.primary.textColor
+          }
         />
       </TouchableOpacity>
       <Text style={styles.errorMessage}>{state.errorMessage}</Text>
-      {state.successMessage !== null && (
+      {state.successMessage !== "null" && (
         <Text style={styles.successMessage}>{state.successMessage}</Text>
       )}
       <Form style={styles.form}>
@@ -89,6 +107,10 @@ const styles = StyleSheet.create({
     backgroundColor: constants.primary.containerColor,
     flex: 1,
   },
+  mainContainerLight: {
+    backgroundColor: constants.secondary.containerColor,
+    flex: 1,
+  },
   closeIcon: {
     alignSelf: "flex-end",
     marginRight: 30,
@@ -105,6 +127,7 @@ const styles = StyleSheet.create({
     fontFamily: constants.primary.fontFamily,
     padding: 5,
   },
+  labelLight: {},
   input: {
     color: constants.primary.textColor,
     fontFamily: constants.primary.fontFamily,
