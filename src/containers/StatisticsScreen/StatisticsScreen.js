@@ -18,6 +18,12 @@ import {
   LocationStateContext,
 } from "../../store/LocationProvider";
 
+import {
+  calculateTotalDistance,
+  calculateAverageSpeed,
+  calculateTotalTime,
+} from "./utils";
+
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
@@ -48,6 +54,7 @@ const StatisticsScreen = ({ navigation }) => {
         dataLocal.push(data);
       });
     }
+    console.log(tracks);
     setData(dataLocal);
   };
 
@@ -57,8 +64,6 @@ const StatisticsScreen = ({ navigation }) => {
     });
     return unsubscribe;
   }, [navigation]);
-
-  console.log(data);
 
   return (
     <View>
@@ -80,7 +85,7 @@ const StatisticsScreen = ({ navigation }) => {
               <Text
                 style={dayMode ? styles.contentDataLight : styles.contentData}
               >
-                some data
+                {data.length > 0 && calculateTotalDistance(data)} metres
               </Text>
             </View>
             <View style={styles.contentLine}>
@@ -92,7 +97,7 @@ const StatisticsScreen = ({ navigation }) => {
               <Text
                 style={dayMode ? styles.contentDataLight : styles.contentData}
               >
-                some data
+                {data.length > 0 && calculateTotalTime(data)} seconds
               </Text>
             </View>
             <View style={styles.contentLine}>
@@ -104,7 +109,7 @@ const StatisticsScreen = ({ navigation }) => {
               <Text
                 style={dayMode ? styles.contentDataLight : styles.contentData}
               >
-                some data
+                {data.length > 0 && calculateAverageSpeed(data)} km/h
               </Text>
             </View>
           </View>
