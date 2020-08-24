@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { View, Dimensions, StyleSheet } from "react-native";
+import { View, Dimensions, StyleSheet, AsyncStorage } from "react-native";
 
 import { LineChart } from "react-native-chart-kit";
 import constants from "../../constants";
@@ -9,6 +9,7 @@ const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
 export const SpeedStatistics = (props) => {
+  const [dayMode, setDayModeLocal] = useState(null);
   const formatDataset = () => {
     let localDataset = [];
     props.data.locations.arrayValue.values.map((item) => {
@@ -18,6 +19,15 @@ export const SpeedStatistics = (props) => {
     });
     return [{ data: localDataset }];
   };
+
+  useEffect(() => {
+    const retrieveDayMode = async () => {
+      const result = await AsyncStorage.getItem("dayMode");
+      const value = result === "true" ? true : false;
+      setDayModeLocal(value);
+    };
+    retrieveDayMode();
+  });
 
   const dataset = formatDataset();
 
@@ -44,11 +54,21 @@ export const SpeedStatistics = (props) => {
         yAxisSuffix=" km/h"
         chartConfig={{
           backgroundColor: "transparent",
-          backgroundGradientFrom: constants.primary.containerColor,
-          backgroundGradientTo: constants.primary.containerColor,
+          backgroundGradientFrom: dayMode
+            ? constants.secondary.containerColor
+            : constants.primary.containerColor,
+          backgroundGradientTo: dayMode
+            ? constants.secondary.containerColor
+            : constants.primary.containerColor,
           decimalPlaces: 0,
-          color: (opacity = 0.4) => `rgba(255, 255, 255, ${opacity})`,
-          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          color: (opacity = 0.4) =>
+            dayMode
+              ? constants.secondary.textColor
+              : constants.primary.textColor,
+          labelColor: (opacity = 1) =>
+            dayMode
+              ? constants.secondary.textColor
+              : constants.primary.textColor,
           propsForDots: {
             r: "3",
             strokeWidth: "2",

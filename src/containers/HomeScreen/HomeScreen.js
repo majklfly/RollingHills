@@ -64,8 +64,6 @@ const HomeScreen = () => {
 
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
-  console.log(dayMode);
-
   return (
     <>
       <Background />

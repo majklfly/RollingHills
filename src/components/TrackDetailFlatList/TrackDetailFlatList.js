@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-import { View, FlatList, StyleSheet, Dimensions } from "react-native";
+import {
+  View,
+  FlatList,
+  StyleSheet,
+  Dimensions,
+  AsyncStorage,
+} from "react-native";
 
 import MapView, { Polyline } from "react-native-maps";
-import { mapStyle } from "..//Map/MapStyle";
+import { mapStyle } from "../Map/MapStyle";
+import { mapStyleLight } from "../Map/MapStyleLight";
 
 import { AntDesign } from "@expo/vector-icons";
 import constants from "../../constants";
@@ -14,6 +21,17 @@ const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
 export const TrackDetailFlatList = (props) => {
+  const [dayMode, setDayModeLocal] = useState(null);
+
+  useEffect(() => {
+    const retrieveDayMode = async () => {
+      const result = await AsyncStorage.getItem("dayMode");
+      const value = result === "true" ? true : false;
+      setDayModeLocal(value);
+    };
+    retrieveDayMode();
+  });
+
   const formatCoordinates = (loc) => {
     const latitude =
       loc.mapValue.fields.coords.mapValue.fields.latitude.doubleValue;
@@ -48,6 +66,8 @@ export const TrackDetailFlatList = (props) => {
     },
   ];
 
+  console.log("here", dayMode);
+
   return (
     <View style={styles.mainContainer}>
       <FlatList
@@ -64,7 +84,7 @@ export const TrackDetailFlatList = (props) => {
               <View style={styles.slideView} key={item.id}>
                 <MapView
                   style={styles.map}
-                  customMapStyle={mapStyle}
+                  customMapStyle={dayMode ? mapStyleLight : mapStyle}
                   initialRegion={{
                     latitude: initialLatitude,
                     longitude: initialLongitude,
