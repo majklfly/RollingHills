@@ -66,8 +66,6 @@ export const TrackDetailFlatList = (props) => {
     },
   ];
 
-  console.log("here", dayMode);
-
   return (
     <View style={styles.mainContainer}>
       <FlatList
