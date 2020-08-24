@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   View,
   Text,
@@ -13,11 +13,19 @@ import constants from "../../constants";
 
 import { BarChart } from "react-native-chart-kit";
 
+import {
+  LocationContext,
+  LocationStateContext,
+} from "../../store/LocationProvider";
+
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
-const StatisticsScreen = () => {
+const StatisticsScreen = ({ navigation }) => {
+  const [data, setData] = useState([]);
   const [dayMode, setDayModeLocal] = useState(null);
+  const { fetchData } = useContext(LocationContext);
+  const { state } = useContext(LocationStateContext);
 
   useEffect(() => {
     const retrieveDayMode = async () => {
@@ -27,6 +35,30 @@ const StatisticsScreen = () => {
     };
     retrieveDayMode();
   });
+
+  useEffect(() => {
+    formatTracks(state.tracks);
+  }, [state.tracks]);
+
+  const formatTracks = (tracks) => {
+    let dataLocal = [];
+    if (tracks) {
+      tracks.map((track) => {
+        const data = track.doc.Xe.proto.mapValue.fields;
+        dataLocal.push(data);
+      });
+    }
+    setData(dataLocal);
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      fetchData();
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  console.log(data);
 
   return (
     <View>
