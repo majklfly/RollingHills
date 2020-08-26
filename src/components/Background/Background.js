@@ -17,7 +17,6 @@ export const Background = () => {
     };
     retrieveDayMode();
   });
-
   if (!dayMode) {
     return (
       <>
