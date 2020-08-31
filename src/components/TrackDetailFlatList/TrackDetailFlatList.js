@@ -65,7 +65,6 @@ export const TrackDetailFlatList = (props) => {
       id: "speedStatistic",
     },
   ];
-
   return (
     <View style={styles.mainContainer}>
       <FlatList
