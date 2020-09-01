@@ -8,6 +8,7 @@ export const GoogleLogin = () => {
       viewBox="0 0 512 512"
       width="58px"
       height="48px"
+      testID="svg"
     >
       <Path
         fill="#14B6B9"

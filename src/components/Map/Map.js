@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import * as Location from "expo-location";
-import { StyleSheet, ActivityIndicator, AsyncStorage } from "react-native";
+import { StyleSheet, ActivityIndicator, View } from "react-native";
 import MapView, { Polyline, Circle } from "react-native-maps";
 import { LocationStateContext } from "../../store/LocationProvider";
+import { AsyncStorage } from "@react-native-community/async-storage";
 
 import { mapStyle } from "./MapStyle";
 import { mapStyleLight } from "./MapStyleLight";
@@ -79,6 +80,7 @@ export const Map = () => {
           longitudeDelta: 0.004,
         }}
         customMapStyle={dayMode ? mapStyleLight : mapStyle}
+        testID="mapView"
       >
         <Circle
           center={currentLocation.coords}

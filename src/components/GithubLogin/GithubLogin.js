@@ -9,6 +9,7 @@ export const GithubLogin = () => {
       viewBox="0 0 512 512"
       width="48px"
       height="48px"
+      testID="svg"
     >
       <Path
         fill="#283D5B"
