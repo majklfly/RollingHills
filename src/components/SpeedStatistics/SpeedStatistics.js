@@ -32,7 +32,7 @@ export const SpeedStatistics = (props) => {
   const dataset = formatDataset();
 
   return (
-    <View style={styles.mainContainer}>
+    <View style={styles.mainContainer} testID="mainContainer">
       <LineChart
         data={{
           labels: [

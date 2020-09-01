@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react";
 
-import {
-  View,
-  FlatList,
-  StyleSheet,
-  Dimensions,
-  AsyncStorage,
-} from "react-native";
+import { View, FlatList, StyleSheet, Dimensions } from "react-native";
+
+import { AsyncStorage } from "@react-native-community/async-storage";
 
 import MapView, { Polyline } from "react-native-maps";
 import { mapStyle } from "../Map/MapStyle";
@@ -66,7 +62,7 @@ export const TrackDetailFlatList = (props) => {
     },
   ];
   return (
-    <View style={styles.mainContainer}>
+    <View style={styles.mainContainer} testID="detailContainer">
       <FlatList
         data={FlatlistSlides}
         style={styles.flatList}

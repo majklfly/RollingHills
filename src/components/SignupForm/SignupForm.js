@@ -31,7 +31,7 @@ export const SignupForm = (props) => {
       >
         <FontAwesome name="close" style={styles.icon} />
       </TouchableOpacity>
-      <Form style={styles.form}>
+      <Form style={styles.form} testID="form">
         <Item floatingLabel>
           <Label style={dayMode ? styles.labelLight : styles.label}>
             Email
@@ -42,6 +42,7 @@ export const SignupForm = (props) => {
             autoCorrent={false}
             autoCapitalize="none"
             onChangeText={(value) => setEmail(value)}
+            testID="emailInput"
           ></Input>
         </Item>
         <Item floatingLabel>
@@ -54,6 +55,7 @@ export const SignupForm = (props) => {
             value={password}
             autoCapitalize="none"
             secureTextEntry
+            testID="passwordInput"
             onChangeText={(value) => {
               setPassword(value);
             }}

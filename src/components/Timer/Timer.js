@@ -1,12 +1,12 @@
 import React, { useState, useContext, useEffect } from "react";
-import { View, Text, StyleSheet, AsyncStorage } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import constants from "../../constants";
+import { AsyncStorage } from "@react-native-community/async-storage";
 
 import {
   LocationStateContext,
   LocationContext,
 } from "../../store/LocationProvider";
-import { GlobalContext } from "../../store/AuthProvider";
 import { TimerActionContext } from "../../store/TimerProvider";
 
 export const Timer = () => {
@@ -96,7 +96,10 @@ export const Timer = () => {
   });
 
   return (
-    <View style={dayMode ? styles.timeContainerLight : styles.timeContainer}>
+    <View
+      style={dayMode ? styles.timeContainerLight : styles.timeContainer}
+      testID="timerContainer"
+    >
       <Text style={dayMode ? styles.timeLight : styles.time}>
         {time.h >= 10 ? time.h : "0" + time.h} :
       </Text>
