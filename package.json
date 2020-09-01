@@ -10,6 +10,7 @@
   },
   "jest": {
     "preset": "jest-expo",
+    "testEnvironment": "jsdom",
     "transformIgnorePatterns": [
       "node_modules/(?!(jest-)?react-native|@codler|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|@sentry/.*)"
     ]
@@ -22,6 +23,7 @@
     "@react-navigation/bottom-tabs": "^5.7.2",
     "@react-navigation/native": "^5.7.1",
     "@react-navigation/stack": "^5.7.1",
+    "@testing-library/jest-dom": "^5.11.4",
     "babel-plugin-dotenv-import": "^2.1.0",
     "babel-plugin-inline-dotenv": "^1.6.0",
     "babel-plugin-transform-inline-environment-variables": "^0.4.3",
@@ -63,6 +65,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",
+    "@testing-library/react-native": "^7.0.2",
     "babel-preset-expo": "~8.1.0",
     "babel-preset-react-native": "^4.0.1",
     "jest-expo": "^38.0.2",

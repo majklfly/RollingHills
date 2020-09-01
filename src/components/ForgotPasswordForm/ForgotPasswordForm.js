@@ -22,17 +22,18 @@ export const ForgotPasswordForm = (props) => {
     state: { successMessage },
   } = useContext(GlobalContext);
 
+  const retrieveDayMode = async () => {
+    const result = await AsyncStorage.getItem("dayMode");
+    const value = result === "true" ? true : false;
+    setDayModeLocal(value);
+  };
+
   useEffect(() => {
-    const retrieveDayMode = async () => {
-      const result = await AsyncStorage.getItem("dayMode");
-      const value = result === "true" ? true : false;
-      setDayModeLocal(value);
-    };
     retrieveDayMode();
   });
 
   return (
-    <View>
+    <View testID="container">
       <Form style={styles.form}>
         <TouchableOpacity onPress={() => props.setModalVisible(false)}>
           <FontAwesome name="close" style={styles.icon} />
@@ -51,6 +52,7 @@ export const ForgotPasswordForm = (props) => {
             autoCorrent={false}
             autoCapitalize="none"
             onChangeText={(value) => setEmail(value)}
+            testID="input"
           ></Input>
         </Item>
         <Button

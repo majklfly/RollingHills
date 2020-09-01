@@ -70,7 +70,10 @@ export const FinishedRunForm = (props) => {
   };
 
   return (
-    <View style={dayMode ? styles.containerLight : styles.container}>
+    <View
+      style={dayMode ? styles.containerLight : styles.container}
+      testID="finishedRunContainer"
+    >
       <View style={styles.dataContainer}>
         <Text style={dayMode ? styles.dataTextLight : styles.dataText}>
           Distance:{" "}
@@ -103,12 +106,14 @@ export const FinishedRunForm = (props) => {
           value={name}
           onChangeText={(text) => setName(text)}
           style={dayMode ? styles.inputLight : styles.input}
+          testID="textInput"
         />
       </View>
       <Text style={styles.errorMessage}>{errorMessage}</Text>
       <TouchableOpacity
         onPress={() => submitData()}
         style={dayMode ? styles.submitButtonLight : styles.submitButton}
+        testID="submit"
       >
         <Text>submit</Text>
       </TouchableOpacity>
