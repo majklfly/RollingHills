@@ -54,7 +54,6 @@ const StatisticsScreen = ({ navigation }) => {
         dataLocal.push(data);
       });
     }
-    console.log(tracks);
     setData(dataLocal);
   };
 
