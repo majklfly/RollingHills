@@ -9,6 +9,7 @@ export const FacebookLogin = () => {
       viewBox="0 0 100 100"
       width="70px"
       height="60px"
+      data-test="facebookLogin"
     >
       <Path fill="#78a2d2" d="M50 15A35 35 0 1 0 50 85A35 35 0 1 0 50 15Z" />
       <Path

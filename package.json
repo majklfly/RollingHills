@@ -5,7 +5,14 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "test": "jest"
+  },
+  "jest": {
+    "preset": "jest-expo",
+    "transformIgnorePatterns": [
+      "node_modules/(?!(jest-)?react-native|@codler|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|@sentry/.*)"
+    ]
   },
   "dependencies": {
     "@react-native-community/google-signin": "^4.0.3",
@@ -19,6 +26,8 @@
     "babel-plugin-inline-dotenv": "^1.6.0",
     "babel-plugin-transform-inline-environment-variables": "^0.4.3",
     "dotenv": "^8.2.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.4",
     "expo": "~38.0.8",
     "expo-constants": "~9.1.1",
     "expo-facebook": "~8.2.1",
@@ -30,6 +39,7 @@
     "firebase": "^7.17.1",
     "geolib": "^3.3.1",
     "lottie-react-native": "^3.5.0",
+    "mock-async-storage": "^2.2.0",
     "moment": "^2.27.0",
     "native-base": "^2.13.13",
     "openssl": "^1.1.0",
@@ -55,6 +65,7 @@
     "@babel/core": "^7.8.6",
     "babel-preset-expo": "~8.1.0",
     "babel-preset-react-native": "^4.0.1",
+    "jest-expo": "^38.0.2",
     "react-native-dotenv": "^2.2.0"
   },
   "private": true

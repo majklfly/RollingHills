@@ -25,13 +25,14 @@ export const HomeStack = () => {
     }
   }, [isEnabled]);
 
+  const retrieveDayMode = async () => {
+    const result = await AsyncStorage.getItem("dayMode");
+    const value = result === "true" ? true : false;
+    setIsEnabled(value);
+    setDayModeLocal(value);
+  };
+
   useEffect(() => {
-    const retrieveDayMode = async () => {
-      const result = await AsyncStorage.getItem("dayMode");
-      const value = result === "true" ? true : false;
-      setIsEnabled(value);
-      setDayModeLocal(value);
-    };
     retrieveDayMode();
   });
 

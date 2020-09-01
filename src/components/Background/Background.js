@@ -2,8 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, Dimensions, AsyncStorage } from "react-native";
 const { width, height } = Dimensions.get("window");
 
-import { GlobalContext } from "../../store/AuthProvider";
-
 import Svg, { G, Path, Rect } from "react-native-svg";
 
 export const Background = () => {
@@ -12,11 +10,13 @@ export const Background = () => {
   useEffect(() => {
     const retrieveDayMode = async () => {
       const result = await AsyncStorage.getItem("dayMode");
+      console.log("result", result);
       const value = result === "true" ? true : false;
       setDayMode(value);
     };
     retrieveDayMode();
   });
+
   if (!dayMode) {
     return (
       <>
@@ -25,6 +25,7 @@ export const Background = () => {
           width="2000"
           height="2000"
           viewBox="0 0 800 800"
+          data-test="nightMode"
         >
           <Rect fill="#000022" width="800" height="800" />
           <G
@@ -240,7 +241,7 @@ export const Background = () => {
           height="2000"
           viewBox="0 0 3000 3000"
           xmlns="http://www.w3.org/2000/svg"
-          S
+          data-test="dayMode"
         >
           <G
             id="Patterns"
