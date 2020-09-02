@@ -2,6 +2,8 @@ version: 2
 jobs:
   node:
     working_directory: ~/demo-react-native
+    docker:
+      - image: circleci/node:8
     steps:
       - checkout
 
