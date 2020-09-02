@@ -289,6 +289,7 @@ export const AuthProvider = ({ children }) => {
         });
     } catch (e) {
       console.log(e);
+      dispatch({ type: "error", payload: "Please enter your email" });
     }
   };
   const setDayMode = (value) => {

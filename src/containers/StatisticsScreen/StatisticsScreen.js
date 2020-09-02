@@ -22,6 +22,8 @@ import {
   calculateTotalDistance,
   calculateAverageSpeed,
   calculateTotalTime,
+  displayDistanceChart,
+  displayAverageSpeed,
 } from "./utils";
 
 const width = Dimensions.get("window").width;
@@ -124,21 +126,7 @@ const StatisticsScreen = ({ navigation }) => {
               Distance
             </Text>
             <BarChart
-              data={{
-                labels: ["15/6", "12/6", "14/6", "8/6", "4/6", "2/6"],
-                datasets: [
-                  {
-                    data: [
-                      Math.random() * 100,
-                      Math.random() * 100,
-                      Math.random() * 100,
-                      Math.random() * 100,
-                      Math.random() * 100,
-                      Math.random() * 100,
-                    ],
-                  },
-                ],
-              }}
+              data={displayDistanceChart(data)}
               width={Dimensions.get("window").width * 0.86}
               height={220}
               yAxisSuffix="m"
@@ -187,21 +175,7 @@ const StatisticsScreen = ({ navigation }) => {
               Average Speed
             </Text>
             <BarChart
-              data={{
-                labels: ["15/6", "12/6", "14/6", "8/6", "4/6", "2/6"],
-                datasets: [
-                  {
-                    data: [
-                      Math.random() * 100,
-                      Math.random() * 100,
-                      Math.random() * 100,
-                      Math.random() * 100,
-                      Math.random() * 100,
-                      Math.random() * 100,
-                    ],
-                  },
-                ],
-              }}
+              data={displayAverageSpeed(data)}
               width={Dimensions.get("window").width * 0.86}
               height={220}
               yAxisSuffix="km/h"
@@ -251,7 +225,7 @@ const StatisticsScreen = ({ navigation }) => {
             </Text>
             <BarChart
               data={{
-                labels: ["15/6", "12/6", "14/6", "8/6", "4/6", "2/6"],
+                labels: ["5.8", "5.2"],
                 datasets: [
                   {
                     data: [

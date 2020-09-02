@@ -17,7 +17,13 @@ export const AuthStack = () => {
           headerShown: false,
         }}
       />
-      <Stack.Screen name="Terms" component={TermsScreen} />
+      <Stack.Screen
+        name="Terms"
+        component={TermsScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack.Navigator>
   );
 };

@@ -19,7 +19,7 @@ export const ForgotPasswordForm = (props) => {
   const [dayMode, setDayModeLocal] = useState(null);
   const { forgotPassword } = useContext(AuthContext);
   const {
-    state: { successMessage },
+    state: { successMessage, errorMessage },
   } = useContext(GlobalContext);
 
   const retrieveDayMode = async () => {
@@ -33,8 +33,8 @@ export const ForgotPasswordForm = (props) => {
   });
 
   return (
-    <View testID="container">
-      <Form style={styles.form}>
+    <>
+      <Form style={styles.form} testID="container">
         <TouchableOpacity onPress={() => props.setModalVisible(false)}>
           <FontAwesome name="close" style={styles.icon} />
         </TouchableOpacity>
@@ -79,7 +79,7 @@ export const ForgotPasswordForm = (props) => {
           </Text>
         ) : null}
       </Form>
-    </View>
+    </>
   );
 };
 

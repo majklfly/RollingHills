@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
+import * as TaskManager from "expo-task-manager";
 import * as Location from "expo-location";
 
 import { Accuracy, watchPositionAsync } from "expo-location";
+
+const LOCATION_TASK_NAME = "background-location-task";
 
 export default (shouldTrack, callback) => {
   const [err, setErr] = useState(null);
@@ -14,7 +17,6 @@ export default (shouldTrack, callback) => {
         if (status !== "granted") {
           setErrorMsg("Permission to access location was denied");
         }
-
         let location = await Location.getCurrentPositionAsync({});
         const sub = await watchPositionAsync(
           {
@@ -47,3 +49,14 @@ export default (shouldTrack, callback) => {
 
   return [err];
 };
+
+// TaskManager.defineTask(LOCATION_TASK_NAME, ({ data, error }) => {
+//   if (error) {
+//     console.log("error", error);
+//     return;
+//   }
+//   if (data) {
+//     const { locations } = data;
+//     console.log("locations", locations);
+//   }
+// });

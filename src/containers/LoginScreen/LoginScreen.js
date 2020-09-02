@@ -37,7 +37,6 @@ const LoginScreen = ({ navigation }) => {
 
   const retrieveDayMode = async () => {
     const result = await AsyncStorage.getItem("dayMode");
-    console.log("triggered");
     const value = result === "true" ? true : false;
     setDayModeLocal(value);
   };
@@ -54,8 +53,6 @@ const LoginScreen = ({ navigation }) => {
   useCallback(() => {
     setDayMode(dayMode);
   }, [dayMode]);
-
-  console.log("daymode", dayMode);
 
   const renderLoginForm = () => {
     if (modalVisible === true || signupModalVisible === true) {
@@ -201,7 +198,7 @@ const LoginScreen = ({ navigation }) => {
         animationType="fade"
         transparent={true}
         visible={modalVisible}
-        onRequestClose={() => Alert.alert("Email has been sent")}
+        onRequestClose={() => setModalVisible(false)}
         style={styles.modal}
       >
         <ForgotPasswordForm setModalVisible={setModalVisible} />
@@ -210,7 +207,7 @@ const LoginScreen = ({ navigation }) => {
         animationType="fade"
         transparent={true}
         visible={signupModalVisible}
-        onRequestClose={() => Alert.alert("Email has been sent")}
+        onRequestClose={() => setSignupModalVisible(false)}
         style={styles.modal}
       >
         <SignupForm setSignupModalVisible={setSignupModalVisible} />
