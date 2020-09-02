@@ -33,7 +33,6 @@ export const UpdatePasswordForm = (props) => {
     }
     return () => (mounted = false);
   });
-
   return (
     <View
       style={dayMode ? styles.mainContainerLight : styles.mainContainer}
