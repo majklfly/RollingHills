@@ -68,6 +68,7 @@ const TracksScreen = ({ navigation }) => {
       </Text>
       <ScrollView
         style={dayMode ? styles.mainContainerLight : styles.mainContainer}
+        testID="TracksScreenContainer"
       >
         {error ? (
           <Text style={styles.errorMessage}>{error}</Text>

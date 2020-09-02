@@ -21,18 +21,23 @@ const TrackDetailScreen = ({ route }) => {
   };
 
   useEffect(() => {
+    let mounted;
     const retrieveDayMode = async () => {
       const result = await AsyncStorage.getItem("dayMode");
       const value = result === "true" ? true : false;
       setDayModeLocal(value);
     };
-    retrieveDayMode();
+    if (mounted) {
+      retrieveDayMode();
+    }
+    return () => (mounted = false);
   });
 
   return (
     <View
       key={route.params.data.time.integerValue}
       style={dayMode ? styles.mainContainerLight : styles.mainContainer}
+      testID="trackDetailContainer"
     >
       <View>
         <Text style={dayMode ? styles.titleLight : styles.title}>

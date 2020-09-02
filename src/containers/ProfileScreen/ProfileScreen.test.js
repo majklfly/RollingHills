@@ -1,7 +1,7 @@
 import React from "react";
-import { render, cleanup } from "@testing-library/react-native";
+import { render, cleanup, waitFor } from "@testing-library/react-native";
 
-import LoginScreen from "./LoginScreen";
+import ProfileScreen from "./ProfileScreen";
 
 import { AuthProvider } from "../../store/AuthProvider";
 
@@ -10,14 +10,14 @@ afterEach(cleanup);
 const setUp = () => {
   const utils = render(
     <AuthProvider>
-      <LoginScreen />
+      <ProfileScreen />
     </AuthProvider>
   );
   return { ...utils };
 };
 
-test("it should render the login page", () => {
+test("it should render the profile screen", async () => {
   const { getByTestId } = setUp();
-  const container = getByTestId("LoginMainContainer");
+  const container = await waitFor(() => getByTestId("profileContainer"));
   expect(container.type).toBe("View");
 });

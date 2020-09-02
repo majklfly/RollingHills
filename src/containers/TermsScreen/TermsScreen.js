@@ -4,7 +4,7 @@ import LottieView from "lottie-react-native";
 
 const TermsScreen = () => {
   return (
-    <View>
+    <View testID="termsContainer">
       <Text>TermsScreen</Text>
       <View style={styles.animationContainer}>
         <LottieView

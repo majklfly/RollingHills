@@ -34,12 +34,16 @@ const StatisticsScreen = ({ navigation }) => {
   const { state } = useContext(LocationStateContext);
 
   useEffect(() => {
+    let mounted = true;
     const retrieveDayMode = async () => {
       const result = await AsyncStorage.getItem("dayMode");
       const value = result === "true" ? true : false;
       setDayModeLocal(value);
     };
-    retrieveDayMode();
+    if (mounted) {
+      retrieveDayMode();
+    }
+    return () => (mounted = false);
   });
 
   useEffect(() => {
@@ -65,7 +69,7 @@ const StatisticsScreen = ({ navigation }) => {
   }, [navigation]);
 
   return (
-    <View>
+    <View testID="statisticsContainer">
       <Background />
       <View style={styles.mainContainer}>
         <Text style={dayMode ? styles.titleLight : styles.title}>

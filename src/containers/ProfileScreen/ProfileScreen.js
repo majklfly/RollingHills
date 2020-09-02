@@ -13,7 +13,7 @@ import moment from "moment";
 import { Background } from "../../components/Background/Background";
 import { UpdatePasswordForm } from "../../components/UpdatePasswordForm/UpdatePasswordForm";
 
-import { GlobalContext, AuthContext } from "../../store/AuthProvider";
+import { GlobalContext } from "../../store/AuthProvider";
 import constants from "../../constants";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
@@ -32,16 +32,20 @@ const ProfileScreen = () => {
   };
 
   useEffect(() => {
+    let mounted = true;
     const retrieveDayMode = async () => {
       const result = await AsyncStorage.getItem("dayMode");
       const value = result === "true" ? true : false;
       setDayMode(value);
     };
-    retrieveDayMode();
+    if (mounted) {
+      retrieveDayMode();
+    }
+    return () => (mounted = false);
   });
 
   return (
-    <View>
+    <View testID="profileContainer">
       <Background />
       <View style={styles.mainContainer}>
         <View
