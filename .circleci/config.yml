@@ -10,7 +10,6 @@ jobs:
       - run:
           name: tests
           command: |
-            npm install
             npm test
           environment:
             JEST_JUNIT_OUTPUT: test-results/jest/junit.xml
