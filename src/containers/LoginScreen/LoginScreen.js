@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, useCallback } from "react";
-import { Form, Item, Button, Label, CheckBox, Input } from "native-base";
+import { Form, Item, Button, Label, Input } from "native-base";
 import {
   StyleSheet,
   Text,
@@ -35,18 +35,27 @@ const LoginScreen = ({ navigation }) => {
   const { state } = useContext(GlobalContext);
   const { isLoading, errorMessage } = state;
 
+  const retrieveDayMode = async () => {
+    const result = await AsyncStorage.getItem("dayMode");
+    console.log("triggered");
+    const value = result === "true" ? true : false;
+    setDayModeLocal(value);
+  };
+
   useEffect(() => {
-    const retrieveDayMode = async () => {
-      const result = await AsyncStorage.getItem("dayMode");
-      const value = result === "true" ? true : false;
-      setDayModeLocal(value);
-    };
-    retrieveDayMode();
-  }, []);
+    let mounted = true;
+
+    if (mounted) {
+      retrieveDayMode();
+    }
+    return () => (mounted = false);
+  });
 
   useCallback(() => {
     setDayMode(dayMode);
   }, [dayMode]);
+
+  console.log("daymode", dayMode);
 
   const renderLoginForm = () => {
     if (modalVisible === true || signupModalVisible === true) {
@@ -54,7 +63,7 @@ const LoginScreen = ({ navigation }) => {
     } else {
       return (
         <>
-          <Form style={styles.form}>
+          <Form style={styles.form} testID="loginForm">
             <Item floatingLabel>
               <Label style={dayMode ? styles.labelLight : styles.label}>
                 Email
@@ -155,64 +164,59 @@ const LoginScreen = ({ navigation }) => {
       );
     }
   };
-
-  if (dayMode !== null) {
-    return (
-      <View style={styles.mainContainer}>
-        <Background />
-        <View style={dayMode ? styles.containerLight : styles.container}>
-          <View style={{ flexDirection: "row" }}>
-            <Svg
-              height={200}
-              width={200}
-              viewBox="0 0 100 100"
-              style={{ position: "relative", top: "-34.2%" }}
-            >
-              <Path
-                d="M0 0 Q0 55 50 70 L0 70 L0 18"
-                fill={
-                  dayMode
-                    ? constants.secondary.containerColor
-                    : constants.primary.containerColor
-                }
-                stroke={
-                  dayMode
-                    ? constants.secondary.containerColor
-                    : constants.primary.containerColor
-                }
-              />
-            </Svg>
-            {errorMessage ? (
-              <View style={styles.errorMessage}>
-                <Text style={styles.buttonText}>{errorMessage}</Text>
-              </View>
-            ) : null}
-          </View>
-          {isLoading ? <ActivityIndicator size="large" /> : renderLoginForm()}
+  return (
+    <View style={styles.mainContainer} testID="LoginMainContainer">
+      <Background />
+      <View style={dayMode ? styles.containerLight : styles.container}>
+        <View style={{ flexDirection: "row" }}>
+          <Svg
+            height={200}
+            width={200}
+            viewBox="0 0 100 100"
+            style={{ position: "relative", top: "-34.2%" }}
+          >
+            <Path
+              d="M0 0 Q0 55 50 70 L0 70 L0 18"
+              fill={
+                dayMode
+                  ? constants.secondary.containerColor
+                  : constants.primary.containerColor
+              }
+              stroke={
+                dayMode
+                  ? constants.secondary.containerColor
+                  : constants.primary.containerColor
+              }
+            />
+          </Svg>
+          {errorMessage ? (
+            <View style={styles.errorMessage}>
+              <Text style={styles.buttonText}>{errorMessage}</Text>
+            </View>
+          ) : null}
         </View>
-        <Modal
-          animationType="fade"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => Alert.alert("Email has been sent")}
-          style={styles.modal}
-        >
-          <ForgotPasswordForm setModalVisible={setModalVisible} />
-        </Modal>
-        <Modal
-          animationType="fade"
-          transparent={true}
-          visible={signupModalVisible}
-          onRequestClose={() => Alert.alert("Email has been sent")}
-          style={styles.modal}
-        >
-          <SignupForm setSignupModalVisible={setSignupModalVisible} />
-        </Modal>
+        {isLoading ? <ActivityIndicator size="large" /> : renderLoginForm()}
       </View>
-    );
-  } else {
-    return <ActivityIndicator />;
-  }
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => Alert.alert("Email has been sent")}
+        style={styles.modal}
+      >
+        <ForgotPasswordForm setModalVisible={setModalVisible} />
+      </Modal>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={signupModalVisible}
+        onRequestClose={() => Alert.alert("Email has been sent")}
+        style={styles.modal}
+      >
+        <SignupForm setSignupModalVisible={setSignupModalVisible} />
+      </Modal>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({

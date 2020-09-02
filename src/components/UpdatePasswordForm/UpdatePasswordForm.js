@@ -31,7 +31,10 @@ export const UpdatePasswordForm = (props) => {
   });
 
   return (
-    <View style={dayMode ? styles.mainContainerLight : styles.mainContainer}>
+    <View
+      style={dayMode ? styles.mainContainerLight : styles.mainContainer}
+      testID="updateForm"
+    >
       <TouchableOpacity
         onPress={() => props.setModalVisible(false)}
         style={styles.closeIcon}

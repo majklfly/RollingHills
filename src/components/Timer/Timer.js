@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, AsyncStorage } from "react-native";
 import constants from "../../constants";
-import { AsyncStorage } from "@react-native-community/async-storage";
 
 import {
   LocationStateContext,

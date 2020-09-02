@@ -67,7 +67,7 @@ const HomeScreen = () => {
   return (
     <>
       <Background />
-      <View style={styles.container}>
+      <View style={styles.container} testID="homescreenContainer">
         {user.displayName ? (
           <Text style={dayMode ? styles.greetingLight : styles.greeting}>
             Hello, {user.displayName}

@@ -10,7 +10,6 @@ export const Background = () => {
   useEffect(() => {
     const retrieveDayMode = async () => {
       const result = await AsyncStorage.getItem("dayMode");
-      console.log("result", result);
       const value = result === "true" ? true : false;
       setDayMode(value);
     };

@@ -1,10 +1,10 @@
 import React from "react";
 
-import { View, Text, Stylesheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 
 const LoadingScreen = () => {
   return (
-    <View style={styles.mainContainer}>
+    <View style={styles.mainContainer} testID="loadingScreen">
       <Text>LoadingScreen</Text>
     </View>
   );
