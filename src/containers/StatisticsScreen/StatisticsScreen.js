@@ -24,6 +24,7 @@ import {
   calculateTotalTime,
   displayDistanceChart,
   displayAverageSpeed,
+  displayTimeChart,
 } from "./utils";
 
 const width = Dimensions.get("window").width;
@@ -224,21 +225,7 @@ const StatisticsScreen = ({ navigation }) => {
               Time
             </Text>
             <BarChart
-              data={{
-                labels: ["5.8", "5.2"],
-                datasets: [
-                  {
-                    data: [
-                      Math.random() * 100,
-                      Math.random() * 100,
-                      Math.random() * 100,
-                      Math.random() * 100,
-                      Math.random() * 100,
-                      Math.random() * 100,
-                    ],
-                  },
-                ],
-              }}
+              data={displayTimeChart(data)}
               width={Dimensions.get("window").width * 0.86}
               height={220}
               yAxisSuffix="s"

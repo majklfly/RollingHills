@@ -21,12 +21,16 @@ export const SpeedStatistics = (props) => {
   };
 
   useEffect(() => {
+    let mounted = true;
     const retrieveDayMode = async () => {
       const result = await AsyncStorage.getItem("dayMode");
       const value = result === "true" ? true : false;
       setDayModeLocal(value);
     };
-    retrieveDayMode();
+    if (mounted) {
+      retrieveDayMode();
+    }
+    return () => (mounted = false);
   });
 
   const dataset = formatDataset();
@@ -70,9 +74,12 @@ export const SpeedStatistics = (props) => {
               ? constants.secondary.textColor
               : constants.primary.textColor,
           propsForDots: {
-            r: "3",
-            strokeWidth: "2",
+            r: "0",
+            strokeWidth: "0",
             stroke: "#ffa726",
+          },
+          propsForBackgroundLines: {
+            stroke: "transparent",
           },
         }}
         bezier

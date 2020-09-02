@@ -21,7 +21,7 @@ const TrackDetailScreen = ({ route }) => {
   };
 
   useEffect(() => {
-    let mounted;
+    let mounted = true;
     const retrieveDayMode = async () => {
       const result = await AsyncStorage.getItem("dayMode");
       const value = result === "true" ? true : false;

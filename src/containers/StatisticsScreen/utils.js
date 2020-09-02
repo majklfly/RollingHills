@@ -17,7 +17,6 @@ export const calculateAverageSpeed = (data) => {
       }
     })
   );
-  console.log("total", total);
   const average = total.reduce((a, b) => a + b) / total.length;
   return parseFloat(average).toFixed(2);
 };
@@ -81,6 +80,29 @@ export const displayDistanceChart = (data) => {
     datasets: [
       {
         data: distancesLocal,
+      },
+    ],
+  };
+};
+
+export const displayTimeChart = (data) => {
+  const datesLocal = [];
+  const timeLocal = [];
+  if (data) {
+    data.map((item) => {
+      datesLocal.push(
+        item.date.stringValue.split(" ")[2] +
+          " " +
+          item.date.stringValue.split(" ")[1]
+      );
+      timeLocal.push(item.time.integerValue / 60);
+    });
+  }
+  return {
+    labels: datesLocal,
+    datasets: [
+      {
+        data: timeLocal,
       },
     ],
   };

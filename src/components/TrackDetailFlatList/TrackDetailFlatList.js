@@ -20,12 +20,16 @@ export const TrackDetailFlatList = (props) => {
   const [dayMode, setDayModeLocal] = useState(null);
 
   useEffect(() => {
+    let mounted = true;
     const retrieveDayMode = async () => {
       const result = await AsyncStorage.getItem("dayMode");
       const value = result === "true" ? true : false;
       setDayModeLocal(value);
     };
-    retrieveDayMode();
+    if (mounted) {
+      retrieveDayMode();
+    }
+    return () => (mounted = false);
   });
 
   const formatCoordinates = (loc) => {
