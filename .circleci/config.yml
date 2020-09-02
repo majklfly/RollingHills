@@ -7,11 +7,14 @@ jobs:
     steps:
       - checkout
 
+      -run:
+        name: install
+        command: npm install
+
       - run:
           name: tests
-          command: |
-            npm install jest
-            npm test
+          command: 
+            npm run test
           environment:
             JEST_JUNIT_OUTPUT: test-results/jest/junit.xml
 
