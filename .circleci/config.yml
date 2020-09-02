@@ -8,10 +8,10 @@ jobs:
       - checkout
 
       - run:
-          name: jest tests
+          name: tests
           command: |
-            mkdir -p test-results/jest
-            npm run test
+            npm install
+            npm test
           environment:
             JEST_JUNIT_OUTPUT: test-results/jest/junit.xml
 
@@ -19,12 +19,6 @@ jobs:
           root: ~/demo-react-native
           paths:
             - node_modules
-
-      - store_test_results:
-          path: test-results
-
-      - store_artifacts:
-          path: test-results
 
 workflows:
   version: 2
