@@ -33,8 +33,12 @@ export const HomeStack = () => {
   };
 
   useEffect(() => {
+    let mounted = true;
+    if (mounted) {
+    }
     retrieveDayMode();
-  });
+    return () => (mounted = false);
+  }, []);
 
   return (
     <Stack.Navigator>

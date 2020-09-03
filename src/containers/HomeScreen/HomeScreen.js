@@ -25,10 +25,9 @@ import constants from "../../constants";
 const HomeScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
-  const [dayMode, setDayModeLocal] = useState(false);
   const { logout } = useContext(AuthContext);
   const {
-    state: { user },
+    state: { user, dayMode },
   } = useContext(GlobalContext);
   const {
     addLocation,
@@ -46,15 +45,6 @@ const HomeScreen = () => {
     },
     [recording]
   );
-
-  useEffect(() => {
-    const retrieveDayMode = async () => {
-      const result = await AsyncStorage.getItem("dayMode");
-      const value = result === "true" ? true : false;
-      setDayModeLocal(value);
-    };
-    retrieveDayMode();
-  });
 
   useEffect(() => {
     mockMovement(isEnabled);

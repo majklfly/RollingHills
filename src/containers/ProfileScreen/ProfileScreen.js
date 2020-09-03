@@ -22,27 +22,13 @@ const height = Dimensions.get("window").height;
 
 const ProfileScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [dayMode, setDayMode] = useState(false);
   const {
-    state: { user },
+    state: { user, dayMode },
   } = useContext(GlobalContext);
 
   const formatDate = (date) => {
     return moment(new Date(parseInt(date))).format("DD/MM/YYYY");
   };
-
-  useEffect(() => {
-    let mounted = true;
-    const retrieveDayMode = async () => {
-      const result = await AsyncStorage.getItem("dayMode");
-      const value = result === "true" ? true : false;
-      setDayMode(value);
-    };
-    if (mounted) {
-      retrieveDayMode();
-    }
-    return () => (mounted = false);
-  });
 
   return (
     <View testID="profileContainer">

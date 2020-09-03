@@ -11,6 +11,8 @@ import {
 } from "react-native";
 import { Background } from "../../components/Background/Background";
 
+import { GlobalContext } from "../../store/AuthProvider";
+
 import {
   LocationContext,
   LocationStateContext,
@@ -22,11 +24,14 @@ const TracksScreen = ({ navigation }) => {
   const [data, setData] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [currentRun, setCurrentRun] = useState(null);
-  const [dayMode, setDayMode] = useState(false);
   const { fetchData, deleteRun } = useContext(LocationContext);
   const {
     state: { tracks, error },
   } = useContext(LocationStateContext);
+
+  const {
+    state: { dayMode },
+  } = useContext(GlobalContext);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
@@ -35,15 +40,6 @@ const TracksScreen = ({ navigation }) => {
 
     return unsubscribe;
   }, [navigation]);
-
-  useEffect(() => {
-    const retrieveDayMode = async () => {
-      const result = await AsyncStorage.getItem("dayMode");
-      const value = result === "true" ? true : false;
-      setDayMode(value);
-    };
-    retrieveDayMode();
-  });
 
   useEffect(() => {
     formatTracks(tracks);

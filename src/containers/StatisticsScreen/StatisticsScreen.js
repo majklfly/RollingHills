@@ -13,6 +13,8 @@ import constants from "../../constants";
 
 import { BarChart } from "react-native-chart-kit";
 
+import { GlobalContext } from "../../store/AuthProvider";
+
 import {
   LocationContext,
   LocationStateContext,
@@ -32,22 +34,11 @@ const height = Dimensions.get("window").height;
 
 const StatisticsScreen = ({ navigation }) => {
   const [data, setData] = useState([]);
-  const [dayMode, setDayModeLocal] = useState(null);
   const { fetchData } = useContext(LocationContext);
   const { state } = useContext(LocationStateContext);
-
-  useEffect(() => {
-    let mounted = true;
-    const retrieveDayMode = async () => {
-      const result = await AsyncStorage.getItem("dayMode");
-      const value = result === "true" ? true : false;
-      setDayModeLocal(value);
-    };
-    if (mounted) {
-      retrieveDayMode();
-    }
-    return () => (mounted = false);
-  });
+  const {
+    state: { dayMode },
+  } = useContext(GlobalContext);
 
   useEffect(() => {
     formatTracks(state.tracks);
