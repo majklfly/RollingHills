@@ -21,7 +21,6 @@ export const ForgotPasswordForm = (props) => {
   const {
     state: { successMessage, errorMessage },
   } = useContext(GlobalContext);
-
   const retrieveDayMode = async () => {
     const result = await AsyncStorage.getItem("dayMode");
     const value = result === "true" ? true : false;
