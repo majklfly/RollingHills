@@ -167,7 +167,7 @@ export const AuthProvider = ({ children }) => {
         .then((data) => resolveUser(data))
         .catch((e) => handleLoginErrors(e));
     } catch (error) {
-      handleLoginErrors(error);
+      handleLoginErrors(error.message);
     }
   };
 
