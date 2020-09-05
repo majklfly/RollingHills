@@ -72,6 +72,7 @@
     "@testing-library/react-native": "^7.0.2",
     "babel-preset-expo": "~8.1.0",
     "babel-preset-react-native": "^4.0.1",
+    "firebase-mock": "^2.3.2",
     "jest-expo": "^38.0.2",
     "react-native-dotenv": "^2.2.0"
   },

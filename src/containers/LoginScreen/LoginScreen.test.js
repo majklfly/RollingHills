@@ -1,5 +1,5 @@
 import React from "react";
-import { render, cleanup } from "@testing-library/react-native";
+import { render, cleanup, waitFor } from "@testing-library/react-native";
 
 import LoginScreen from "./LoginScreen";
 
