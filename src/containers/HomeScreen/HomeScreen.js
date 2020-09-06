@@ -1,12 +1,5 @@
 import React, { useContext, useCallback, useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Modal,
-  Switch,
-  AsyncStorage,
-} from "react-native";
+import { View, Text, StyleSheet, Modal, Switch } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 import { AuthContext, GlobalContext } from "../../store/AuthProvider";
@@ -14,12 +7,14 @@ import {
   LocationContext,
   LocationStateContext,
 } from "../../store/LocationProvider";
+
 import useLocation from "../../hooks/useLocation";
 
 import { Background } from "../../components/Background/Background";
 import { Map } from "../../components/Map/Map";
 import { Timer } from "../../components/Timer/Timer";
 import { FinishedRunForm } from "../../components/FinishedRunForm/FinishedRunForm";
+import { Reminder } from "../../components/Reminder/Reminder";
 import constants from "../../constants";
 
 const HomeScreen = () => {
@@ -83,6 +78,7 @@ const HomeScreen = () => {
           />
         </View>
         <Timer />
+        <Reminder />
         {recording ? (
           <View style={styles.pauseContainer}>
             <TouchableOpacity

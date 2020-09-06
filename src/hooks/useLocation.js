@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import * as TaskManager from "expo-task-manager";
 import * as Location from "expo-location";
 
 import { Accuracy, watchPositionAsync } from "expo-location";

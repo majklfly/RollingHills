@@ -7,31 +7,22 @@ import {
   AsyncStorage,
 } from "react-native";
 import MapView, { Polyline, Circle } from "react-native-maps";
+
 import { LocationStateContext } from "../../store/LocationProvider";
+import { GlobalContext } from "../../store/AuthProvider";
 
 import { mapStyle } from "./MapStyle";
 import { mapStyleLight } from "./MapStyleLight";
 
-import * as TaskManager from "expo-task-manager";
-
 export const Map = () => {
-  const [dayMode, setDayMode] = useState(false);
+  const [interv, setInterv] = useState(false);
   const {
     state: { currentLocation, locations, mockRunning },
   } = useContext(LocationStateContext);
 
-  useEffect(() => {
-    const retrieveDayMode = async () => {
-      const result = await AsyncStorage.getItem("dayMode");
-      const value = result === "true" ? true : false;
-      setDayMode(value);
-    };
-    retrieveDayMode();
-  });
-
-  if (!currentLocation) {
-    return <ActivityIndicator size="large" style={{ marginTop: 150 }} />;
-  }
+  const {
+    state: { dayMode },
+  } = useContext(GlobalContext);
 
   const tenMetersWithDegrees = 0.0001;
 
@@ -52,20 +43,26 @@ export const Map = () => {
 
   let counter = 0;
 
-  let timer = () => {
-    Location.EventEmitter.emit("Expo.locationChanged", {
-      watchId: Location._getCurrentWatchId(),
-      location: getLocation(counter),
-    });
-    counter++;
+  const timer = () => {
+    if (mockRunning === true) {
+      Location.EventEmitter.emit("Expo.locationChanged", {
+        watchId: Location._getCurrentWatchId(),
+        location: getLocation(counter),
+      });
+      counter++;
+    }
   };
 
   useEffect(() => {
-    const interval = setInterval(timer, 1000);
+    setInterv(setInterval(timer, 1000));
     if (mockRunning === false) {
-      clearInterval(interval);
+      clearInterval(interv);
     }
   }, [mockRunning]);
+
+  if (!currentLocation) {
+    return <ActivityIndicator size="large" style={{ marginTop: 100 }} />;
+  }
 
   return (
     <>
