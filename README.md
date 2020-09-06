@@ -6,11 +6,11 @@ RollingHills is a running application designated using React-native in frontend 
 
 Rollinghills provides intuitive and simple navigations threw app, elegant design in day and night mode, Social login, minimalized collection of information about the user, but maximum possible data about every single workout and general progress.
 
-![Alt text](./assets/RHMobileSlide1.png?raw=true "Title")
-![Alt text](./assets/RHMobileSlide2.png?raw=true "Title")
-![Alt text](./assets/RHMobileSlide3.png?raw=true "Title")
-![Alt text](./assets/RHMobileSlide4.png?raw=true "Title")
-![Alt text](./assets/RHMobileSlide5.png?raw=true "Title")
+![Alt text](./assets/RHMobileSlide1.jpg?raw=true "Title")
+![Alt text](./assets/RHMobileSlide2.jpg?raw=true "Title")
+![Alt text](./assets/RHMobileSlide3.jpg?raw=true "Title")
+![Alt text](./assets/RHMobileSlide4.jpg?raw=true "Title")
+![Alt text](./assets/RHMobileSlide5.jpg?raw=true "Title")
 
 ## Privacy Policy
 
