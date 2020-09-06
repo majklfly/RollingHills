@@ -75,3 +75,4 @@ INFO: Detected non-HTTP/2 connection.
 [debug] [2020-09-05T16:29:20.053Z] Sep 05, 2020 5:29:20 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
  {"metadata":{"emulator":{"name":"firestore"},"message":"Sep 05, 2020 5:29:20 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected HTTP/2 connection.\r\n"}}
+[debug] [2020-09-05T22:15:58.379Z] Received signal SIGHUP 1
