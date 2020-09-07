@@ -7,6 +7,7 @@ import { HomeStack } from "./HomeStack";
 import { TracksStack } from "./TracksStack";
 import ProfileScreen from "../containers/ProfileScreen/ProfileScreen";
 import StatisticsScreen from "../containers/StatisticsScreen/StatisticsScreen";
+import ProgressScreen from "../containers/ProgressScreen/ProgressScreen";
 
 import constants from "../constants";
 
@@ -38,6 +39,8 @@ export const AppTabs = () => {
             iconName = "running";
           } else if (route.name === "Statistics") {
             iconName = "clipboard-list";
+          } else if (route.name === "progressScreen") {
+            iconName = focused ? "star-half" : "star-half-alt";
           }
           return <FontAwesome name={iconName} size={size} color={color} />;
         },
@@ -68,6 +71,7 @@ export const AppTabs = () => {
       <Tabs.Screen name="Tracks" component={TracksStack} />
       <Tabs.Screen name="Statistics" component={StatisticsScreen} />
       <Tabs.Screen name="profileScreen" component={ProfileScreen} />
+      <Tabs.Screen name="progressScreen" component={ProgressScreen} />
     </Tabs.Navigator>
   );
 };
