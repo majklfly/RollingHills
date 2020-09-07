@@ -48,14 +48,3 @@ export default (shouldTrack, callback) => {
 
   return [err];
 };
-
-// TaskManager.defineTask(LOCATION_TASK_NAME, ({ data, error }) => {
-//   if (error) {
-//     console.log("error", error);
-//     return;
-//   }
-//   if (data) {
-//     const { locations } = data;
-//     console.log("locations", locations);
-//   }
-// });

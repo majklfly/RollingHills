@@ -9,12 +9,12 @@ import {
 } from "../../store/LocationProvider";
 
 import useLocation from "../../hooks/useLocation";
+import useNotifications from "../../hooks/useNotifications";
 
 import { Background } from "../../components/Background/Background";
 import { Map } from "../../components/Map/Map";
 import { Timer } from "../../components/Timer/Timer";
 import { FinishedRunForm } from "../../components/FinishedRunForm/FinishedRunForm";
-import { Reminder } from "../../components/Reminder/Reminder";
 import constants from "../../constants";
 
 const HomeScreen = () => {
@@ -46,6 +46,7 @@ const HomeScreen = () => {
   }, [isEnabled]);
 
   const [err] = useLocation(true, callback);
+  useNotifications();
 
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
@@ -55,7 +56,7 @@ const HomeScreen = () => {
       <View style={styles.container} testID="homescreenContainer">
         {user.displayName ? (
           <Text style={dayMode ? styles.greetingLight : styles.greeting}>
-            Hello, {user.displayName}
+            {user.displayName}
           </Text>
         ) : (
           <Text style={dayMode ? styles.greetingLight : styles.greeting}>
@@ -78,7 +79,7 @@ const HomeScreen = () => {
           />
         </View>
         <Timer />
-        <Reminder />
+        {/* <Reminder /> */}
         {recording ? (
           <View style={styles.pauseContainer}>
             <TouchableOpacity
@@ -139,7 +140,7 @@ const styles = StyleSheet.create({
     color: constants.primary.textColor,
     width: "100%",
     left: "10%",
-    marginTop: "30%",
+    marginTop: "20%",
     fontFamily: constants.primary.fontFamily,
   },
   greetingLight: {
@@ -147,7 +148,8 @@ const styles = StyleSheet.create({
     color: constants.secondary.textColor,
     width: "100%",
     left: "10%",
-    marginTop: "30%",
+    marginTop: "20%",
+    textAlign: "left",
     fontFamily: constants.secondary.fontFamily,
   },
   container: {
