@@ -7,7 +7,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   Modal,
-  AsyncStorage,
 } from "react-native";
 import { Background } from "../../components/Background/Background";
 

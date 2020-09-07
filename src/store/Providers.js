@@ -2,6 +2,7 @@ import React from "react";
 import { AuthProvider } from "./AuthProvider";
 import { LocationProvider } from "./LocationProvider";
 import { TimerProvider } from "./TimerProvider";
+import { QuotesProvider } from "./QuotesProvider";
 import { Routes } from "../navigation/Routes";
 
 export const Providers = () => {
@@ -9,7 +10,9 @@ export const Providers = () => {
     <AuthProvider>
       <TimerProvider>
         <LocationProvider>
-          <Routes />
+          <QuotesProvider>
+            <Routes />
+          </QuotesProvider>
         </LocationProvider>
       </TimerProvider>
     </AuthProvider>

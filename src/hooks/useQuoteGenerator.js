@@ -1,29 +1,40 @@
-import React, { useState, useCallback, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+
+import { QuotesActionContext } from "../store/QuotesProvider";
+import { QuotesStateContext } from "../store/QuotesProvider";
 
 export default () => {
   const [selectedQuote, setSelectedQuote] = useState(null);
   const [genIndex, setGenIndex] = useState(null);
-
-  const data = [
-    {
-      title: "Rolling hills",
-      body: "Dont' forget to drink water!",
-    },
-    {
-      title: "Rolling hills",
-      body: "Grab something to eat!",
-    },
-    {
-      title: "Rolling hills",
-      body: "Do you feel the love tonight?",
-    },
-  ];
+  const [data, setData] = useState([]);
+  const { fetchQuotes } = useContext(QuotesActionContext);
+  const {
+    state: { quotes },
+  } = useContext(QuotesStateContext);
 
   useEffect(() => {
-    setGenIndex(Math.round(Math.random() * data.length));
+    fetchQuotes();
   }, []);
 
   useEffect(() => {
+    if (quotes) {
+      const data = [];
+      quotes.map((item) => {
+        const author = item.doc.Xe.proto.mapValue.fields.author.stringValue;
+        const quote = item.doc.Xe.proto.mapValue.fields.body.stringValue;
+        const unit = { title: author, body: quote };
+        data.push(unit);
+      });
+      setData(data);
+    }
+  }, [quotes]);
+
+  useEffect(() => {
+    setGenIndex(Math.round(Math.random() * data.length));
+  }, [data]);
+
+  useEffect(() => {
+    console.log(data[genIndex]);
     setSelectedQuote(data[genIndex]);
   }, [genIndex]);
 

@@ -22,7 +22,8 @@ const useNotifications = async () => {
       Notifications.scheduleNotificationAsync({
         content: quote,
         trigger: {
-          seconds: 5,
+          seconds: 30,
+          repeats: false,
         },
       });
     }
