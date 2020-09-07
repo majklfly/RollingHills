@@ -1,5 +1,7 @@
 import React from "react";
 
+import * as Progress from "react-native-progress";
+
 import {
   View,
   Text,
@@ -15,6 +17,7 @@ export const BadgeButton = (props) => {
   return (
     <TouchableOpacity style={styles.mainContainer}>
       <Text style={styles.buttonTitle}>{props.title}</Text>
+      <Progress.Circle size={30} indeterminate={true} />
     </TouchableOpacity>
   );
 };
