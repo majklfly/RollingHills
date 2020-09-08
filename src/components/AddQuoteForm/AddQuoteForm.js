@@ -24,6 +24,7 @@ const { width, height } = Dimensions.get("window");
 export const AddQuoteForm = (props) => {
   const [author, setAuthor] = useState(null);
   const [content, setContent] = useState(null);
+  const [visibleRules, setVisibleRules] = useState(false);
   const {
     state: { dayMode },
   } = useContext(GlobalContext);
@@ -45,65 +46,98 @@ export const AddQuoteForm = (props) => {
           alignItems: "center",
         }}
       >
-        <TouchableOpacity>
-          <Text style={dayMode ? styles.rulesTextLight : styles.rulesText}>
-            view 3 simple rules
-          </Text>
+        <TouchableOpacity onPress={() => setVisibleRules(!visibleRules)}>
+          {visibleRules ? (
+            <Text style={dayMode ? styles.rulesTextLight : styles.rulesText}>
+              go back to the quote form
+            </Text>
+          ) : (
+            <Text style={dayMode ? styles.rulesTextLight : styles.rulesText}>
+              view couple simple rules
+            </Text>
+          )}
         </TouchableOpacity>
         <TouchableOpacity onPress={() => props.setModalVisible(false)}>
           <FontAwesome name="close" style={styles.icon} />
         </TouchableOpacity>
       </View>
 
-      <Form style={styles.form}>
-        <Item floatingLabel>
-          <Label style={dayMode ? styles.labelLight : styles.label}>
-            Author
-          </Label>
-          <Input
-            style={{
-              color: dayMode
-                ? constants.secondary.textColor
-                : constants.primary.textColor,
-            }}
-            value={author}
-            autoCorrent={false}
-            autoCapitalize="none"
-            onChangeText={(value) => setAuthor(value)}
-            testID="QuoteAuthorInput"
-          ></Input>
-        </Item>
-        <TextInput
-          style={dayMode ? styles.contentInputLight : styles.contentInput}
-          onChangeText={(text) => setContent(text)}
-          value={content}
-          textAlign="center"
-          textBreakStrategy="balanced"
-          spellCheck={true}
-          multiline={true}
-          testID="QuoteContentInput"
-        />
-        {errorMessage ? (
-          <Text style={styles.errorMessage}>{errorMessage}</Text>
-        ) : null}
-        <Button
-          full
-          rounded
+      {visibleRules ? (
+        <View
           style={{
-            marginTop: 20,
             width: "80%",
+            height: "70%",
             alignSelf: "center",
-            backgroundColor: dayMode
-              ? constants.secondary.buttonColor
-              : constants.primary.buttonColor,
+            marginTop: "10%",
           }}
-          onPress={() => addQuote(author, content)}
         >
-          <Text style={dayMode ? styles.buttonTextLight : styles.buttonText}>
-            Add new quote to the hat
+          <Text style={dayMode ? styles.singleRuleLight : styles.singleRule}>
+            1) Each account can have only 1 quote in the hat.
           </Text>
-        </Button>
-      </Form>
+          <Text style={dayMode ? styles.singleRuleLight : styles.singleRule}>
+            2) Your quote can be updated at any time.
+          </Text>
+          <Text style={dayMode ? styles.singleRuleLight : styles.singleRule}>
+            3) Please don't use any swear words.
+          </Text>
+          <Text style={dayMode ? styles.singleRuleLight : styles.singleRule}>
+            4) and mostly, have fun!
+          </Text>
+          <Text style={dayMode ? styles.singleRuleLight : styles.singleRule}>
+            Report a quote
+          </Text>
+        </View>
+      ) : (
+        <Form style={styles.form}>
+          <Item floatingLabel>
+            <Label style={dayMode ? styles.labelLight : styles.label}>
+              Author
+            </Label>
+            <Input
+              style={{
+                color: dayMode
+                  ? constants.secondary.textColor
+                  : constants.primary.textColor,
+              }}
+              value={author}
+              autoCorrent={false}
+              autoCapitalize="none"
+              onChangeText={(value) => setAuthor(value)}
+              testID="QuoteAuthorInput"
+            ></Input>
+          </Item>
+          <TextInput
+            style={dayMode ? styles.contentInputLight : styles.contentInput}
+            onChangeText={(text) => setContent(text)}
+            value={content}
+            textAlign="center"
+            textBreakStrategy="balanced"
+            spellCheck={true}
+            multiline={true}
+            testID="QuoteContentInput"
+          />
+          {errorMessage ? (
+            <Text style={styles.errorMessage}>{errorMessage}</Text>
+          ) : null}
+          <Button
+            full
+            rounded
+            style={{
+              marginTop: 20,
+              width: "80%",
+              alignSelf: "center",
+              backgroundColor: dayMode
+                ? constants.secondary.buttonColor
+                : constants.primary.buttonColor,
+            }}
+            onPress={() => addQuote(author, content)}
+          >
+            <Text style={dayMode ? styles.buttonTextLight : styles.buttonText}>
+              Add new quote to the hat
+            </Text>
+          </Button>
+        </Form>
+      )}
     </View>
   );
 };
@@ -134,11 +168,30 @@ const styles = StyleSheet.create({
     fontFamily: constants.primary.fontFamily,
     textDecorationLine: "underline",
   },
+  rulesTextLight: {
+    fontSize: 15,
+    marginTop: "10%",
+    color: constants.secondary.textColor,
+    fontFamily: constants.secondary.fontFamily,
+    textDecorationLine: "underline",
+  },
+  singleRule: {
+    fontSize: 15,
+    marginTop: "10%",
+    color: constants.primary.textColor,
+    fontFamily: constants.primary.fontFamily,
+  },
+  singleRuleLight: {
+    fontSize: 15,
+    marginTop: "10%",
+    color: constants.secondary.textColor,
+    fontFamily: constants.secondary.fontFamily,
+  },
   icon: {
     fontSize: 40,
     alignSelf: "flex-end",
     color: "white",
-    marginRight: 20,
+    marginRight: -10,
     marginTop: 20,
   },
   form: {
