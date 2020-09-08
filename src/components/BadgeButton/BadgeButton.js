@@ -1,6 +1,7 @@
 import React from "react";
 
-import * as Progress from "react-native-progress";
+import { AnimatedCircularProgress } from "react-native-circular-progress";
+import { Circle } from "react-native-svg";
 
 import {
   View,
@@ -17,7 +18,15 @@ export const BadgeButton = (props) => {
   return (
     <TouchableOpacity style={styles.mainContainer}>
       <Text style={styles.buttonTitle}>{props.title}</Text>
-      <Progress.Circle size={30} indeterminate={true} />
+      <AnimatedCircularProgress
+        size={60}
+        width={15}
+        fill={props.percentage}
+        tintColor="#00e0ff"
+        onAnimationComplete={() => {}}
+        backgroundColor="#3d5875"
+        style={styles.progressCircle}
+      />
     </TouchableOpacity>
   );
 };
@@ -38,5 +47,9 @@ const styles = StyleSheet.create({
     fontFamily: constants.primary.fontFamily,
     paddingHorizontal: "10%",
     textAlign: "center",
+  },
+  progressCircle: {
+    position: "absolute",
+    bottom: "20%",
   },
 });

@@ -34,7 +34,6 @@ export default () => {
   }, [data]);
 
   useEffect(() => {
-    console.log(data[genIndex]);
     setSelectedQuote(data[genIndex]);
   }, [genIndex]);
 

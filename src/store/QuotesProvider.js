@@ -5,13 +5,18 @@ const db = Firebase.firestore();
 
 export const QuotesActionContext = createContext({
   fetchQuotes: () => {},
+  addQuote: () => {},
 });
 export const QuotesStateContext = createContext({
   quotes: [],
+  successMesage: null,
+  errorMessage: null,
 });
 
 const initialState = {
   quotes: [],
+  successMesage: null,
+  errorMessage: null,
 };
 
 const quotesReducer = (state, action) => {
@@ -35,9 +40,20 @@ export const QuotesProvider = ({ children }) => {
     }
   };
 
+  const addQuote = async (author, content) => {
+    if (content.length === 0) {
+      console.log("hello");
+    }
+    try {
+      console.log("triggered", author, content);
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
   return (
     <QuotesStateContext.Provider value={{ state }}>
-      <QuotesActionContext.Provider value={{ fetchQuotes }}>
+      <QuotesActionContext.Provider value={{ fetchQuotes, addQuote }}>
         {children}
       </QuotesActionContext.Provider>
     </QuotesStateContext.Provider>
