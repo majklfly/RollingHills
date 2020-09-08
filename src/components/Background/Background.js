@@ -7,13 +7,18 @@ import Svg, { G, Path, Rect } from "react-native-svg";
 export const Background = () => {
   const [dayMode, setDayMode] = useState(false);
 
+  const retrieveDayMode = async () => {
+    const result = await AsyncStorage.getItem("dayMode");
+    const value = result === "true" ? true : false;
+    setDayMode(value);
+  };
+
   useEffect(() => {
-    const retrieveDayMode = async () => {
-      const result = await AsyncStorage.getItem("dayMode");
-      const value = result === "true" ? true : false;
-      setDayMode(value);
-    };
-    retrieveDayMode();
+    let mounted = true;
+    if (mounted) {
+      retrieveDayMode();
+    }
+    return () => (mounted = false);
   });
 
   if (!dayMode) {

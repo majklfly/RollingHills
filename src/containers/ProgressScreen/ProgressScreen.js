@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 
 import {
   View,
@@ -14,26 +14,33 @@ import { Background } from "../../components/Background/Background";
 import { BadgeButton } from "../../components/BadgeButton/BadgeButton";
 import { AddQuoteForm } from "../../components/AddQuoteForm/AddQuoteForm";
 
+import { GlobalContext } from "../../store/AuthProvider";
+
 import constants from "../../constants";
 
 const { width, height } = Dimensions.get("window");
 
 const ProgressScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  const {
+    state: { dayMode },
+  } = useContext(GlobalContext);
 
   return (
-    <View>
+    <View testID="ProgressScreenContainer">
       <Background />
       {modalVisible === false && (
         <TouchableOpacity
-          style={styles.hatButton}
+          style={dayMode ? styles.hatButtonLight : styles.hatButton}
           onPress={() => setModalVisible(true)}
         >
           <Text style={styles.hatButtonText}>Add another quote to the hat</Text>
         </TouchableOpacity>
       )}
       {modalVisible === false ? (
-        <ScrollView style={styles.mainContainer}>
+        <ScrollView
+          style={dayMode ? styles.mainContainerLight : styles.mainContainer}
+        >
           <View style={styles.row}>
             <BadgeButton title="downloaded App" percentage={100} />
             <BadgeButton title="run 1 hour" percentage={80} />
@@ -71,6 +78,16 @@ const styles = StyleSheet.create({
     backgroundColor: constants.primary.containerColor,
     flexWrap: "wrap",
   },
+  mainContainerLight: {
+    width: width * 0.9,
+    height: height * 0.7,
+    position: "absolute",
+    alignSelf: "center",
+    marginTop: "40%",
+    borderRadius: 20,
+    backgroundColor: constants.secondary.containerColor,
+    flexWrap: "wrap",
+  },
   row: {
     flexDirection: "row",
   },
@@ -85,9 +102,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  hatButtonLight: {
+    position: "absolute",
+    width: width * 0.9,
+    height: "2%",
+    backgroundColor: constants.secondary.buttonColor,
+    alignSelf: "center",
+    marginTop: "20%",
+    borderRadius: 15,
+    alignItems: "center",
+    justifyContent: "center",
+  },
   hatButtonText: {
     color: constants.primary.textColor,
     fontFamily: constants.primary.fontFamily,
+  },
+  hatButtonTextLight: {
+    color: constants.secondary.textColor,
+    fontFamily: constants.secondary.fontFamily,
   },
 });
 

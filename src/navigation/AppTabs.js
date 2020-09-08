@@ -11,19 +11,14 @@ import ProgressScreen from "../containers/ProgressScreen/ProgressScreen";
 
 import constants from "../constants";
 
+import { GlobalContext } from "../store/AuthProvider";
+
 const Tabs = createBottomTabNavigator();
 
 export const AppTabs = () => {
-  const [dayMode, setDayModeLocal] = useState(null);
-
-  useEffect(() => {
-    const retrieveDayMode = async () => {
-      const result = await AsyncStorage.getItem("dayMode");
-      const value = result === "true" ? true : false;
-      setDayModeLocal(value);
-    };
-    retrieveDayMode();
-  });
+  const {
+    state: { dayMode },
+  } = useContext(GlobalContext);
 
   return (
     <Tabs.Navigator

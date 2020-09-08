@@ -34,7 +34,10 @@ export const AddQuoteForm = (props) => {
 
   const { addQuote } = useContext(QuotesActionContext);
   return (
-    <View style={dayMode ? styles.mainContainerLight : styles.mainContainer}>
+    <View
+      style={dayMode ? styles.mainContainerLight : styles.mainContainer}
+      testID="AddQuoteContainer"
+    >
       <TouchableOpacity onPress={() => props.setModalVisible(false)}>
         <FontAwesome name="close" style={styles.icon} />
       </TouchableOpacity>
@@ -53,6 +56,7 @@ export const AddQuoteForm = (props) => {
             autoCorrent={false}
             autoCapitalize="none"
             onChangeText={(value) => setAuthor(value)}
+            testID="QuoteAuthorInput"
           ></Input>
         </Item>
         <TextInput
@@ -63,6 +67,7 @@ export const AddQuoteForm = (props) => {
           textBreakStrategy="balanced"
           spellCheck={true}
           multiline={true}
+          testID="QuoteContentInput"
         />
         <Button
           full
