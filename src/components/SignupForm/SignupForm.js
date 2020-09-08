@@ -14,13 +14,18 @@ export const SignupForm = (props) => {
   const [dayMode, setDayModeLocal] = useState(null);
   const { signup } = useContext(AuthContext);
 
+  const retrieveDayMode = async () => {
+    const result = await AsyncStorage.getItem("dayMode");
+    const value = result === "true" ? true : false;
+    setDayModeLocal(value);
+  };
+
   useEffect(() => {
-    const retrieveDayMode = async () => {
-      const result = await AsyncStorage.getItem("dayMode");
-      const value = result === "true" ? true : false;
-      setDayModeLocal(value);
-    };
-    retrieveDayMode();
+    let mounted = true;
+    if (mounted) {
+      retrieveDayMode();
+    }
+    return () => (mounted = false);
   }, []);
 
   return (

@@ -9,7 +9,6 @@ import {
 } from "../../store/LocationProvider";
 
 import useLocation from "../../hooks/useLocation";
-import useNotifications from "../../hooks/useNotifications";
 
 import { Background } from "../../components/Background/Background";
 import { Map } from "../../components/Map/Map";
@@ -45,8 +44,7 @@ const HomeScreen = () => {
     mockMovement(isEnabled);
   }, [isEnabled]);
 
-  const [err] = useLocation(true, callback);
-  useNotifications();
+  useLocation(true, callback);
 
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 

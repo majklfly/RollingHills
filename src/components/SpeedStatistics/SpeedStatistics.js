@@ -5,11 +5,15 @@ import { View, Dimensions, StyleSheet, AsyncStorage } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import constants from "../../constants";
 
-const width = Dimensions.get("window").width;
-const height = Dimensions.get("window").height;
+import { GlobalContext } from "../../store/AuthProvider";
+
+const { width } = Dimensions.get("window");
 
 export const SpeedStatistics = (props) => {
-  const [dayMode, setDayModeLocal] = useState(null);
+  const {
+    state: { dayMode },
+  } = useContext(GlobalContext);
+
   const formatDataset = () => {
     let localDataset = [];
     props.data.locations.arrayValue.values.map((item) => {
@@ -19,19 +23,6 @@ export const SpeedStatistics = (props) => {
     });
     return [{ data: localDataset }];
   };
-
-  useEffect(() => {
-    let mounted = true;
-    const retrieveDayMode = async () => {
-      const result = await AsyncStorage.getItem("dayMode");
-      const value = result === "true" ? true : false;
-      setDayModeLocal(value);
-    };
-    if (mounted) {
-      retrieveDayMode();
-    }
-    return () => (mounted = false);
-  });
 
   const dataset = formatDataset();
 

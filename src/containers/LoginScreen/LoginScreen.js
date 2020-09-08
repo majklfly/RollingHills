@@ -18,6 +18,8 @@ import Svg, { Path } from "react-native-svg";
 import { Background } from "../../components/Background/Background";
 import { AuthContext, GlobalContext } from "../../store/AuthProvider";
 
+import useNotifications from "../../hooks/useNotifications";
+
 import { GoogleLogin } from "../../components/GoogleLogin/GoogleLogin";
 import { FacebookLogin } from "../../components/FacebookLogin/FacebookLogin";
 import { ForgotPasswordForm } from "../../components/ForgotPasswordForm/ForgotPasswordForm";
@@ -38,6 +40,7 @@ const LoginScreen = ({ navigation }) => {
   const retrieveDayMode = async () => {
     const result = await AsyncStorage.getItem("dayMode");
     const value = result === "true" ? true : false;
+    setDayMode(value);
     setDayModeLocal(value);
   };
 
@@ -53,6 +56,8 @@ const LoginScreen = ({ navigation }) => {
   useCallback(() => {
     setDayMode(dayMode);
   }, [dayMode]);
+
+  useNotifications();
 
   const renderLoginForm = () => {
     if (modalVisible === true || signupModalVisible === true) {

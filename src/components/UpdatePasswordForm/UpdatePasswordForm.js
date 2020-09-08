@@ -15,24 +15,13 @@ import { AuthContext, GlobalContext } from "../../store/AuthProvider";
 export const UpdatePasswordForm = (props) => {
   const [email, setEmail] = useState(null);
   const [currentPassword, setCurrentPassword] = useState(null);
-  const [dayMode, setDayModeLocal] = useState(null);
   const [newPassword, setNewPassword] = useState(null);
 
   const { changePassword } = useContext(AuthContext);
-  const { state } = useContext(GlobalContext);
+  const {
+    state: { dayMode, errorMessage, successMessage },
+  } = useContext(GlobalContext);
 
-  useEffect(() => {
-    let mounted = true;
-    const retrieveDayMode = async () => {
-      const result = await AsyncStorage.getItem("dayMode");
-      const value = result === "true" ? true : false;
-      setDayModeLocal(value);
-    };
-    if (mounted) {
-      retrieveDayMode();
-    }
-    return () => (mounted = false);
-  });
   return (
     <View
       style={dayMode ? styles.mainContainerLight : styles.mainContainer}
@@ -52,12 +41,12 @@ export const UpdatePasswordForm = (props) => {
           }
         />
       </TouchableOpacity>
-      <Text style={styles.errorMessage}>{state.errorMessage}</Text>
-      {state.successMessage !== "null" && (
+      <Text style={styles.errorMessage}>{errorMessage}</Text>
+      {successMessage !== "null" && (
         <Text
           style={dayMode ? state.successMessageLight : styles.successMessage}
         >
-          {state.successMessage}
+          {successMessage}
         </Text>
       )}
       <Form style={styles.form}>

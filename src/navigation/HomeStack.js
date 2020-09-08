@@ -13,7 +13,9 @@ const Stack = createStackNavigator();
 
 export const HomeStack = () => {
   const { logout, setDayMode } = useContext(AuthContext);
-  const [dayMode, setDayModeLocal] = useState(false);
+  const {
+    state: { dayMode },
+  } = useContext(GlobalContext);
   const [isEnabled, setIsEnabled] = useState(null);
 
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
@@ -25,20 +27,9 @@ export const HomeStack = () => {
     }
   }, [isEnabled]);
 
-  const retrieveDayMode = async () => {
-    const result = await AsyncStorage.getItem("dayMode");
-    const value = result === "true" ? true : false;
-    setIsEnabled(value);
-    setDayModeLocal(value);
-  };
-
   useEffect(() => {
-    let mounted = true;
-    if (mounted) {
-    }
-    retrieveDayMode();
-    return () => (mounted = false);
-  }, []);
+    dayMode ? setIsEnabled(true) : setIsEnabled(false);
+  }, [dayMode]);
 
   return (
     <Stack.Navigator>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 
 import { View, FlatList, StyleSheet, Dimensions } from "react-native";
 
@@ -13,24 +13,14 @@ import constants from "../../constants";
 
 import { SpeedStatistics } from "../SpeedStatistics/SpeedStatistics";
 
-const width = Dimensions.get("window").width;
-const height = Dimensions.get("window").height;
+import { GlobalContext } from "../../store/AuthProvider";
+
+const { width, height } = Dimensions.get("window");
 
 export const TrackDetailFlatList = (props) => {
-  const [dayMode, setDayModeLocal] = useState(null);
-
-  useEffect(() => {
-    let mounted = true;
-    const retrieveDayMode = async () => {
-      const result = await AsyncStorage.getItem("dayMode");
-      const value = result === "true" ? true : false;
-      setDayModeLocal(value);
-    };
-    if (mounted) {
-      retrieveDayMode();
-    }
-    return () => (mounted = false);
-  });
+  const {
+    state: { dayMode },
+  } = useContext(GlobalContext);
 
   const formatCoordinates = (loc) => {
     const latitude =

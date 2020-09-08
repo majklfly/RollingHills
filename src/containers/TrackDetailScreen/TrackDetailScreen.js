@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useContext } from "react";
 
 import { View, Text, StyleSheet, AsyncStorage } from "react-native";
 
 import constants from "../../constants";
 
 import { TrackDetailFlatList } from "../../components/TrackDetailFlatList/TrackDetailFlatList";
+import { GlobalContext } from "../../store/AuthProvider";
 
 const TrackDetailScreen = ({ route }) => {
-  const [dayMode, setDayModeLocal] = useState(null);
+  const {
+    state: { dayMode },
+  } = useContext(GlobalContext);
   const formatTime = (time) => {
     const seconds = Math.round(time / 60);
     if (seconds < 60) {
@@ -19,19 +22,6 @@ const TrackDetailScreen = ({ route }) => {
       return formatedTime;
     }
   };
-
-  useEffect(() => {
-    let mounted = true;
-    const retrieveDayMode = async () => {
-      const result = await AsyncStorage.getItem("dayMode");
-      const value = result === "true" ? true : false;
-      setDayModeLocal(value);
-    };
-    if (mounted) {
-      retrieveDayMode();
-    }
-    return () => (mounted = false);
-  });
 
   return (
     <View

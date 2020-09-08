@@ -7,18 +7,21 @@ import {
   LocationContext,
 } from "../../store/LocationProvider";
 import { TimerActionContext } from "../../store/TimerProvider";
+import { GlobalContext } from "../../store/AuthProvider";
 
 export const Timer = () => {
   const [time, setTime] = useState({ ms: 0, s: 0, m: 0, h: 0 });
   const [totalTime, setTotalTime] = useState({ total: 0 });
   const [totalInterv, setTotalInterv] = useState();
-  const [dayMode, setDayModeLocal] = useState(false);
   const [interv, setInterv] = useState();
   const {
     state: { recording, finished },
   } = useContext(LocationStateContext);
   const { cleanup } = useContext(LocationContext);
   const { timerFinished } = useContext(TimerActionContext);
+  const {
+    state: { dayMode },
+  } = useContext(GlobalContext);
 
   var updatedMs = time.ms,
     updatedS = time.s,
@@ -84,15 +87,6 @@ export const Timer = () => {
       cleanup();
     };
   }, [finished]);
-
-  useEffect(() => {
-    const retrieveDayMode = async () => {
-      const result = await AsyncStorage.getItem("dayMode");
-      const value = result === "true" ? true : false;
-      setDayModeLocal(value);
-    };
-    retrieveDayMode();
-  });
 
   return (
     <View

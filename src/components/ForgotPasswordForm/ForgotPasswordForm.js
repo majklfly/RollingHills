@@ -16,20 +16,10 @@ import { AuthContext, GlobalContext } from "../../store/AuthProvider";
 
 export const ForgotPasswordForm = (props) => {
   const [email, setEmail] = useState(null);
-  const [dayMode, setDayModeLocal] = useState(null);
   const { forgotPassword } = useContext(AuthContext);
   const {
-    state: { successMessage, errorMessage },
+    state: { successMessage, errorMessage, dayMode },
   } = useContext(GlobalContext);
-  const retrieveDayMode = async () => {
-    const result = await AsyncStorage.getItem("dayMode");
-    const value = result === "true" ? true : false;
-    setDayModeLocal(value);
-  };
-
-  useEffect(() => {
-    retrieveDayMode();
-  });
 
   return (
     <>
