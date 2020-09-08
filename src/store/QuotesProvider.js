@@ -1,5 +1,7 @@
-import React, { createContext, useReducer } from "react";
+import React, { createContext, useReducer, useContext } from "react";
 import Firebase from "../../firebase";
+
+import { GlobalContext } from "./AuthProvider";
 
 const db = Firebase.firestore();
 
@@ -23,6 +25,10 @@ const quotesReducer = (state, action) => {
   switch (action.type) {
     case "uploadQuotes":
       return { ...state, quotes: action.payload };
+    case "errorMessage":
+      return { ...state, errorMessage: action.payload };
+    case "clearErrorMessage":
+      return { ...state, errorMessage: null };
     default:
       return state;
   }
@@ -30,6 +36,9 @@ const quotesReducer = (state, action) => {
 
 export const QuotesProvider = ({ children }) => {
   const [state, dispatch] = useReducer(quotesReducer, initialState);
+  const {
+    state: { user },
+  } = useContext(GlobalContext);
 
   const fetchQuotes = async () => {
     try {
@@ -41,13 +50,34 @@ export const QuotesProvider = ({ children }) => {
   };
 
   const addQuote = async (author, content) => {
-    if (content.length === 0) {
-      console.log("hello");
+    console.log("content", content);
+    if (content === null) {
+      dispatch({
+        type: "errorMessage",
+        payload: "Please enter your favourite quote.",
+      });
+      setTimeout(function () {
+        dispatch({ type: "clearErrorMessage" });
+      }, 2000);
+    } else if (author === null) {
+      dispatch({
+        type: "errorMessage",
+        payload: "Please enter the author of the quote.",
+      });
+      setTimeout(function () {
+        dispatch({ type: "clearErrorMessage" });
+      }, 2000);
     }
     try {
-      console.log("triggered", author, content);
+      console.log("triggered", author, content, user.uid);
     } catch (e) {
-      console.log(e.message);
+      dispatch({
+        type: "errorMessage",
+        payload: e.message,
+      });
+      setTimeout(function () {
+        dispatch({ type: "clearErrorMessage" });
+      }, 2000);
     }
   };
 

@@ -38,9 +38,23 @@ export const AddQuoteForm = (props) => {
       style={dayMode ? styles.mainContainerLight : styles.mainContainer}
       testID="AddQuoteContainer"
     >
-      <TouchableOpacity onPress={() => props.setModalVisible(false)}>
-        <FontAwesome name="close" style={styles.icon} />
-      </TouchableOpacity>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-around",
+          alignItems: "center",
+        }}
+      >
+        <TouchableOpacity>
+          <Text style={dayMode ? styles.rulesTextLight : styles.rulesText}>
+            view 3 simple rules
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => props.setModalVisible(false)}>
+          <FontAwesome name="close" style={styles.icon} />
+        </TouchableOpacity>
+      </View>
+
       <Form style={styles.form}>
         <Item floatingLabel>
           <Label style={dayMode ? styles.labelLight : styles.label}>
@@ -69,6 +83,9 @@ export const AddQuoteForm = (props) => {
           multiline={true}
           testID="QuoteContentInput"
         />
+        {errorMessage ? (
+          <Text style={styles.errorMessage}>{errorMessage}</Text>
+        ) : null}
         <Button
           full
           rounded
@@ -86,13 +103,6 @@ export const AddQuoteForm = (props) => {
             Add new quote to the hat
           </Text>
         </Button>
-        {successMessage !== "null" ? (
-          <Text
-            style={dayMode ? styles.successMessageLight : styles.successMessage}
-          >
-            {successMessage}
-          </Text>
-        ) : null}
       </Form>
     </View>
   );
@@ -116,6 +126,13 @@ const styles = StyleSheet.create({
     marginTop: "20%",
     borderRadius: 20,
     backgroundColor: constants.secondary.containerColor,
+  },
+  rulesText: {
+    fontSize: 15,
+    marginTop: "10%",
+    color: constants.primary.textColor,
+    fontFamily: constants.primary.fontFamily,
+    textDecorationLine: "underline",
   },
   icon: {
     fontSize: 40,
@@ -161,6 +178,12 @@ const styles = StyleSheet.create({
     color: constants.secondary.textColor,
     textDecorationLine: "none",
     fontFamily: constants.secondary.fontFamily,
+  },
+  errorMessage: {
+    color: "red",
+    fontSize: 15,
+    textAlign: "center",
+    fontFamily: constants.primary.fontFamily,
   },
   buttonText: {
     color: constants.primary.textColor,
