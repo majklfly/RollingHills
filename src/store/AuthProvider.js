@@ -249,7 +249,6 @@ export const AuthProvider = ({ children }) => {
 
   const signInFacebook = async () => {
     dispatch({ type: "login" });
-    console.log("dispatched");
     try {
       await Facebook.initializeAsync("213144473364363");
       const { type, token } = await Facebook.logInWithReadPermissionsAsync({

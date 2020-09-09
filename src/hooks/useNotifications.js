@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import { useState, useEffect } from "react";
 import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
 

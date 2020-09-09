@@ -29,8 +29,7 @@ import {
   displayTimeChart,
 } from "./utils";
 
-const width = Dimensions.get("window").width;
-const height = Dimensions.get("window").height;
+const { width, height } = Dimensions.get("window");
 
 const StatisticsScreen = ({ navigation }) => {
   const [data, setData] = useState([]);

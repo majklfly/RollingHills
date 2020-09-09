@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 
 import {
   View,
@@ -10,6 +10,11 @@ import {
   Modal,
 } from "react-native";
 
+import {
+  LocationContext,
+  LocationStateContext,
+} from "../../store/LocationProvider";
+
 import { Background } from "../../components/Background/Background";
 import { BadgeButton } from "../../components/BadgeButton/BadgeButton";
 import { AddQuoteForm } from "../../components/AddQuoteForm/AddQuoteForm";
@@ -18,13 +23,57 @@ import { GlobalContext } from "../../store/AuthProvider";
 
 import constants from "../../constants";
 
+import {
+  calculateTotalDistance,
+  calculateTotalTime,
+} from "../StatisticsScreen/utils";
+
+import {
+  calculate1HourBadge,
+  calculate3HourBadge,
+  calculate5kmBadge,
+  calculate10kmBadge,
+  evaluateRunWeekOnce,
+  evaluateRunWeekTwice,
+  evaluateRunEveryDay,
+} from "./utils";
+
 const { width, height } = Dimensions.get("window");
 
-const ProgressScreen = () => {
+const ProgressScreen = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [localValues, setLocalValues] = useState({});
+  const [data, setData] = useState([]);
+  const { state } = useContext(LocationStateContext);
+  const { fetchData } = useContext(LocationContext);
   const {
     state: { dayMode },
   } = useContext(GlobalContext);
+
+  const formatTracks = (tracks) => {
+    let dataLocal = [];
+    if (tracks) {
+      tracks.map((track) => {
+        const data = track.doc.Xe.proto.mapValue.fields;
+        dataLocal.push(data);
+      });
+    }
+    setData(dataLocal);
+  };
+
+  useEffect(() => {
+    formatTracks(state.tracks);
+    const totalDistance = calculateTotalDistance(data);
+    const totalTime = calculateTotalTime(data);
+    setLocalValues({ totalDistance, totalTime });
+  }, [state.tracks]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      fetchData();
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <View testID="ProgressScreenContainer">
@@ -43,19 +92,40 @@ const ProgressScreen = () => {
         >
           <View style={styles.row}>
             <BadgeButton title="downloaded App" percentage={100} />
-            <BadgeButton title="run 1 hour" percentage={80} />
+            <BadgeButton
+              title="run 1 hour"
+              percentage={calculate1HourBadge(localValues.totalTime)}
+            />
           </View>
           <View style={styles.row}>
-            <BadgeButton title="run once per week" percentage={81} />
-            <BadgeButton title="run 3 hours" percentage={52} />
+            <BadgeButton
+              title="run this week"
+              percentage={evaluateRunWeekOnce(data)}
+            />
+            <BadgeButton
+              title="run 3 hours"
+              percentage={calculate3HourBadge(localValues.totalTime)}
+            />
           </View>
           <View style={styles.row}>
-            <BadgeButton title="run 5km" percentage={30} />
-            <BadgeButton title="run twice per week" percentage={50} />
+            <BadgeButton
+              title="run 5km"
+              percentage={calculate5kmBadge(localValues.totalDistance)}
+            />
+            <BadgeButton
+              title="run this week twice"
+              percentage={evaluateRunWeekTwice(data)}
+            />
           </View>
           <View style={styles.row}>
-            <BadgeButton title="run 10km" percentage={10} />
-            <BadgeButton title="run everyday for one week" percentage={23} />
+            <BadgeButton
+              title="run 10km"
+              percentage={calculate10kmBadge(localValues.totalDistance)}
+            />
+            <BadgeButton
+              title="run this week every day"
+              percentage={evaluateRunEveryDay(data)}
+            />
           </View>
         </ScrollView>
       ) : (

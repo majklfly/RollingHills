@@ -22,6 +22,7 @@
     },
     "android": {
       "package": "com.majklfly.RollingHills",
+      "softwareKeyboardLayoutMode": "pan",
       "useNextNotificationsApi": true
     }
   }

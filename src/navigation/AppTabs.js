@@ -48,7 +48,6 @@ export const AppTabs = () => {
           ? constants.secondary.textColor
           : constants.primary.textColor,
         showLabel: false,
-        keyboardHidesTabBar: true,
         style: {
           opacity: 0.5,
           position: "absolute",
