@@ -14,6 +14,12 @@ import { Background } from "../../components/Background/Background";
 import { UpdatePasswordForm } from "../../components/UpdatePasswordForm/UpdatePasswordForm";
 
 import { GlobalContext } from "../../store/AuthProvider";
+
+import {
+  QuotesActionContext,
+  QuotesStateContext,
+} from "../../store/QuotesProvider";
+
 import constants from "../../constants";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
@@ -25,10 +31,18 @@ const ProfileScreen = () => {
   const {
     state: { user, dayMode },
   } = useContext(GlobalContext);
+  const { fetchUserdata } = useContext(QuotesActionContext);
+  const {
+    state: { quote },
+  } = useContext(QuotesStateContext);
 
   const formatDate = (date) => {
     return moment(new Date(parseInt(date))).format("DD/MM/YYYY");
   };
+
+  useEffect(() => {
+    fetchUserdata();
+  }, [quote]);
 
   return (
     <View testID="profileContainer">
@@ -65,6 +79,23 @@ const ProfileScreen = () => {
               style={dayMode ? styles.contentDataLight : styles.contentData}
             >
               {formatDate(user.lastLoginAt)}
+            </Text>
+          </View>
+          <View style={styles.contentLine}>
+            <Text
+              style={dayMode ? styles.contentLabelLight : styles.contentLabel}
+            >
+              your quote:
+            </Text>
+            <Text
+              style={dayMode ? styles.quoteContentLight : styles.quoteContent}
+            >
+              {quote && quote.quoteContent}
+            </Text>
+            <Text
+              style={dayMode ? styles.quoteAuthorLight : styles.quoteAuthor}
+            >
+              {quote && quote.quoteAuthor}
             </Text>
           </View>
           <View style={styles.contentLine}>
@@ -160,6 +191,28 @@ const styles = StyleSheet.create({
     color: constants.secondary.textColor,
     fontFamily: constants.secondary.fontFamily,
     fontSize: 25,
+  },
+  quoteContent: {
+    color: constants.primary.textColor,
+    fontFamily: constants.primary.fontFamily,
+    fontSize: 18,
+  },
+  quoteContentLight: {
+    color: constants.secondary.textColor,
+    fontFamily: constants.secondary.fontFamily,
+    fontSize: 18,
+  },
+  quoteAuthor: {
+    color: constants.primary.textColor,
+    fontFamily: constants.primary.fontFamily,
+    fontSize: 12,
+    alignSelf: "flex-end",
+  },
+  quoteAuthorLight: {
+    color: constants.secondary.textColor,
+    fontFamily: constants.secondary.fontFamily,
+    fontSize: 12,
+    alignSelf: "flex-end",
   },
   passwordButton: {
     backgroundColor: constants.primary.buttonColor,

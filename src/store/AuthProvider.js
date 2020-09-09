@@ -1,4 +1,4 @@
-import React, { createContext, useReducer } from "react";
+import React, { createContext, useReducer, useContext } from "react";
 import { AsyncStorage } from "react-native";
 import Firebase from "../../firebase";
 import * as Google from "expo-google-app-auth";
@@ -23,6 +23,7 @@ export const GlobalContext = createContext({
   errorMessage: null,
   successMessage: null,
   dayMode: false,
+  userdata: null,
 });
 
 const initialState = {
@@ -31,6 +32,7 @@ const initialState = {
   isLoading: false,
   successMessage: "null",
   dayMode: false,
+  userdata: null,
 };
 
 const authReducer = (state, action) => {

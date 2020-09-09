@@ -21,7 +21,7 @@ export default () => {
       const data = [];
       quotes.map((item) => {
         const author = item.doc.Xe.proto.mapValue.fields.author.stringValue;
-        const quote = item.doc.Xe.proto.mapValue.fields.body.stringValue;
+        const quote = item.doc.Xe.proto.mapValue.fields.quote.stringValue;
         const unit = { title: author, body: quote };
         data.push(unit);
       });

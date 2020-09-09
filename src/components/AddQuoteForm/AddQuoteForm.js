@@ -83,9 +83,6 @@ export const AddQuoteForm = (props) => {
           <Text style={dayMode ? styles.singleRuleLight : styles.singleRule}>
             4) and mostly, have fun!
           </Text>
-          <Text style={dayMode ? styles.singleRuleLight : styles.singleRule}>
-            Report a quote
-          </Text>
         </View>
       ) : (
         <Form style={styles.form}>
@@ -130,7 +127,10 @@ export const AddQuoteForm = (props) => {
                 ? constants.secondary.buttonColor
                 : constants.primary.buttonColor,
             }}
-            onPress={() => addQuote(author, content)}
+            onPress={() => (
+              addQuote(author, content),
+              content !== null && props.setModalVisible(false)
+            )}
           >
             <Text style={dayMode ? styles.buttonTextLight : styles.buttonText}>
               Add new quote to the hat
