@@ -39,7 +39,6 @@ const ProfileScreen = () => {
   const formatDate = (date) => {
     return moment(new Date(parseInt(date))).format("DD/MM/YYYY");
   };
-
   useEffect(() => {
     fetchUserdata();
   }, [quote]);
