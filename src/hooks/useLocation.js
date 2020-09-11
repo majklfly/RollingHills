@@ -16,7 +16,6 @@ export default (shouldTrack, callback) => {
         if (status !== "granted") {
           setErrorMsg("Permission to access location was denied");
         }
-        let location = await Location.getCurrentPositionAsync({});
         const sub = await watchPositionAsync(
           {
             accuracy: Accuracy.BestForNavigation,
