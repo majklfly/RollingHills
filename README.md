@@ -11,6 +11,7 @@ Rollinghills provides intuitive and simple navigations threw app, elegant design
 ![Alt text](./assets/RHMobileSlide3.jpg?raw=true "Title")
 ![Alt text](./assets/RHMobileSlide4.jpg?raw=true "Title")
 ![Alt text](./assets/RHMobileSlide5.jpg?raw=true "Title")
+![Alt text](./assets/RHMobileSlide6.jpg?raw=true "Title")
 
 ## Privacy Policy
 
