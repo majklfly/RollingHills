@@ -17,9 +17,11 @@ export const SpeedStatistics = (props) => {
   const formatDataset = () => {
     let localDataset = [];
     props.data.locations.arrayValue.values.map((item) => {
-      localDataset.push(
-        item.mapValue.fields.coords.mapValue.fields.speed.doubleValue
-      );
+      if (item.mapValue.fields.coords.mapValue.fields.speed.doubleValue) {
+        localDataset.push(
+          item.mapValue.fields.coords.mapValue.fields.speed.doubleValue
+        );
+      }
     });
     return [{ data: localDataset }];
   };
@@ -28,54 +30,56 @@ export const SpeedStatistics = (props) => {
 
   return (
     <View style={styles.mainContainer} testID="mainContainer">
-      <LineChart
-        data={{
-          labels: [
-            "10%",
-            "20%",
-            "30%",
-            "40%",
-            "50%",
-            "60%",
-            "70%",
-            "80%",
-            "90%",
-            "100%",
-          ],
-          datasets: dataset,
-        }}
-        width={Dimensions.get("window").width - 50}
-        height={300}
-        yAxisSuffix=" km/h"
-        chartConfig={{
-          backgroundColor: "transparent",
-          backgroundGradientFrom: dayMode
-            ? constants.secondary.containerColor
-            : constants.primary.containerColor,
-          backgroundGradientTo: dayMode
-            ? constants.secondary.containerColor
-            : constants.primary.containerColor,
-          decimalPlaces: 0,
-          color: (opacity = 0.4) =>
-            dayMode
-              ? constants.secondary.textColor
-              : constants.primary.textColor,
-          labelColor: (opacity = 1) =>
-            dayMode
-              ? constants.secondary.textColor
-              : constants.primary.textColor,
-          propsForDots: {
-            r: "0",
-            strokeWidth: "0",
-            stroke: "#ffa726",
-          },
-          propsForBackgroundLines: {
-            stroke: "transparent",
-          },
-        }}
-        bezier
-        style={styles.chart}
-      />
+      {dataset && (
+        <LineChart
+          data={{
+            labels: [
+              "10%",
+              "20%",
+              "30%",
+              "40%",
+              "50%",
+              "60%",
+              "70%",
+              "80%",
+              "90%",
+              "100%",
+            ],
+            datasets: dataset,
+          }}
+          width={Dimensions.get("window").width - 50}
+          height={300}
+          yAxisSuffix=" km/h"
+          chartConfig={{
+            backgroundColor: "transparent",
+            backgroundGradientFrom: dayMode
+              ? constants.secondary.containerColor
+              : constants.primary.containerColor,
+            backgroundGradientTo: dayMode
+              ? constants.secondary.containerColor
+              : constants.primary.containerColor,
+            decimalPlaces: 0,
+            color: (opacity = 0.4) =>
+              dayMode
+                ? constants.secondary.textColor
+                : constants.primary.textColor,
+            labelColor: (opacity = 1) =>
+              dayMode
+                ? constants.secondary.textColor
+                : constants.primary.textColor,
+            propsForDots: {
+              r: "0",
+              strokeWidth: "0",
+              stroke: "#ffa726",
+            },
+            propsForBackgroundLines: {
+              stroke: "transparent",
+            },
+          }}
+          bezier
+          style={styles.chart}
+        />
+      )}
     </View>
   );
 };
