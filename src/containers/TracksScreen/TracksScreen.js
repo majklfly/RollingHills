@@ -61,87 +61,90 @@ const TracksScreen = ({ navigation }) => {
       <Text style={dayMode ? styles.titleLight : styles.title}>
         Finished Tracks
       </Text>
-      <ScrollView
-        style={dayMode ? styles.mainContainerLight : styles.mainContainer}
-        testID="TracksScreenContainer"
-      >
-        {error ? (
-          <Text style={styles.errorMessage}>{error}</Text>
-        ) : (
-          <>
-            {data.map((item) => {
-              return (
+      <View style={dayMode ? styles.mainContainerLight : styles.mainContainer}>
+        <ScrollView testID="TracksScreenContainer">
+          {error ? (
+            <Text style={styles.errorMessage}>{error}</Text>
+          ) : (
+            <>
+              {data.map((item) => {
+                return (
+                  <TouchableOpacity
+                    style={dayMode ? styles.buttonLight : styles.button}
+                    key={item.date.stringValue}
+                    onPress={() =>
+                      navigation.navigate("trackDetailScreen", { data: item })
+                    }
+                    onLongPress={() => (
+                      setModalVisible(true), setCurrentRun(item)
+                    )}
+                  >
+                    <Text
+                      style={
+                        dayMode ? styles.buttonTextLight : styles.buttonText
+                      }
+                    >
+                      {item.date.stringValue.split("GMT")[0]}
+                    </Text>
+                    <Text
+                      style={
+                        dayMode
+                          ? styles.buttonTextNameLight
+                          : styles.buttonTextName
+                      }
+                    >
+                      {item.name.stringValue}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </>
+          )}
+          <Modal visible={modalVisible} transparent={true}>
+            <View style={dayMode ? styles.modalLight : styles.modal}>
+              <Text
+                style={dayMode ? styles.deleteTextLight : styles.deleteText}
+              >
+                Would you like to delete this run?
+              </Text>
+              <View style={styles.modalButtonContainer}>
                 <TouchableOpacity
-                  style={dayMode ? styles.buttonLight : styles.button}
-                  key={item.date.stringValue}
-                  onPress={() =>
-                    navigation.navigate("trackDetailScreen", { data: item })
-                  }
-                  onLongPress={() => (
-                    setModalVisible(true), setCurrentRun(item)
+                  style={dayMode ? styles.modalButtonLight : styles.modalButton}
+                  onPress={() => (
+                    deleteRun(currentRun),
+                    setModalVisible(false),
+                    navigation.navigate("homeScreen")
                   )}
                 >
                   <Text
-                    style={dayMode ? styles.buttonTextLight : styles.buttonText}
+                    style={
+                      dayMode
+                        ? styles.modalButtonTextLight
+                        : styles.modalButtonText
+                    }
                   >
-                    {item.date.stringValue.split("GMT")[0]}
+                    Yes
                   </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={dayMode ? styles.modalButtonLight : styles.modalButton}
+                  onPress={() => setModalVisible(false)}
+                >
                   <Text
                     style={
                       dayMode
-                        ? styles.buttonTextNameLight
-                        : styles.buttonTextName
+                        ? styles.modalButtonTextLight
+                        : styles.modalButtonText
                     }
                   >
-                    {item.name.stringValue}
+                    No
                   </Text>
                 </TouchableOpacity>
-              );
-            })}
-          </>
-        )}
-        <Modal visible={modalVisible} transparent={true}>
-          <View style={dayMode ? styles.modalLight : styles.modal}>
-            <Text style={dayMode ? styles.deleteTextLight : styles.deleteText}>
-              Would you like to delete this run?
-            </Text>
-            <View style={styles.modalButtonContainer}>
-              <TouchableOpacity
-                style={dayMode ? styles.modalButtonLight : styles.modalButton}
-                onPress={() => (
-                  deleteRun(currentRun),
-                  setModalVisible(false),
-                  navigation.navigate("homeScreen")
-                )}
-              >
-                <Text
-                  style={
-                    dayMode
-                      ? styles.modalButtonTextLight
-                      : styles.modalButtonText
-                  }
-                >
-                  Yes
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={dayMode ? styles.modalButtonLight : styles.modalButton}
-                onPress={() => setModalVisible(false)}
-              >
-                <Text
-                  style={
-                    dayMode
-                      ? styles.modalButtonTextLight
-                      : styles.modalButtonText
-                  }
-                >
-                  No
-                </Text>
-              </TouchableOpacity>
+              </View>
             </View>
-          </View>
-        </Modal>
-      </ScrollView>
+          </Modal>
+        </ScrollView>
+      </View>
     </>
   );
 };

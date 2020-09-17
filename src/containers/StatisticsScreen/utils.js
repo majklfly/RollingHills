@@ -53,10 +53,10 @@ export const displayAverageSpeed = (data) => {
     });
   }
   return {
-    labels: datesLocal.reverse(),
+    labels: datesLocal.slice(-5).reverse(),
     datasets: [
       {
-        data: speedsLocal.reverse(),
+        data: speedsLocal.slice(-5).reverse(),
       },
     ],
   };
@@ -76,10 +76,10 @@ export const displayDistanceChart = (data) => {
     });
   }
   return {
-    labels: datesLocal.reverse(),
+    labels: datesLocal.slice(-5).reverse(),
     datasets: [
       {
-        data: distancesLocal.reverse(),
+        data: distancesLocal.slice(-5).reverse(),
       },
     ],
   };
@@ -99,10 +99,10 @@ export const displayTimeChart = (data) => {
     });
   }
   return {
-    labels: datesLocal.reverse(),
+    labels: datesLocal.slice(-5).reverse(),
     datasets: [
       {
-        data: timeLocal.reverse(),
+        data: timeLocal.slice(-5).reverse(),
       },
     ],
   };
