@@ -86,7 +86,7 @@ export const AddQuoteForm = (props) => {
         </View>
       ) : (
         <Form style={styles.form}>
-          <Item floatingLabel>
+          <Item stackedLabel>
             <Label style={dayMode ? styles.labelLight : styles.label}>
               Author
             </Label>

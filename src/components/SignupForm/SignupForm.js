@@ -1,5 +1,11 @@
 import React, { useState, useContext, useEffect } from "react";
-import { StyleSheet, Text, TouchableOpacity, AsyncStorage } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  AsyncStorage,
+  KeyboardAvoidingView,
+} from "react-native";
 import { Form, Item, Button, Label, Input } from "native-base";
 
 import { FontAwesome } from "@expo/vector-icons";
@@ -29,7 +35,7 @@ export const SignupForm = (props) => {
   }, []);
 
   return (
-    <>
+    <KeyboardAvoidingView style={styles.mainContainer}>
       <TouchableOpacity
         onPress={() => props.setSignupModalVisible(false)}
         style={styles.iconContainer}
@@ -37,7 +43,7 @@ export const SignupForm = (props) => {
         <FontAwesome name="close" style={styles.icon} />
       </TouchableOpacity>
       <Form style={styles.form} testID="form">
-        <Item floatingLabel>
+        <Item stackedLabel>
           <Label style={dayMode ? styles.labelLight : styles.label}>
             Email
           </Label>
@@ -50,7 +56,7 @@ export const SignupForm = (props) => {
             testID="emailInput"
           ></Input>
         </Item>
-        <Item floatingLabel>
+        <Item stackedLabel>
           <Label style={dayMode ? styles.labelLight : styles.label}>
             Password
           </Label>
@@ -82,11 +88,14 @@ export const SignupForm = (props) => {
           </Text>
         </Button>
       </Form>
-    </>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    marginTop: "40%",
+  },
   form: {
     width: "70%",
     alignSelf: "center",
@@ -136,7 +145,7 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     position: "absolute",
-    top: "23%",
+    top: "2%",
     right: "15%",
     alignSelf: "flex-end",
   },

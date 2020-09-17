@@ -5,10 +5,10 @@ import {
   Text,
   View,
   Modal,
-  Alert,
   TouchableOpacity,
   ActivityIndicator,
   AsyncStorage,
+  YellowBox,
 } from "react-native";
 
 import constants from "../../constants";
@@ -66,7 +66,7 @@ const LoginScreen = ({ navigation }) => {
       return (
         <>
           <Form style={styles.form} testID="loginForm">
-            <Item floatingLabel>
+            <Item stackedLabel>
               <Label style={dayMode ? styles.labelLight : styles.label}>
                 Email
               </Label>
@@ -78,7 +78,7 @@ const LoginScreen = ({ navigation }) => {
                 onChangeText={(value) => setEmail(value)}
               ></Input>
             </Item>
-            <Item floatingLabel>
+            <Item stackedLabel>
               <Label style={dayMode ? styles.labelLight : styles.label}>
                 Password
               </Label>

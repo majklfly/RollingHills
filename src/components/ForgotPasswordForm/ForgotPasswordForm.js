@@ -27,7 +27,7 @@ export const ForgotPasswordForm = (props) => {
         <TouchableOpacity onPress={() => props.setModalVisible(false)}>
           <FontAwesome name="close" style={styles.icon} />
         </TouchableOpacity>
-        <Item floatingLabel>
+        <Item stackedLabel>
           <Label style={dayMode ? styles.labelLight : styles.label}>
             Email
           </Label>

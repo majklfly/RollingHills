@@ -50,7 +50,7 @@ export const UpdatePasswordForm = (props) => {
         </Text>
       )}
       <Form style={styles.form}>
-        <Item floatingLabel>
+        <Item stackedLabel>
           <Label style={dayMode ? styles.labelLight : styles.label}>
             Your Email
           </Label>
@@ -62,7 +62,7 @@ export const UpdatePasswordForm = (props) => {
             onChangeText={(value) => setEmail(value)}
           ></Input>
         </Item>
-        <Item floatingLabel>
+        <Item stackedLabel>
           <Label style={dayMode ? styles.labelLight : styles.label}>
             Current Password
           </Label>
@@ -74,7 +74,7 @@ export const UpdatePasswordForm = (props) => {
             onChangeText={(value) => setCurrentPassword(value)}
           ></Input>
         </Item>
-        <Item floatingLabel>
+        <Item stackedLabel>
           <Label style={dayMode ? styles.labelLight : styles.label}>
             {" "}
             New Password
