@@ -265,12 +265,12 @@ const styles = StyleSheet.create({
   input: {
     color: constants.primary.textColor,
     fontFamily: constants.primary.fontFamily,
-    width: 70,
+    width: "80%",
   },
   inputLight: {
     color: constants.secondary.textColor,
     fontFamily: constants.secondary.fontFamily,
-    width: 70,
+    width: "80%",
   },
   terms: {
     color: constants.primary.textColor,
