@@ -72,22 +72,24 @@ export const SignupForm = (props) => {
             }}
           ></Input>
         </Item>
-        <Button
-          full
-          rounded
-          style={{
-            marginTop: 20,
-            backgroundColor: dayMode
-              ? constants.secondary.buttonColor
-              : constants.primary.buttonColor,
-          }}
-          onPress={() => signup(email, password)}
-        >
-          <Text style={dayMode ? styles.buttonTextLight : styles.buttonText}>
-            Sign Up
-          </Text>
-        </Button>
       </Form>
+      <Button
+        full
+        rounded
+        style={{
+          marginTop: "30%",
+          width: "80%",
+          alignSelf: "center",
+          backgroundColor: dayMode
+            ? constants.secondary.buttonColor
+            : constants.primary.buttonColor,
+        }}
+        onPress={() => signup(email, password)}
+      >
+        <Text style={dayMode ? styles.buttonTextLight : styles.buttonText}>
+          Sign Up
+        </Text>
+      </Button>
     </KeyboardAvoidingView>
   );
 };
@@ -115,12 +117,12 @@ const styles = StyleSheet.create({
   input: {
     color: constants.primary.textColor,
     fontFamily: constants.primary.fontFamily,
-    width: 70,
+    width: "90%",
   },
   inputLight: {
     color: constants.secondary.textColor,
     fontFamily: constants.secondary.fontFamily,
-    width: 70,
+    width: "90%",
   },
   buttonText: {
     color: constants.primary.textColor,

@@ -1,5 +1,5 @@
 import React, { createContext, useReducer, useContext } from "react";
-import { AsyncStorage } from "react-native";
+import { AsyncStorage, Alert } from "react-native";
 import Firebase from "../../firebase";
 import * as Google from "expo-google-app-auth";
 import * as Facebook from "expo-facebook";
@@ -238,7 +238,7 @@ export const AuthProvider = ({ children }) => {
           .then((data) => resolveUser());
       }
     } catch (e) {
-      console.log(error);
+      Alert.alert(error.message);
     }
   };
 

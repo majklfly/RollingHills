@@ -60,43 +60,43 @@ export const Map = () => {
     }
   }, [mockRunning]);
 
-  if (!currentLocation) {
-    return <ActivityIndicator size="large" style={{ marginTop: 100 }} />;
+  if (currentLocation) {
+    return (
+      <>
+        <MapView
+          style={styles.map}
+          initialRegion={{
+            longitude: currentLocation.coords.longitude,
+            latitude: currentLocation.coords.latitude,
+            latitudeDelta: 0.004,
+            longitudeDelta: 0.004,
+          }}
+          region={{
+            longitude: currentLocation.coords.longitude,
+            latitude: currentLocation.coords.latitude,
+            latitudeDelta: 0.004,
+            longitudeDelta: 0.004,
+          }}
+          customMapStyle={dayMode ? mapStyleLight : mapStyle}
+          testID="mapView"
+        >
+          <Circle
+            center={currentLocation.coords}
+            radius={10}
+            strokeColor="rgba(158,158,255,1)"
+            fillColor="rgba(158,158,255,0.3)"
+          />
+          <Polyline
+            coordinates={locations.map((loc) => loc.coords)}
+            strokeWidth={4}
+            strokeColor="rgba(158,158,255,1)"
+          />
+        </MapView>
+      </>
+    );
   }
 
-  return (
-    <>
-      <MapView
-        style={styles.map}
-        initialRegion={{
-          longitude: currentLocation.coords.longitude,
-          latitude: currentLocation.coords.latitude,
-          latitudeDelta: 0.004,
-          longitudeDelta: 0.004,
-        }}
-        region={{
-          longitude: currentLocation.coords.longitude,
-          latitude: currentLocation.coords.latitude,
-          latitudeDelta: 0.004,
-          longitudeDelta: 0.004,
-        }}
-        customMapStyle={dayMode ? mapStyleLight : mapStyle}
-        testID="mapView"
-      >
-        <Circle
-          center={currentLocation.coords}
-          radius={10}
-          strokeColor="rgba(158,158,255,1)"
-          fillColor="rgba(158,158,255,0.3)"
-        />
-        <Polyline
-          coordinates={locations.map((loc) => loc.coords)}
-          strokeWidth={4}
-          strokeColor="rgba(158,158,255,1)"
-        />
-      </MapView>
-    </>
-  );
+  return <></>;
 };
 
 const styles = StyleSheet.create({

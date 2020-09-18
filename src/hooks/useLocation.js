@@ -14,8 +14,9 @@ export default (shouldTrack, callback) => {
       (async () => {
         let { status } = await Location.requestPermissionsAsync();
         if (status !== "granted") {
-          setErrorMsg("Permission to access location was denied");
+          setErr("Permission to access location was denied");
         }
+        // needs to extract the initial location
         const sub = await watchPositionAsync(
           {
             accuracy: Accuracy.BestForNavigation,
@@ -27,7 +28,7 @@ export default (shouldTrack, callback) => {
         setSubscriber(sub);
       })();
     } catch (e) {
-      setErr(e);
+      setErr(e.message);
     }
   };
 
