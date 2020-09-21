@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useContext, useState } from "react";
+import React, { createContext, useReducer, useContext } from "react";
 import Firebase from "../../firebase";
 import { GlobalContext } from "../store/AuthProvider";
 import { getDistance } from "geolib";

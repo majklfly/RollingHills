@@ -236,9 +236,11 @@ export const AuthProvider = ({ children }) => {
         Firebase.auth()
           .signInWithCredential(credential)
           .then((data) => resolveUser());
+      } else {
+        dispatch({ type: "error", payload: "Something went wrong" });
       }
     } catch (e) {
-      Alert.alert(error.message);
+      dispatch({ type: "error", payload: "Something went wrong" });
     }
   };
 
@@ -262,10 +264,10 @@ export const AuthProvider = ({ children }) => {
           .then((data) => resolveUser(data))
           .catch((error) => console.log("here", error));
       } else {
-        // type === 'cancel'
+        dispatch({ type: "error", payload: "Something went wrong" });
       }
     } catch ({ message }) {
-      alert(`Facebook Login Error: ${message}`);
+      dispatch({ type: "error", payload: `Facebook Login Error: ${message}` });
     }
   };
 

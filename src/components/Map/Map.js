@@ -1,11 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import * as Location from "expo-location";
-import {
-  StyleSheet,
-  ActivityIndicator,
-  View,
-  AsyncStorage,
-} from "react-native";
+import { StyleSheet } from "react-native";
 import MapView, { Polyline, Circle } from "react-native-maps";
 
 import { LocationStateContext } from "../../store/LocationProvider";
@@ -35,8 +30,10 @@ export const Map = () => {
         accuracy: 5,
         altitudeAccuracy: 5,
         altitude: 5,
-        longitude: -0.205746 + increment * tenMetersWithDegrees,
-        latitude: 51.473506 + increment * tenMetersWithDegrees,
+        longitude:
+          currentLocation.coords.longitude + increment * tenMetersWithDegrees,
+        latitude:
+          currentLocation.coords.latitude + increment * tenMetersWithDegrees,
       },
     };
   };
