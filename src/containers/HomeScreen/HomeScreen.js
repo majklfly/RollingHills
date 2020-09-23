@@ -41,10 +41,14 @@ const HomeScreen = () => {
   );
 
   useEffect(() => {
-    mockMovement(isEnabled);
+    let mounted = true;
+    if (mounted) {
+      mockMovement(isEnabled);
+    }
+    return () => (mounted = false);
   }, [isEnabled]);
 
-  useLocation(true, callback);
+  useLocation(true);
 
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 

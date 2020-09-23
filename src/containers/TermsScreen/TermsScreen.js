@@ -15,13 +15,14 @@ import constants from "../../constants";
 const TermsScreen = () => {
   const [dayMode, setDayModeLocal] = useState(null);
 
+  const retrieveDayMode = async () => {
+    const result = await AsyncStorage.getItem("dayMode");
+    const value = result === "true" ? true : false;
+    setDayModeLocal(value);
+  };
+
   useEffect(() => {
     let mounted = true;
-    const retrieveDayMode = async () => {
-      const result = await AsyncStorage.getItem("dayMode");
-      const value = result === "true" ? true : false;
-      setDayModeLocal(value);
-    };
     if (mounted) {
       retrieveDayMode();
     }

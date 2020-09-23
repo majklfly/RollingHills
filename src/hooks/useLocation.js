@@ -7,9 +7,7 @@ import { Accuracy, watchPositionAsync } from "expo-location";
 
 import { LocationContext } from "../store/LocationProvider";
 
-const LOCATION_TASK_NAME = "background-location-task";
-
-export default (shouldTrack, callback) => {
+export default (shouldTrack) => {
   const [err, setErr] = useState(null);
   const [subscriber, setSubscriber] = useState(false);
   const { addLocation } = useContext(LocationContext);
@@ -18,22 +16,21 @@ export default (shouldTrack, callback) => {
     try {
       let { status } = await Location.requestPermissionsAsync();
       if (status !== "granted") {
-        setErr("Permission to access location was denied");
+        Alert.alert("Permission to access location was denied");
       }
       let position = await Location.getCurrentPositionAsync({});
+      Alert.alert(` position: ${position.coords.accuracy}`);
       if (position) {
         addLocation(position, false);
       }
     } catch (e) {
-      Alert.alert("Problem with useLocation hook");
+      Alert.alert("Problem with useLocation");
     }
   };
 
   useEffect(() => {
-    if (shouldTrack) {
-      startWatching();
-    }
-  }, [shouldTrack, callback]);
+    startWatching();
+  }, []);
 
   return [err];
 };

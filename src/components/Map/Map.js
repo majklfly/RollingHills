@@ -51,10 +51,14 @@ export const Map = () => {
   };
 
   useEffect(() => {
-    setInterv(setInterval(timer, 1000));
-    if (mockRunning === false) {
-      clearInterval(interv);
+    let mounted = true;
+    if (mounted) {
+      setInterv(setInterval(timer, 1000));
+      if (mockRunning === false) {
+        clearInterval(interv);
+      }
     }
+    return () => (mounted = false);
   }, [mockRunning]);
 
   if (currentLocation) {
