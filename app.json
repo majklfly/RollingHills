@@ -25,9 +25,13 @@
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyBzJCIljn_-JjYdwBcKa3NlhuJcQjAA6FI"
+        },
+        "googleSignIn": {
+          "certificateHash": "B:5B:3C:9F:5C:68:B4:A6:7B:8B:80:61:3A:5E:F3:F1:D4:6C:6D:5B"
         }
       },
       "softwareKeyboardLayoutMode": "pan",
+      "googleServicesFile": "./google-services.json",
       "useNextNotificationsApi": true,
       "versionCode": 4
     }

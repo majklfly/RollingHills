@@ -2,6 +2,7 @@ import React, { createContext, useReducer, useContext } from "react";
 import { AsyncStorage, Alert } from "react-native";
 import Firebase from "../../firebase";
 import * as Google from "expo-google-app-auth";
+import * as GoogleSignIn from "expo-google-sign-in";
 import * as Facebook from "expo-facebook";
 const firebase = require("firebase");
 import { ANDROID_CLIENT_ID } from "@env";
@@ -224,11 +225,10 @@ export const AuthProvider = ({ children }) => {
   const signInGoogle = async () => {
     dispatch({ type: "login" });
     try {
-      const result = await Google.logInAsync({
-        androidClientId: ANDROID_CLIENT_ID,
-        scopes: ["profile", "email"],
-      });
-      if (result.type === "success") {
+      await GoogleSignIn.askForPlayServicesAsync();
+      const { type, user } = await GoogleSignIn.signInAsync();
+      if (type === "success") {
+        Alert.alert(`User: ${user}`);
         const credential = firebase.auth.GoogleAuthProvider.credential(
           result.idToken,
           result.accessToken
@@ -259,7 +259,6 @@ export const AuthProvider = ({ children }) => {
       const { type, token } = await Facebook.logInWithReadPermissionsAsync({
         permissions: ["email", "public_profile"],
       });
-      Alert.alert(`type: ${type}, token: ${token}`);
       if (type === "success") {
         const credential = firebase.auth.FacebookAuthProvider.credential(token);
         firebase

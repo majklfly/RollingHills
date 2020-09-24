@@ -20,7 +20,6 @@ export default (shouldTrack, callback) => {
         Alert.alert("Permission to access location was denied");
       }
       let position = await Location.getCurrentPositionAsync({});
-      Alert.alert(` position: ${position.coords.accuracy}`);
       if (position) {
         addLocation(position, false);
       }
@@ -32,7 +31,7 @@ export default (shouldTrack, callback) => {
         },
         callback
       );
-      // setSubscriber(sub);
+      setSubscriber(sub);
     } catch (e) {
       Alert.alert("Problem with useLocation");
     }
@@ -41,11 +40,8 @@ export default (shouldTrack, callback) => {
   useEffect(() => {
     if (!isMounted.current) {
       startWatching();
-<<<<<<< HEAD
     } else {
       subscriber.remove();
-=======
->>>>>>> bd14166ab330003ce744f04da571eaa77181ce4f
     }
     return () => {
       isMounted.current = true;
