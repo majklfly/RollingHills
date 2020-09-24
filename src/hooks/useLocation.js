@@ -1,56 +1,56 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import * as Location from "expo-location";
+
+import { Alert } from "react-native";
 
 import { Accuracy, watchPositionAsync } from "expo-location";
 
 import { LocationContext } from "../store/LocationProvider";
 
-const LOCATION_TASK_NAME = "background-location-task";
-
 export default (shouldTrack, callback) => {
   const [err, setErr] = useState(null);
   const [subscriber, setSubscriber] = useState(false);
   const { addLocation } = useContext(LocationContext);
+  const isMounted = useRef(false);
 
   const startWatching = async () => {
     try {
       let { status } = await Location.requestPermissionsAsync();
       if (status !== "granted") {
-        setErr("Permission to access location was denied");
+        Alert.alert("Permission to access location was denied");
       }
       let position = await Location.getCurrentPositionAsync({});
-      addLocation(position, false);
-      await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
-        accuracy: Accuracy.BestForNavigation,
-        timeInterval: 5000,
-        distanceInterval: 10,
-      });
+      Alert.alert(` position: ${position.coords.accuracy}`);
+      if (position) {
+        addLocation(position, false);
+      }
       const sub = await watchPositionAsync(
         {
-          accuracy: Accuracy.Balanced,
+          accuracy: Accuracy.BestForNavigation,
           timeInterval: 5000,
           distanceInterval: 10,
         },
         callback
       );
-      setSubscriber(sub);
+      // setSubscriber(sub);
     } catch (e) {
-      setErr(e.message);
+      Alert.alert("Problem with useLocation");
     }
   };
 
   useEffect(() => {
-    if (shouldTrack) {
+    if (!isMounted.current) {
       startWatching();
+<<<<<<< HEAD
     } else {
       subscriber.remove();
+=======
+>>>>>>> bd14166ab330003ce744f04da571eaa77181ce4f
     }
     return () => {
-      if (subscriber) {
-        subscriber.remove();
-      }
+      isMounted.current = true;
     };
-  }, [shouldTrack, callback]);
+  }, []);
 
   return [err];
 };

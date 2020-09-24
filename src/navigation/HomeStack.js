@@ -21,14 +21,22 @@ export const HomeStack = () => {
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
   useEffect(() => {
-    if (isEnabled !== null) {
-      AsyncStorage.setItem("dayMode", isEnabled.toString());
-      setDayMode(isEnabled);
+    let mounted = true;
+    if (mounted) {
+      if (isEnabled !== null) {
+        AsyncStorage.setItem("dayMode", isEnabled.toString());
+        setDayMode(isEnabled);
+      }
     }
+    return () => (mounted = false);
   }, [isEnabled]);
 
   useEffect(() => {
-    dayMode ? setIsEnabled(true) : setIsEnabled(false);
+    let mounted = true;
+    if (mounted) {
+      dayMode ? setIsEnabled(true) : setIsEnabled(false);
+    }
+    return () => (mounted = false);
   }, [dayMode]);
 
   return (

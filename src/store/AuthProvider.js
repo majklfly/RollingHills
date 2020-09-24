@@ -237,10 +237,13 @@ export const AuthProvider = ({ children }) => {
           .signInWithCredential(credential)
           .then((data) => resolveUser());
       } else {
-        dispatch({ type: "error", payload: "Something went wrong" });
+        dispatch({
+          type: "error",
+          payload: "Something went wrong with Firebase",
+        });
       }
     } catch (e) {
-      dispatch({ type: "error", payload: "Something went wrong" });
+      dispatch({ type: "error", payload: `error ${e}` });
     }
   };
 
@@ -256,6 +259,7 @@ export const AuthProvider = ({ children }) => {
       const { type, token } = await Facebook.logInWithReadPermissionsAsync({
         permissions: ["email", "public_profile"],
       });
+      Alert.alert(`type: ${type}, token: ${token}`);
       if (type === "success") {
         const credential = firebase.auth.FacebookAuthProvider.credential(token);
         firebase

@@ -1,4 +1,10 @@
-import React, { useState, useContext, useEffect, useCallback } from "react";
+import React, {
+  useState,
+  useContext,
+  useEffect,
+  useCallback,
+  useRef,
+} from "react";
 import { Form, Item, Button, Label, Input } from "native-base";
 import {
   StyleSheet,
@@ -36,6 +42,7 @@ const LoginScreen = ({ navigation }) => {
   );
   const { state } = useContext(GlobalContext);
   const { isLoading, errorMessage } = state;
+  let isMounted = useRef(false);
 
   const retrieveDayMode = async () => {
     const result = await AsyncStorage.getItem("dayMode");
@@ -44,14 +51,13 @@ const LoginScreen = ({ navigation }) => {
     setDayModeLocal(value);
   };
 
-  useEffect(() => {
-    let mounted = true;
-
-    if (mounted) {
-      retrieveDayMode();
-    }
-    return () => (mounted = false);
-  });
+  // useEffect(() => {
+  //   isMounted = true;
+  //   if (isMounted) {
+  //     retrieveDayMode();
+  //   }
+  //   return () => (isMounted = false);
+  // });
 
   useCallback(() => {
     setDayMode(dayMode);
