@@ -41,7 +41,13 @@ const HomeScreen = () => {
   );
 
   useEffect(() => {
+    let mounted = true;
+    if (mounted) {
+    }
     mockMovement(isEnabled);
+    return () => {
+      mounted = false;
+    };
   }, [isEnabled]);
 
   useLocation(true, callback);

@@ -44,7 +44,6 @@ export default (shouldTrack, callback) => {
       startWatching();
     } else {
       subscriber.remove();
-      setSubscriber(null);
     }
     return () => {
       if (subscriber) {

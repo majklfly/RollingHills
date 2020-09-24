@@ -22,6 +22,11 @@
     },
     "android": {
       "package": "com.majklfly.RollingHills",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyBzJCIljn_-JjYdwBcKa3NlhuJcQjAA6FI"
+        }
+      },
       "softwareKeyboardLayoutMode": "pan",
       "useNextNotificationsApi": true,
       "versionCode": 4
