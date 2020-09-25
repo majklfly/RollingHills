@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:691114278143:android:0e1cfef9d5b437b39660ca",
         "android_client_info": {
-          "package_name": "com.majklfly.RollingHills"
+          "package_name": "com.majklfly.rollinghills"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "691114278143-br4mmbs6ker71ojj8e7k5fef8ulabd79.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.majklfly.RollingHills",
+            "package_name": "com.majklfly.rollinghills",
             "certificate_hash": "eb5b3c9f5c68b4a67b8b80613a5ef3f1d46c6d5b"
           }
         }

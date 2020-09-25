@@ -227,12 +227,13 @@ export const AuthProvider = ({ children }) => {
     try {
       await GoogleSignIn.askForPlayServicesAsync();
       const { type, user } = await GoogleSignIn.signInAsync();
-      Alert.alert(`type: ${type} user: ${user}`);
       if (type === "success") {
-        Alert.alert(`User: ${user}`);
+        Alert.alert(
+          `idToken: ${user.idToken}, accessToken: ${user.accessToken}`
+        );
         const credential = firebase.auth.GoogleAuthProvider.credential(
-          result.idToken,
-          result.accessToken
+          user.idToken,
+          user.accessToken
         );
         Firebase.auth()
           .signInWithCredential(credential)

@@ -16,7 +16,7 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.majklfly.RollingHills",
+      "bundleIdentifier": "com.majklfly.rollinghills",
       "googleServicesFile": "./GoogleService-Info.plist",
       "config": {
         "googleSignIn": {
