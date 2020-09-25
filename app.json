@@ -15,13 +15,20 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.majklfly.RollingHills",
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "config": {
+        "googleSignIn": {
+          "reservedClientId": "com.googleusercontent.apps.691114278143-9hfodad7v14v2l8m690u15p9ersh7h1i"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "android": {
-      "package": "com.majklfly.RollingHills",
+      "package": "com.majklfly.rollinghills",
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyBzJCIljn_-JjYdwBcKa3NlhuJcQjAA6FI"

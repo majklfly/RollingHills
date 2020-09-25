@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>691114278143-9hfodad7v14v2l8m690u15p9ersh7h1i.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.691114278143-9hfodad7v14v2l8m690u15p9ersh7h1i</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>691114278143-br4mmbs6ker71ojj8e7k5fef8ulabd79.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBwseXmM1NiL3lVMp59YnfTPSFshsGNqNo</string>
+	<key>GCM_SENDER_ID</key>
+	<string>691114278143</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.majklfly.RollingHills</string>
+	<key>PROJECT_ID</key>
+	<string>rollinghills-61b07</string>
+	<key>STORAGE_BUCKET</key>
+	<string>rollinghills-61b07.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:691114278143:ios:fff7b8154d705a5f9660ca</string>
+	<key>DATABASE_URL</key>
+	<string>https://rollinghills-61b07.firebaseio.com</string>
+</dict>
+</plist>
