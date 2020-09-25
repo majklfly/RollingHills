@@ -27,13 +27,13 @@
           "apiKey": "AIzaSyBzJCIljn_-JjYdwBcKa3NlhuJcQjAA6FI"
         },
         "googleSignIn": {
-          "certificateHash": "B:5B:3C:9F:5C:68:B4:A6:7B:8B:80:61:3A:5E:F3:F1:D4:6C:6D:5B"
+          "certificateHash": "eb:5b:3c:9f:5c:68:b4:a6:7b:8b:80:61:3a:5e:f3:f1:d4:6c:6d:5b"
         }
       },
       "softwareKeyboardLayoutMode": "pan",
       "googleServicesFile": "./google-services.json",
       "useNextNotificationsApi": true,
-      "versionCode": 4
+      "versionCode": 5
     }
   }
 }

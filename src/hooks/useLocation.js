@@ -14,6 +14,7 @@ export default (shouldTrack, callback) => {
   const isMounted = useRef(false);
 
   const startWatching = async () => {
+    console.log("triggered");
     try {
       let { status } = await Location.requestPermissionsAsync();
       if (status !== "granted") {
@@ -38,15 +39,18 @@ export default (shouldTrack, callback) => {
   };
 
   useEffect(() => {
-    if (!isMounted.current) {
+    if (shouldTrack) {
       startWatching();
     } else {
       subscriber.remove();
+      setSubscriber(null);
     }
     return () => {
-      isMounted.current = true;
+      if (subscriber) {
+        subscriber.remove();
+      }
     };
-  }, []);
+  }, [shouldTrack, callback]);
 
   return [err];
 };

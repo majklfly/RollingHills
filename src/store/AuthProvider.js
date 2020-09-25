@@ -227,6 +227,7 @@ export const AuthProvider = ({ children }) => {
     try {
       await GoogleSignIn.askForPlayServicesAsync();
       const { type, user } = await GoogleSignIn.signInAsync();
+      Alert.alert(`type: ${type} user: ${user}`);
       if (type === "success") {
         Alert.alert(`User: ${user}`);
         const credential = firebase.auth.GoogleAuthProvider.credential(
@@ -242,8 +243,8 @@ export const AuthProvider = ({ children }) => {
           payload: "Something went wrong with Firebase",
         });
       }
-    } catch (e) {
-      dispatch({ type: "error", payload: `error ${e}` });
+    } catch ({ message }) {
+      dispatch({ type: "error", payload: `error ${message}` });
     }
   };
 
