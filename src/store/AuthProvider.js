@@ -228,20 +228,11 @@ export const AuthProvider = ({ children }) => {
       await GoogleSignIn.askForPlayServicesAsync();
       const { type, user } = await GoogleSignIn.signInAsync();
       if (type === "success") {
-        Alert.alert(
-          `idToken: ${user.idToken}, accessToken: ${user.accessToken}`
-        );
-        const credential = firebase.auth.GoogleAuthProvider.credential(
-          user.idToken,
-          user.accessToken
-        );
-        Firebase.auth()
-          .signInWithCredential(credential)
-          .then((data) => resolveUser());
+        resolveUser(user);
       } else {
         dispatch({
           type: "error",
-          payload: "Something went wrong with Firebase",
+          payload: "Something went wrong with the server",
         });
       }
     } catch ({ message }) {
