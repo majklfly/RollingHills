@@ -224,11 +224,29 @@ export const AuthProvider = ({ children }) => {
 
   const signInGoogle = async () => {
     dispatch({ type: "login" });
+
+    try {
+      await GoogleSignIn.initAsync();
+    } catch ({ message }) {
+      Alert.alert("GoogleSignIn.initAsync(): " + message);
+    }
+
     try {
       await GoogleSignIn.askForPlayServicesAsync();
       const { type, user } = await GoogleSignIn.signInAsync();
+      const user = await GoogleSignIn.getCurrentUserAsync();
       if (type === "success") {
-        resolveUser(user);
+        dispatch({
+          type: "error",
+          payload: JSON.stringify(user.auth.idToken),
+        });
+        // const credential = firebase.auth.GoogleAuthProvider.credential(
+        //   user.auth.idToken,
+        //   user.auth.accessToken
+        // );
+        // Firebase.auth()
+        //   .signInWithCredential(credential)
+        //   .then((data) => resolveUser());
       } else {
         dispatch({
           type: "error",
