@@ -234,7 +234,6 @@ export const AuthProvider = ({ children }) => {
     try {
       await GoogleSignIn.askForPlayServicesAsync();
       const { type, user } = await GoogleSignIn.signInAsync();
-      const user = await GoogleSignIn.getCurrentUserAsync();
       if (type === "success") {
         dispatch({
           type: "error",

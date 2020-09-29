@@ -16,7 +16,7 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.majklfly.rollinghills",
+      "bundleIdentifier": "com.majklfly.RollingHills",
       "googleServicesFile": "./GoogleService-Info.plist",
       "config": {
         "googleSignIn": {
@@ -28,7 +28,7 @@
       "favicon": "./assets/favicon.png"
     },
     "android": {
-      "package": "com.majklfly.rollinghills",
+      "package": "com.majklfly.RollingHills",
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyBzJCIljn_-JjYdwBcKa3NlhuJcQjAA6FI"
@@ -40,7 +40,7 @@
       "softwareKeyboardLayoutMode": "pan",
       "googleServicesFile": "./google-services.json",
       "useNextNotificationsApi": true,
-      "versionCode": 5
+      "versionCode": 6
     }
   }
 }
